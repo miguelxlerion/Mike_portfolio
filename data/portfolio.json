@@ -1,1 +1,517 @@
-{"site":{"nombre":"Miguel Rodríguez Martínez","claim":"Portafolio creativo","heroLinea1":"Diseñando Ideas y Destinos","heroLinea2":"forma, color y código.","heroTags":"3D · Diseño · Código · Videojuegos","descripcion":"\"Desarrollo interactivo, arte técnico y diseño visual: diseño ecosistemas digitales donde la lógica robusta y el impacto estético van de la mano.\"","email":"merm.198427@gmail.com","redes":[{"nombre":"GitHub","url":"https://github.com/MikeHell84"},{"nombre":"LinkedIn","url":"https://linkedin.com/in/mikerodriguez84"}],"eyebrowContacto":"Contacto","contactoLinea1":"¿Tienes una visión","contactoLinea2":"en mente?","contactoLinea3":"Hagámosla Realidad.","textoPie":"MIGUEL RODRÍGUEZ MARTÍNEZ © - 2026","telefono":"+57 3208605600","ubicacion":"Colombia","formato":"comic","buttonStyle":""},"areas":[{"id":"3d","nombre":"3D","corto":"3D","descripcion":"Modelado, iluminación y render para producto, arquitectura y creatividad digital.","color":"#00ddff"},{"id":"diseno","nombre":"Diseño Gráfico","corto":"Diseño","descripcion":"Identidad, editorial y piezas visuales con foco en jerarquía y emoción.","color":"#ff0084"},{"id":"dev","nombre":"Programación de Software y Web","corto":"Software & Web","descripcion":"Apps, sitios web y software a medida: interfaces cuidadas y código sólido.","color":"#9dff00"},{"id":"area_1786650100016","nombre":"Música & Composición","corto":"Música & Composición","descripcion":"Música creada para ambientes de videojuegos, videoclips y proyectos multimedia.","color":"#eb002f"}],"diseno":{"bg":"#0b0b12","panel":"#141420","texto":"#e8eaf2","muted":"#ffffff","gradfrom":"#00ffe1","gradmid":"#ffffff","gradto":"#00ffee","fuenteTitulos":"Space Grotesk","fuenteTexto":"Inter","fuenteMono":"Fira Code","css":".modal .zoomed{display:block;margin:0 auto;max-width:100%;height:auto}\n\nbody::after{content:\"\";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mix-blend-mode:overlay}\n\na{color:var(--c3d, #22d3ee)} a:hover{text-decoration:underline}","formas":{"activo":true,"tipo":"orbes","cantidad":10,"blur":100,"opacidad":50,"velocidad":27},"parallax":{"activo":true,"imagen":"images/1786740556319-2a3u.jpg","posicion":"centro","velocidad":0.4,"opacidad":40,"desenfoque":6},"presentacion":{"gap":4,"mincol":270,"radius":24,"tilt":2.8,"shadow":6,"colores":{"bg":"#404040","border":"#404454","text":"#FFFFFF","muted":"#474747","overlay":"#151A2E","chip":"#212121","chipText":"#FFFFFF","anioBg":"#151A2E","anioText":"#00FFD5","toolBg":"#151A2E","toolText":"#F3F0FF","videoBg":null,"videoText":null,"shadow":"#030407"}},"fondo":{"activo":false,"imagen":"","posicion":"centro","opacidad":40,"desenfoque":0,"oscurecer":0},"buttonStyles":{"BtnStyle01":{"bgColor":"#000000","textColor":"#ffffff","icon":"images/1786736406314-3ved.jpg","padding":10,"borderRadius":8,"fontWeight":"600","activo":false},"btn-abrir-sitio":{"behavior":{"type":"link","url":"index.html"}},"btn-entrar":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false,"hoverTextColor":"#b1ff0a","hoverEnabled":true},"btn-vista-previa":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-guardar-todo":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-nuevo":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-a-adir-imagen":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-a-adir-url":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-subir-video":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-a-adir-enlace":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-guardar-trabajo":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-cancelar":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--a-adir-red":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--guardar-sitio":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-subir-imagen":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--nuevo-estilo":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-insertar":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-agregar-al-final":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-borrar":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--guardar-dise-o":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-descargar-json":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-copiar-json":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-importar-portfolio-json":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-probar-conexi-n":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-publicar-en-github":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-cambiar-pin":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false,"hoverBgColor":"#eecc20"},"btn-cerrar":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--agregar-rea-de-trabajo":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-subir-imagen-antes":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn-subir-imagen-despu-s":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false},"btn--nueva-comparaci-n":{"bgColor":"#22d3ee","textColor":"#0b0b12","icon":"","padding":10,"borderRadius":8,"fontWeight":"600","activo":true,"label":"","behavior":{"type":"none","url":""},"hoverScale":1,"transitionMs":200,"animation":"none","iconPosition":"left","disabled":false}},"defaultButtonStyle":"BtnStyle01","lead":"#e3e3e3","buttonUsage":{"admin:global":["btn-entrar","btn-cerrar"],"admin:header:anon":["btn-abrir-sitio","btn-vista-previa","btn-guardar-todo"],"admin:section:anon":["btn-nuevo","btn-a-adir-imagen","btn-a-adir-url","btn-subir-video","btn-a-adir-enlace","btn-guardar-trabajo","btn-cancelar","btn--a-adir-red","btn--guardar-sitio","btn-subir-imagen","btn--nuevo-estilo","btn-insertar","btn-agregar-al-final","btn-borrar","btn--guardar-dise-o","btn-descargar-json","btn-copiar-json","btn-importar-portfolio-json","btn-probar-conexi-n","btn-publicar-en-github","btn-cambiar-pin","btn--agregar-rea-de-trabajo","btn-subir-imagen-antes","btn-subir-imagen-despu-s","btn--nueva-comparaci-n"]},"beforeAfter":{"activo":false,"titulo":"Transformaciones","descripcion":"Resultados lado a lado","color":"#22d3ee","etiquetaTitulo":"Comparativa","etiquetaAntes":"BEFORE","etiquetaDespues":"AFTER","items":[]}},"trabajos":[{"id":"job-1786850614912","titulo":"Dead Hope","area":"area_1786650100016","anio":2025,"cliente":"Redemthor","descripcion":"Creación, Composición y grabación de la canción Dead Hope para el videojuego llamado Total Darkness de la Banda Redemthor.","herramientas":["Software de Captura y extracción de sonidos diseñada por mi","Cakewalk Sonar","Addictive Drums 2."],"destacado":true,"imagenes":["images/1786850614951-vfei.jpg"],"video":{"tipo":"youtube","url":"https://youtu.be/_FKCl1oPJbg"},"enlaces":[]},{"id":"tmspms7sw","titulo":"Assets Renders","area":"3d","anio":2019,"cliente":"Xlerion Studios","descripcion":"Serie de Assets creados en 3D Max y con el motor de Renderizado Vray.","herramientas":["3D max","Vray."],"destacado":true,"imagenes":["images/1786511427864-nxpg.jpg","images/1786511428047-oxbh.jpg","images/1786511428149-6ygz.jpg","images/1786511428246-k8vm.jpg","images/1786511428353-cio0.jpg","images/1786511428427-ywcc.jpg","images/1786511428545-gng6.jpg","images/1786511428661-hhzx.jpg","images/1786511428749-xgak.jpg","images/1786511428837-l2p8.jpg","images/1786511428950-g2y1.jpg","images/1786511428999-h9ci.jpg","images/1786511429043-kqym.jpg","images/1786511429070-ar42.jpg"],"video":{"tipo":"ninguno","url":""},"enlaces":[],"beforeAfter":{"before":"images/1786739228674-u0ow.jpg","after":"images/1786739228684-m29u.jpg","activo":true}},{"id":"t-geometria","titulo":"Dummu Ul","area":"3d","anio":2023,"cliente":"Xlerion Studios","descripcion":"Serie de renders de uno de los personajes para el videojuego llamado TOTAL DARKNESS en Colombia para Xlerion Studios. trabajado en Zbrush para el modelado, 3D max para el mapping de las texturas, y Substance 3d painter para las texturas.","herramientas":["Zbrush","3D Max","Substance 3D Painter."],"destacado":true,"imagenes":["images/1786736406321-abj9.jpg","images/1786736406327-lps0.jpg","images/1786736406333-w2qd.jpg","images/1786736406347-dun8.jpg","images/1786736406354-29i5.jpg","images/1786736406365-ai0j.jpg"],"video":{"tipo":"ninguno","url":""},"enlaces":[]},{"id":"t-identidad","titulo":"USAID","area":"diseno","anio":2015,"cliente":"USAID","descripcion":"Identidad visual completa para una USAID: logotipo, papelería, editorial, backings, brieffers y redes sociales.","herramientas":["Illustrator","InDesign","Figma"],"destacado":true,"imagenes":["images/1786513633083-7yxd.jpg","images/1786513633102-5qia.jpg","images/1786513633118-gf0s.jpg","images/1786513633144-e8hh.jpg","images/1786513633159-dwyf.jpg","images/1786513633179-e48m.jpg","images/1786513633192-zv5m.jpg"],"video":{"tipo":"ninguno","url":""},"enlaces":[]},{"id":"t-tienda","titulo":"ICOE","area":"dev","anio":2016,"cliente":"USAID & ACDIVOCA","descripcion":"Sistema basado en Excel y Visual Basic para la visualización de datos en bruto a gráficos entendibles y temáticos para la comunidad del Choco.","herramientas":["React","Node.js","PostgreSQL"],"destacado":true,"imagenes":["images/1786513806719-e4dj.jpg","images/1786513806746-dcav.jpg","images/1786513806799-yeri.png","images/1786513806837-xscb.png","images/1786736406383-j9wk.jpg"],"video":{"tipo":"ninguno","url":""},"enlaces":[]}]}
+{
+  "site": {
+    "nombre": "Miguel Rodríguez Martínez",
+    "claim": "Portafolio creativo",
+    "heroLinea1": "Diseñando Ideas y Destinos",
+    "heroLinea2": "forma, color y código.",
+    "heroTags": "3D · Diseño · Código · Videojuegos",
+    "descripcion": "\"Desarrollo interactivo, arte técnico y diseño visual: diseño ecosistemas digitales donde la lógica robusta y el impacto estético van de la mano.\"",
+    "email": "merm.198427@gmail.com",
+    "redes": [
+      {
+        "nombre": "GitHub",
+        "url": "https://github.com/MikeHell84"
+      },
+      {
+        "nombre": "LinkedIn",
+        "url": "https://linkedin.com/in/mikerodriguez84"
+      }
+    ],
+    "eyebrowContacto": "Contacto",
+    "contactoLinea1": "¿Tienes una visión",
+    "contactoLinea2": "en mente?",
+    "contactoLinea3": "Hagámosla Realidad.",
+    "textoPie": "MIGUEL RODRÍGUEZ MARTÍNEZ © - 2026",
+    "telefono": "+57 3208605600",
+    "ubicacion": "Colombia",
+    "formato": "masonry",
+    "buttonStyle": "",
+    "brand": "Miguel Rodríguez Martínez",
+    "logoUrl": "images/1787080952220-nyu4.jpg",
+    "faviconUrl": "images/1787080952225-ier3.jpg",
+    "manifesto": "Innovación que se ve, se siente y se usa.",
+    "heroBg": "#0e0e0c",
+    "heroColor": "#f2efe6",
+    "secciones": {
+      "workEye": "",
+      "workTitle": "Estos son trabajos que han inspirado mi carrera...",
+      "aboutEye": "",
+      "aboutTitle": "Aprender algo nuevo, siempre alentará mi vida...",
+      "servEye": "",
+      "servTitle": "Mis Disciplinas...",
+      "recEye": "04 / Trayectoria",
+      "recTitle": "Algo de mi trayectoria...",
+      "heroTitle": "",
+      "servicesEye": "",
+      "servicesTitle": "El Arte y la Música alimentan mi creatividad...",
+      "recognitionEye": "",
+      "recognitionTitle": "",
+      "contactTitle": ""
+    },
+    "navItems": [
+      {
+        "label": "Trabajos",
+        "href": "#work"
+      },
+      {
+        "label": "Estudio",
+        "href": "#about"
+      },
+      {
+        "label": "Servicios",
+        "href": "#services"
+      },
+      {
+        "label": "Reconocimientos",
+        "href": "#recognition"
+      },
+      {
+        "label": "Contacto",
+        "href": "#contact"
+      }
+    ],
+    "numeros": []
+  },
+  "areas": [
+    {
+      "id": "3d",
+      "nombre": "3D",
+      "corto": "3D",
+      "descripcion": "Modelado, iluminación y render para producto, arquitectura y creatividad digital.",
+      "color": "#00ddff"
+    },
+    {
+      "id": "diseno",
+      "nombre": "Diseño Gráfico",
+      "corto": "Diseño",
+      "descripcion": "Identidad, editorial y piezas visuales con foco en jerarquía y emoción.",
+      "color": "#ffffff"
+    },
+    {
+      "id": "dev",
+      "nombre": "Programación de Software y Web",
+      "corto": "Software & Web",
+      "descripcion": "Apps, sitios web y software a medida: interfaces cuidadas y código sólido.",
+      "color": "#ffffff"
+    },
+    {
+      "id": "area_1786650100016",
+      "nombre": "Música & Composición",
+      "corto": "Música & Composición",
+      "descripcion": "Música creada para ambientes de videojuegos, videoclips y proyectos multimedia.",
+      "color": "#ffffff"
+    }
+  ],
+  "diseno": {
+    "bg": "#0E0E0C",
+    "panel": "#141420",
+    "texto": "#F2EFE6",
+    "muted": "#9AA0B5",
+    "line": "rgba(242,239,230,.12)",
+    "accent": "#D4FF3D",
+    "accent2": "#FF4A1C",
+    "accent3": "#A78BFA",
+    "gradfrom": "#22D3EE",
+    "gradmid": "#A78BFA",
+    "gradto": "#F472B6",
+    "lead": null,
+    "fuenteTitulos": "Anton",
+    "fuenteTexto": "Inter",
+    "fuenteMono": "JetBrains Mono",
+    "formas": {
+      "activo": true,
+      "tipo": "orbes",
+      "cantidad": 3,
+      "blur": 90,
+      "opacidad": 45,
+      "velocidad": 14
+    },
+    "parallax": {
+      "activo": true,
+      "imagen": "images/1786740556319-2a3u.jpg",
+      "posicion": "centro",
+      "velocidad": 0.4,
+      "opacidad": 40,
+      "desenfoque": 6
+    },
+    "fondo": {
+      "activo": false,
+      "imagen": "",
+      "posicion": "centro",
+      "opacidad": 40,
+      "desenfoque": 0,
+      "oscurecer": 0
+    },
+    "presentacion": {
+      "gap": 26,
+      "mincol": 300,
+      "radius": 18,
+      "tilt": 1.2,
+      "shadow": 8,
+      "colores": {}
+    },
+    "three": {
+      "enabled": true,
+      "colors": {
+        "a1": "#3DFCFF",
+        "a2": "#1AFFC6",
+        "a3": "#89DEFB",
+        "bg": "#0E0E0C"
+      },
+      "shapes": {
+        "hero": "galaxy",
+        "work": "cube",
+        "manifesto": "core",
+        "services": "image",
+        "about": "icosa",
+        "recognition": "icosa",
+        "contact": "wave"
+      },
+      "image": "images/1787285518452-g3vc.png",
+      "imageMode": "particles",
+      "particleCount": 2600,
+      "particleSize": 0.18,
+      "gridOpacity": 0.25,
+      "wireframe": true
+    },
+    "nav": {
+      "color": "#F2EFE6",
+      "accent": "#D4FF3D",
+      "blend": "difference"
+    },
+    "cursor": {
+      "color": "#D4FF3D",
+      "fuente": "JetBrains Mono",
+      "font": "JetBrains Mono",
+      "size": 14,
+      "big": 90
+    },
+    "ticker": {
+      "bg": "#D4FF3D",
+      "color": "#0E0E0C",
+      "fuente": "Anton",
+      "font": "Anton",
+      "speed": 40
+    },
+    "sidebar": {
+      "bg": "#161613",
+      "color": "#F2EFE6",
+      "border": "#2A2A28",
+      "active": "#D4FF3D"
+    },
+    "em": {
+      "color": "#D4FF3D",
+      "fondo": "#D4FF3D",
+      "fuente": "Instrument Serif",
+      "font": "Instrument Serif"
+    },
+    "enfasis": {
+      "color": "#D4FF3D",
+      "fondo": "#D4FF3D",
+      "fuente": "Instrument Serif",
+      "font": "Instrument Serif"
+    },
+    "loader": {
+      "enabled": true,
+      "bg": "#0B0B12",
+      "text": "#9AA0B5",
+      "accent": "#D4FF3D",
+      "fontBig": "Anton",
+      "fontSmall": "JetBrains Mono",
+      "template": "counter",
+      "pos": "center",
+      "duration": 1200
+    },
+    "footer": {
+      "footBig": {
+        "color": "#F2EFE6",
+        "em": "#D4FF3D",
+        "font": "Anton",
+        "size": 320,
+        "spacing": "-0.02em",
+        "transform": "uppercase"
+      }
+    },
+    "typography": {
+      "hero": 200,
+      "claim": 20,
+      "eyebrow": 11,
+      "h2": 48,
+      "body": 15,
+      "work": 20,
+      "svc": 44,
+      "footer": 280
+    },
+    "layout": {
+      "radius": 14,
+      "padSec": 100,
+      "navH": 64,
+      "workGap": 12,
+      "maxW": 1280,
+      "lh": "1.55"
+    },
+    "works": {
+      "bg": "#161613",
+      "border": "#2A2A28",
+      "accent": "#D4FF3D"
+    },
+    "modal": {
+      "bg": "#161613",
+      "overlay": "rgba(0,0,0,.75)",
+      "radius": 21
+    },
+    "services": {
+      "bg": "#161613",
+      "border": "#2A2A28"
+    },
+    "buttonStyles": {},
+    "buttonUsage": {},
+    "defaultButtonStyle": "",
+    "fullCss": "",
+    "cssCompleto": "",
+    "css": "",
+    "secciones": {
+      "hero": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "work": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "manifesto": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "services": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "about": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "recognition": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "contact": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "footer": {
+        "bg": "#0E0E0C",
+        "color": "#F2EFE6",
+        "font": "Anton"
+      },
+      "ticker": {
+        "bg": "#D4FF3D",
+        "color": "#0E0E0C",
+        "font": "Anton"
+      }
+    },
+    "trayectoria": {
+      "accent": "#A78BFA",
+      "accent2": "#22D3EE",
+      "accent3": "#F472B6",
+      "cardBg": "#141420",
+      "cardBorder": "#2A2A3A",
+      "radius": 18,
+      "fontTitle": "Anton"
+    },
+    "bg2": "#161613",
+    "texto2": "#B8B3A3"
+  },
+  "trabajos": [
+    {
+      "id": "job-1786850614912",
+      "titulo": "Dead Hope",
+      "area": "area_1786650100016",
+      "anio": 2025,
+      "cliente": "Redemthor",
+      "descripcion": "Creación, Composición y grabación de la canción Dead Hope para el videojuego llamado Total Darkness de la Banda Redemthor.",
+      "herramientas": [
+        "Software de Captura y extracción de sonidos diseñada por mi",
+        "Cakewalk Sonar",
+        "Addictive Drums 2."
+      ],
+      "destacado": true,
+      "imagenes": [
+        "images/1786850614951-vfei.jpg"
+      ],
+      "video": {
+        "tipo": "youtube",
+        "url": "https://youtu.be/_FKCl1oPJbg"
+      },
+      "enlaces": [],
+      "beforeAfter": {},
+      "pagina": "",
+      "botonTexto": "Ver proyecto",
+      "destacadoHome": false
+    },
+    {
+      "id": "tmspms7sw",
+      "titulo": "Assets Renders",
+      "area": "3d",
+      "anio": 2019,
+      "cliente": "Xlerion Studios",
+      "descripcion": "Serie de Assets creados en 3D Max y con el motor de Renderizado Vray.",
+      "herramientas": [
+        "3D max",
+        "Vray."
+      ],
+      "destacado": true,
+      "imagenes": [
+        "images/1786511427864-nxpg.jpg",
+        "images/1786511428047-oxbh.jpg",
+        "images/1786511428149-6ygz.jpg",
+        "images/1786511428246-k8vm.jpg",
+        "images/1786511428353-cio0.jpg",
+        "images/1786511428427-ywcc.jpg",
+        "images/1786511428545-gng6.jpg",
+        "images/1786511428661-hhzx.jpg",
+        "images/1786511428749-xgak.jpg",
+        "images/1786511428837-l2p8.jpg",
+        "images/1786511428950-g2y1.jpg",
+        "images/1786511428999-h9ci.jpg",
+        "images/1786511429043-kqym.jpg",
+        "images/1786511429070-ar42.jpg"
+      ],
+      "video": {
+        "tipo": "ninguno",
+        "url": ""
+      },
+      "enlaces": [],
+      "beforeAfter": {
+        "before": "images/1786739228674-u0ow.jpg",
+        "after": "images/1786739228684-m29u.jpg",
+        "activo": true
+      },
+      "pagina": "",
+      "botonTexto": "Ver proyecto",
+      "destacadoHome": false
+    },
+    {
+      "id": "t-geometria",
+      "titulo": "Dummu Ul",
+      "area": "3d",
+      "anio": 2023,
+      "cliente": "Xlerion Studios",
+      "descripcion": "Serie de renders de uno de los personajes para el videojuego llamado TOTAL DARKNESS en Colombia para Xlerion Studios. trabajado en Zbrush para el modelado, 3D max para el mapping de las texturas, y Substance 3d painter para las texturas.",
+      "herramientas": [
+        "Zbrush",
+        "3D Max",
+        "Substance 3D Painter."
+      ],
+      "destacado": true,
+      "imagenes": [
+        "images/1786736406321-abj9.jpg",
+        "images/1786736406327-lps0.jpg",
+        "images/1786736406333-w2qd.jpg",
+        "images/1786736406347-dun8.jpg",
+        "images/1786736406354-29i5.jpg",
+        "images/1786736406365-ai0j.jpg"
+      ],
+      "video": {
+        "tipo": "ninguno",
+        "url": ""
+      },
+      "enlaces": [],
+      "beforeAfter": {},
+      "pagina": "",
+      "botonTexto": "Ver proyecto",
+      "destacadoHome": false
+    },
+    {
+      "id": "t-identidad",
+      "titulo": "USAID",
+      "area": "diseno",
+      "anio": 2015,
+      "cliente": "USAID",
+      "descripcion": "Identidad visual completa para una USAID: logotipo, papelería, editorial, backings, brieffers y redes sociales.",
+      "herramientas": [
+        "Illustrator",
+        "InDesign",
+        "Figma"
+      ],
+      "destacado": true,
+      "imagenes": [
+        "images/1786513633083-7yxd.jpg",
+        "images/1786513633102-5qia.jpg",
+        "images/1786513633118-gf0s.jpg",
+        "images/1786513633144-e8hh.jpg",
+        "images/1786513633159-dwyf.jpg",
+        "images/1786513633179-e48m.jpg",
+        "images/1786513633192-zv5m.jpg"
+      ],
+      "video": {
+        "tipo": "ninguno",
+        "url": ""
+      },
+      "enlaces": [],
+      "beforeAfter": {},
+      "pagina": "",
+      "botonTexto": "Ver proyecto",
+      "destacadoHome": false
+    },
+    {
+      "id": "t-tienda",
+      "titulo": "ICOE",
+      "area": "dev",
+      "anio": 2016,
+      "cliente": "USAID & ACDIVOCA",
+      "descripcion": "Sistema basado en Excel y Visual Basic para la visualización de datos en bruto a gráficos entendibles y temáticos para la comunidad del Choco.",
+      "herramientas": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "destacado": true,
+      "imagenes": [
+        "images/1786513806719-e4dj.jpg",
+        "images/1786513806746-dcav.jpg",
+        "images/1786513806799-yeri.png",
+        "images/1786513806837-xscb.png",
+        "images/1786736406383-j9wk.jpg"
+      ],
+      "video": {
+        "tipo": "ninguno",
+        "url": ""
+      },
+      "enlaces": [],
+      "beforeAfter": {},
+      "pagina": "",
+      "botonTexto": "Ver proyecto",
+      "destacadoHome": false
+    }
+  ],
+  "trayectoria": [
+    {
+      "inicio": "2024-01",
+      "fin": "",
+      "tipo": "experiencia",
+      "titulo": "Unity Technical Artist / XR Specialist",
+      "org": "Estudio Colaborativo / Equipo Interno",
+      "descripcion": "Liderazgo técnico en pipeline XR: arquitectura de scenes, addressables, DOTS/ECS, profiling, Git/Perforce, CI/CD, tools IA para asset integration.",
+      "imagen": "images/1787084894779-f1dx.jpg",
+      "_id": "tray_1787956280939_0"
+    },
+    {
+      "inicio": "2022-01",
+      "fin": "2023-12",
+      "tipo": "experiencia",
+      "titulo": "Senior 3D Artist / Technical Artist",
+      "org": "Xlerion Studios",
+      "descripcion": "Creación de assets 3D para videojuegos (Total Darkness), pipeline ZBrush→Maya→Substance→Unity, optimización mobile/PC, rigging técnico.",
+      "imagen": "images/1786736406321-abj9.jpg",
+      "_id": "tray_1787956280939_1"
+    }
+  ]
+}

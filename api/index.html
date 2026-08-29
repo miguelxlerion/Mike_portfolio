@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MERM API — Tester</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono:vf@latest/latin-wght-normal.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#FCFCF9;--ink:#0F1020;--muted:#6B7280;--line:#E5E7EB;--accent:#0F1020;--ok:#0A7A42;--err:#DC2626}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+a{color:inherit}
+header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:20}
+.head{max-width:1100px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:700}
+.nav{font-size:12px;display:flex;gap:16px;color:var(--muted)}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 20px}
+.card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:16px;margin-bottom:16px}
+.card h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff}
+.btn{padding:10px 14px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-size:13px;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.small{padding:6px 10px;font-size:12px}
+.mono{font-family:JetBrains Mono,monospace;font-size:12px;background:#0F1020;color:#E5E7EB;border-radius:8px;padding:12px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+.badge{font-size:11px;padding:4px 8px;border-radius:20px;border:1px solid var(--line)}
+.badge.ok{border-color:rgba(10,122,66,.2);background:rgba(10,122,66,.08);color:var(--ok)}
+.badge.err{border-color:rgba(220,38,38,.2);background:rgba(220,38,38,.06);color:var(--err)}
+.kbd{font-family:JetBrains Mono,monospace;font-size:11px;background:#F3F4F6;padding:2px 6px;border-radius:4px;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header><div class="head"><a href="../index.html" class="brand">MERM API</a><div class="nav"><a href="docs.html">Swagger</a><a href="redoc.html">Redoc</a><a href="../proyecto-api.html">← Caso</a></div></div></header>
+<div class="wrap">
+  <h1 style="font-size:28px;letter-spacing:-.02em;margin-bottom:8px">API tester — datos financieros</h1>
+  <p style="color:var(--muted);font-size:13px;max-width:720px">Prueba todos los endpoints sin salir de aquí. Usa la API key demo <span class="kbd">merm_test_51H7x8a2e4f6g8h0j2k4</span> o genera la tuya tras login. Rate limit 100 req/h (free) — mira las cabeceras <span class="kbd">X-RateLimit-*</span>.</p>
+
+  <div class="card">
+    <h3>1 — Autenticación (JWT + refresh)</h3>
+    <div class="grid2">
+      <div>
+        <input class="input" id="regName" placeholder="Nombre (registro)">
+        <input class="input" id="regEmail" placeholder="Email" style="margin-top:8px">
+        <input class="input" id="regPass" placeholder="Password" type="password" style="margin-top:8px">
+        <button class="btn small" style="margin-top:8px" onclick="register()">Registrar</button>
+      </div>
+      <div>
+        <input class="input" id="logEmail" placeholder="Email" value="demo@merm.dev">
+        <input class="input" id="logPass" placeholder="Password" value="demo123" type="password" style="margin-top:8px">
+        <button class="btn small" style="margin-top:8px" onclick="login()">Login</button>
+        <button class="btn ghost small" style="margin-top:8px" onclick="refresh()">Refresh (rotación)</button>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="badge" id="authStatus">No autenticado</span>
+      <button class="btn ghost small" onclick="logout()">Cerrar sesión</button>
+    </div>
+    <div class="mono" id="authOut" style="margin-top:12px;max-height:140px">—</div>
+  </div>
+
+  <div class="card">
+    <h3>2 — API Keys (scopes, revocación)</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input class="input" id="keyName" placeholder="Nombre key" style="max-width:200px">
+      <select id="keyScope" class="input" style="max-width:220px"><option value="read:prices">read:prices</option><option value="read:markets">read:markets</option><option value="read:prices,read:markets">ambos</option></select>
+      <button class="btn small" onclick="createKey()">Generar key</button>
+      <button class="btn ghost small" onclick="listKeys()">Listar</button>
+    </div>
+    <input class="input" id="apiKeyInput" placeholder="X-API-Key (pega aquí o usa la demo)" value="merm_test_51H7x8a2e4f6g8h0j2k4" style="margin-top:8px">
+    <div class="mono" id="keysOut" style="margin-top:12px;max-height:160px">—</div>
+  </div>
+
+  <div class="card">
+    <h3>3 — Endpoints públicos (requieren X-API-Key)</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn small" onclick="callPrices()">GET /prices/current</button>
+      <button class="btn ghost small" onclick="callPrice('BTC')">GET /prices/BTC</button>
+      <button class="btn ghost small" onclick="callHistorical()">GET /prices/historical?symbol=BTC&limit=5</button>
+      <button class="btn ghost small" onclick="callMarkets()">GET /markets</button>
+      <button class="btn ghost small" onclick="callConversion()">GET /conversion?from=BTC&to=USD&amount=2</button>
+    </div>
+    <div class="mono" id="publicOut" style="margin-top:12px;max-height:240px">—</div>
+    <div id="rateInfo" style="font-size:11px;color:var(--muted);margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+    <h3>4 — Endpoints privados (requieren JWT Bearer)</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn small" onclick="getWatchlist()">GET /watchlist</button>
+      <button class="btn ghost small" onclick="addWatchlist()">POST /watchlist {BTC}</button>
+      <button class="btn ghost small" onclick="delWatchlist()">DELETE /watchlist/BTC</button>
+      <button class="btn ghost small" onclick="getAlerts()">GET /alerts?limit=2</button>
+      <button class="btn ghost small" onclick="addAlert()">POST /alerts</button>
+      <button class="btn ghost small" onclick="getProfile()">GET /users/profile</button>
+    </div>
+    <div class="mono" id="privateOut" style="margin-top:12px;max-height:240px">—</div>
+  </div>
+
+  <div class="card">
+    <h3>5 — Paginación y errores</h3>
+    <p style="font-size:13px;color:var(--muted)">Prueba <span class="kbd">limit</span> + <span class="kbd">cursor</span> en /alerts y /prices/historical. Los errores devuelven <span class="kbd">error.code</span> + <span class="kbd">traceId</span> y no exponen datos sensibles.</p>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn ghost small" onclick="testError()">Probar 401 sin key</button>
+      <button class="btn ghost small" onclick="test429()">Forzar 429 (100 req)</button>
+    </div>
+    <div class="mono" id="miscOut" style="margin-top:12px">—</div>
+  </div>
+</div>
+<script>
+let ACCESS=null, REFRESH=null;
+function setAuth(a,r){ACCESS=a;REFRESH=r;localStorage.setItem('api_access',a||'');localStorage.setItem('api_refresh',r||'');document.getElementById('authStatus').textContent=a?'Autenticado':'No autenticado';document.getElementById('authStatus').className='badge '+(a?'ok':'err')}
+function loadAuth(){setAuth(localStorage.getItem('api_access'),localStorage.getItem('api_refresh'))}
+loadAuth();
+function authHeaders(){return ACCESS?{Authorization:'Bearer '+ACCESS}:{};}
+function keyHeaders(){const k=document.getElementById('apiKeyInput').value.trim();return k?{'X-API-Key':k}:{};}
+async function api(path,opts={}){
+  const headers={ 'Content-Type':'application/json', ...authHeaders(), ...keyHeaders(), ...(opts.headers||{})};
+  const res=await fetch('/api/v1'+path, {...opts, headers});
+  const text=await res.text();
+  let body; try{ body=JSON.parse(text)}catch(e){ body=text}
+  const rate={limit:res.headers.get('X-RateLimit-Limit'), remaining:res.headers.get('X-RateLimit-Remaining'), reset:res.headers.get('X-RateLimit-Reset'), version:res.headers.get('API-Version')};
+  return {status:res.status, body, rate, raw:text};
+}
+function show(id,obj){document.getElementById(id).textContent=typeof obj==='string'?obj:JSON.stringify(obj,null,2)}
+async function register(){
+  const r=await api('/auth/register',{method:'POST', body:JSON.stringify({name:document.getElementById('regName').value, email:document.getElementById('regEmail').value, password:document.getElementById('regPass').value})});
+  show('authOut', r); if(r.body.access_token) setAuth(r.body.access_token, r.body.refresh_token);
+}
+async function login(){
+  const r=await api('/auth/login',{method:'POST', body:JSON.stringify({email:document.getElementById('logEmail').value, password:document.getElementById('logPass').value})});
+  show('authOut', r); if(r.body.access_token) setAuth(r.body.access_token, r.body.refresh_token);
+}
+async function refresh(){
+  const r=await api('/auth/refresh',{method:'POST', body:JSON.stringify({refresh_token: REFRESH})});
+  show('authOut', r); if(r.body.access_token) setAuth(r.body.access_token, r.body.refresh_token);
+}
+function logout(){setAuth(null,null);show('authOut','Sesión cerrada')}
+async function createKey(){
+  const r=await api('/auth/keys',{method:'POST', body:JSON.stringify({name:document.getElementById('keyName').value||'test', scopes: document.getElementById('keyScope').value.split(',')})});
+  show('keysOut', r); if(r.body.key) document.getElementById('apiKeyInput').value=r.body.key;
+}
+async function listKeys(){const r=await api('/auth/keys'); show('keysOut', r)}
+async function callPrices(){const r=await api('/prices/current'); show('publicOut', r); document.getElementById('rateInfo').textContent='Rate: '+r.rate.limit+' / Remaining '+r.rate.remaining+' Reset '+r.rate.reset}
+async function callPrice(s){const r=await api('/prices/'+s); show('publicOut', r)}
+async function callHistorical(){const r=await api('/prices/historical?symbol=BTC&limit=5'); show('publicOut', r)}
+async function callMarkets(){const r=await api('/markets'); show('publicOut', r)}
+async function callConversion(){const r=await api('/conversion?from=BTC&to=USD&amount=2'); show('publicOut', r)}
+async function getWatchlist(){const r=await api('/watchlist'); show('privateOut', r)}
+async function addWatchlist(){const r=await api('/watchlist',{method:'POST', body:JSON.stringify({symbol:'BTC'})}); show('privateOut', r)}
+async function delWatchlist(){const r=await api('/watchlist/BTC',{method:'DELETE'}); show('privateOut', r)}
+async function getAlerts(){const r=await api('/alerts?limit=2'); show('privateOut', r)}
+async function addAlert(){const r=await api('/alerts',{method:'POST', body:JSON.stringify({symbol:'ETH', target_price:2500, condition:'above'})}); show('privateOut', r)}
+async function getProfile(){const r=await api('/users/profile'); show('privateOut', r)}
+async function testError(){const old=document.getElementById('apiKeyInput').value;document.getElementById('apiKeyInput').value='';const r=await api('/prices/current');show('miscOut', r);document.getElementById('apiKeyInput').value=old}
+async function test429(){
+  let out='';
+  for(let i=0;i<5;i++){
+    const r=await api('/prices/current');
+    out+='req '+(i+1)+': '+r.status+' remaining '+r.rate.remaining+'\n';
+    if(r.status===429) break;
+  }
+  show('miscOut', out+'\n(Para forzar 429 real, haz 100 req rápidas — el servidor bloquea por IP/key y devuelve 429 con X-RateLimit-*)');
+}
+</script>
+</body>
+</html>

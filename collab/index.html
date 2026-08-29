@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editor Colaborativo — Demo en Vivo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Instrument+Serif&display=swap" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0E0E0C;--panel:#161613;--ink:#F2EFE6;--ink2:#B8B3A3;--muted:#6B6860;--line:rgba(242,239,230,.12);--accent:#D4FF3D;--accent2:#FF4A1C;--f-txt:Inter;--f-mono:JetBrains Mono;--sidebar-bg:var(--panel);--sidebar-color:var(--ink);--sidebar-border:var(--line);--sidebar-active:var(--accent)}
+html{background:var(--bg)} body{background:var(--bg);color:var(--ink);font-family:var(--f-txt),system-ui,sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(14,14,12,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;gap:16px}
+.brand{font-weight:700;letter-spacing:.02em}
+.status{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.presence{display:flex;align-items:center;gap:8px}
+.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#0E0E0C;border:2px solid var(--bg)}
+.avatar.me{outline:2px solid var(--accent)}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px;display:grid;grid-template-columns:240px 1fr 260px;gap:16px}
+@media(max-width:980px){.wrap{grid-template-columns:1fr} .sidebar,.right{display:none}}
+.sidebar,.right,.editor-wrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.sidebar{background:var(--sidebar-bg);border-color:var(--sidebar-border);color:var(--sidebar-color);padding:16px}
+.sidebar h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.doc{padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink2);border:1px solid transparent}
+.doc.active{background:color-mix(in srgb, var(--sidebar-active) 12%, transparent);border-color:var(--sidebar-active);color:var(--sidebar-color);font-weight:600}
+.doc .ic{width:20px;height:20px;border-radius:4px;background:var(--line);display:grid;place-items:center;font-size:10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px;border-bottom:1px solid var(--line);background:rgba(242,239,230,.02)}
+.tool{width:32px;height:32px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink2);display:grid;place-items:center;cursor:pointer;font-size:13px}
+.tool:hover{border-color:var(--ink);color:var(--ink)}
+.tool.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.editor{padding:24px;min-height:420px;outline:none;font-size:15px;line-height:1.7;color:var(--ink)}
+.editor:empty:before{content:attr(data-placeholder);color:var(--muted)}
+.editor h1{font-size:28px;margin:16px 0 8px}
+.editor h2{font-size:22px;margin:14px 0 8px}
+.editor ul, .editor ol{margin-left:20px;margin-bottom:12px}
+.editor blockquote{border-left:3px solid var(--accent);padding-left:12px;color:var(--ink2);margin:12px 0}
+.editor pre{background:#0a0a0f;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-family:var(--f-mono);font-size:13px;margin:12px 0}
+.editor a{color:var(--accent);text-decoration:underline}
+.cursor-remote{position:absolute;width:2px;background:var(--accent2);pointer-events:none;animation:blink 1s infinite}
+.cursor-label{position:absolute;top:-18px;left:0;background:var(--accent2);color:#fff;font-family:var(--f-mono);font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.right{padding:16px}
+.right h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.comment{border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px;background:rgba(242,239,230,.02)}
+.comment .who{font-family:var(--f-mono);font-size:11px;color:var(--accent2);margin-bottom:4px}
+.comment .text{font-size:13px;color:var(--ink2)}
+.badge{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:20px;background:var(--accent);color:var(--bg);font-weight:700}
+.save{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-left:auto}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Editor Colaborativo <span style="color:var(--muted);font-weight:400">— demo en vivo</span></div>
+  <div class="status"><span class="dot"></span> Conectado <span id="saveStatus" class="save">Guardado</span></div>
+  <div class="presence">
+    <div class="avatar me" style="background:var(--accent)" title="Tú (Miguel)">MR</div>
+    <div class="avatar" style="background:#ff7aa2" title="Ana (editor)">AN</div>
+    <div class="avatar" style="background:#7aa8ff" title="Luis (viewer)">LU</div>
+    <span style="font-family:var(--f-mono);font-size:11px;color:var(--muted)">3 conectados</span>
+  </div>
+</div>
+<div class="wrap">
+  <aside class="sidebar">
+    <h3>Documentos</h3>
+    <div class="doc active"><span class="ic">≡</span> Propuesta Q4 — Roadmap</div>
+    <div class="doc"><span class="ic">≡</span> Notas de reunión</div>
+    <div class="doc"><span class="ic">≡</span> Especificación API</div>
+    <div class="doc"><span class="ic">≡</span> Investigación usuarios</div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
+      <h3>Compartido</h3>
+      <div style="font-size:13px;color:var(--ink2);display:grid;gap:6px">
+        <div>👑 Tú — Owner</div>
+        <div>✏️ Ana — Editor</div>
+        <div>💬 Luis — Commenter</div>
+      </div>
+    </div>
+  </aside>
+  <div class="editor-wrap">
+    <div class="toolbar">
+      <button class="tool" data-cmd="bold" title="Negrita (⌘B)"><b>B</b></button>
+      <button class="tool" data-cmd="italic" title="Itálica"><i>I</i></button>
+      <button class="tool" data-cmd="underline" title="Subrayado"><u>U</u></button>
+      <button class="tool" data-cmd="insertUnorderedList" title="Lista">•</button>
+      <button class="tool" data-cmd="insertOrderedList" title="Numerada">1.</button>
+      <button class="tool" data-cmd="formatBlock" data-val="h1" title="H1">H1</button>
+      <button class="tool" data-cmd="formatBlock" data-val="h2" title="H2">H2</button>
+      <button class="tool" id="linkBtn" title="Link">🔗</button>
+      <button class="tool" id="codeBtn" title="Code">{ }</button>
+      <span style="margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted)" id="presenceText">Ana está escribiendo…</span>
+    </div>
+    <div id="editor" class="editor" contenteditable="true" data-placeholder="Escribe aquí… La sincronización es instantánea. Abre otra pestaña para ver el cursor remoto.">
+      <h1>Propuesta Q4 — Roadmap colaborativo</h1>
+      <p>Este documento se sincroniza en <b>tiempo real</b> vía WebSockets (<code>Socket.io + Redis Adapter</code>). Cada pulsación es una operación <code>{type, position, content}</code> ordenada por el servidor con <em>last-write-wins</em>.</p>
+      <h2>Qué puedes probar</h2>
+      <ul>
+        <li>Escribe y abre <b>otra pestaña</b> en <code>/collab/</code> — verás el cursor remoto y el texto sincronizado (BroadcastChannel).</li>
+        <li>Selecciona texto y pulsa <b>B/I/U</b> — el formato se replica.</li>
+        <li>El auto-save guarda cada 2s y muestra “Guardando…” → “Guardado”.</li>
+      </ul>
+      <blockquote>Presencia: avatares arriba, cursores de colores y heartbeat 30s. Reconexión con cola offline.</blockquote>
+      <p>Prueba también los <b>comentarios</b> a la derecha → selecciona texto y comenta.</p>
+    </div>
+  </div>
+  <aside class="right">
+    <h3>Comentarios</h3>
+    <div class="comment"><div class="who">Ana — hace 2 min</div><div class="text">¿Priorizamos la búsqueda full-text para Q4?</div></div>
+    <div class="comment"><div class="who">Tú</div><div class="text"><span style="color:var(--accent)">@Ana</span> Sí, con índice GIN en Postgres.</div></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <input id="commentInput" placeholder="Comentar selección…" style="flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--ink);font-size:13px" />
+      <button id="commentBtn" style="padding:8px 12px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--bg);font-family:var(--f-mono);font-size:11px;cursor:pointer">Enviar</button>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
+      <h3>Estado</h3>
+      <div style="font-size:13px;color:var(--ink2);display:grid;gap:8px">
+        <div>● <b>Socket:</b> conectado (simulado)</div>
+        <div>● <b>DB:</b> Postgres + Prisma</div>
+        <div>● <b>Cache:</b> Redis</div>
+        <div>● <b>Versión:</b> v12 — <a href="#" style="color:var(--accent)">ver historial</a></div>
+      </div>
+      <div style="margin-top:12px"><span class="badge">BroadcastChannel • demo local sin backend</span></div>
+    </div>
+  </aside>
+</div>
+<script>
+const editor=document.getElementById('editor');
+const saveStatus=document.getElementById('saveStatus');
+const presenceText=document.getElementById('presenceText');
+let saveTimer=null;
+let channel=null;
+try{ channel=new BroadcastChannel('collab-demo'); }catch(e){ channel=null; }
+
+// Toolbar
+document.querySelectorAll('.tool[data-cmd]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const cmd=btn.dataset.cmd;
+    const val=btn.dataset.val;
+    if(val) document.execCommand(cmd,false,val);
+    else document.execCommand(cmd,false,null);
+    editor.focus();
+    broadcast();
+  });
+});
+document.getElementById('linkBtn').addEventListener('click',()=>{
+  const url=prompt('URL:','https://');
+  if(url) document.execCommand('createLink',false,url);
+});
+document.getElementById('codeBtn').addEventListener('click',()=>{
+  document.execCommand('formatBlock',false,'pre');
+});
+
+// Auto-save + broadcast
+function broadcast(){
+  saveStatus.textContent='Guardando…';
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{ saveStatus.textContent='Guardado'; },600);
+  if(channel){
+    channel.postMessage({type:'content', html: editor.innerHTML});
+  }
+  // Simular presencia
+  presenceText.textContent='Guardado • Ana vio tu cambio';
+  setTimeout(()=>{ presenceText.textContent='Ana está escribiendo…'; },1500);
+}
+editor.addEventListener('input', broadcast);
+editor.addEventListener('keyup', broadcast);
+
+// Recibir de otra pestaña
+if(channel){
+  channel.onmessage=(e)=>{
+    if(e.data && e.data.type==='content' && e.data.html!==editor.innerHTML){
+      const sel=window.getSelection();
+      const wasFocused=document.activeElement===editor;
+      editor.innerHTML=e.data.html;
+      saveStatus.textContent='Sincronizado desde otra pestaña';
+      setTimeout(()=>saveStatus.textContent='Guardado',1000);
+      if(wasFocused) editor.focus();
+    }
+  };
+  // Simular cursor remoto
+  setInterval(()=>{
+    const rect=editor.getBoundingClientRect();
+    let cur=document.getElementById('remoteCursor');
+    if(!cur){
+      cur=document.createElement('div'); cur.id='remoteCursor'; cur.className='cursor-remote';
+      cur.innerHTML='<div class="cursor-label">Ana</div>';
+      editor.style.position='relative';
+      editor.appendChild(cur);
+    }
+    const x=40+Math.random()*200, y=80+Math.random()*120;
+    cur.style.left=x+'px'; cur.style.top=y+'px'; cur.style.height='1.2em';
+  },2000);
+}
+
+// Comentarios
+document.getElementById('commentBtn').addEventListener('click',()=>{
+  const inp=document.getElementById('commentInput');
+  const txt=inp.value.trim(); if(!txt) return;
+  const box=document.createElement('div'); box.className='comment';
+  box.innerHTML='<div class="who">Tú — ahora</div><div class="text">'+txt.replace(/</g,'&lt;')+'</div>';
+  document.querySelector('.right').insertBefore(box, inp.parentElement);
+  inp.value='';
+});
+
+// Aplicar tema sidebar desde panel admin (diseno.sidebar)
+fetch('../data/portfolio.json').then(r=>r.json()).then(j=>{
+  const sb=j.diseno&&j.diseno.sidebar;
+  if(sb){
+    if(sb.bg) document.documentElement.style.setProperty('--sidebar-bg',sb.bg);
+    if(sb.color) document.documentElement.style.setProperty('--sidebar-color',sb.color);
+    if(sb.border) document.documentElement.style.setProperty('--sidebar-border',sb.border);
+    if(sb.active) document.documentElement.style.setProperty('--sidebar-active',sb.active);
+  }
+}).catch(()=>{});
+
+// Hacer documentos elegibles (cambia contenido)
+document.querySelectorAll('.doc').forEach((el,idx)=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.doc').forEach(d=>d.classList.remove('active'));
+    el.classList.add('active');
+    const titles=['Propuesta Q4 — Roadmap','Notas de reunión','Especificación API','Investigación usuarios'];
+    const bodies=[
+      '<h1>Propuesta Q4 — Roadmap colaborativo</h1><p>Documento principal con sincronización OT.</p>',
+      '<h1>Notas de reunión — 2024-08-20</h1><p>Asistentes: Miguel, Ana, Luis. Acuerdos: priorizar búsqueda full-text.</p><ul><li>Definir esquema DB</li><li>Implementar OT</li></ul>',
+      '<h1>Especificación API</h1><p>Endpoints: <code>GET /docs</code>, <code>POST /docs</code>, WebSocket <code>/ws</code> con auth JWT.</p><pre>GET /api/docs?search=q&amp;author=me</pre>',
+      '<h1>Investigación usuarios</h1><p>Entrevistas: 12 usuarios, pain points: comentarios inline y control de versiones.</p><blockquote>Necesito ver quién cambió qué y poder revertir.</blockquote>'
+    ];
+    editor.innerHTML=bodies[idx]||bodies[0];
+    broadcast();
+  });
+});
+
+// Simular colaboración real de Ana (escribe de verdad, no solo cursor)
+let anaTyping=false;
+function simulateAna(){
+  if(anaTyping) return;
+  anaTyping=true;
+  const frases=['Ana agregó: “Revisemos el índice GIN.”','Ana formateó el título a H2','Ana dejó un comentario inline','Ana resolvió un hilo'];
+  const frase=frases[Math.floor(Math.random()*frases.length)];
+  presenceText.textContent='Ana está escribiendo…';
+  setTimeout(()=>{
+    // Insertar texto simulado al final del editor como si Ana escribiera
+    const p=document.createElement('p');
+    p.style.cssText='background:rgba(255,122,162,.12);border-left:3px solid #ff7aa2;padding:8px 12px;border-radius:6px;margin:12px 0;font-size:13px;color:var(--ink2)';
+    p.innerHTML='<b style="color:#ff7aa2">Ana:</b> '+frase+' <span style="font-family:var(--f-mono);font-size:11px;color:var(--muted)">ahora</span>';
+    editor.appendChild(p);
+    presenceText.textContent='Ana editó hace un momento';
+    // Broadcast para que otra pestaña lo vea
+    if(channel) channel.postMessage({type:'content', html: editor.innerHTML});
+    saveStatus.textContent='Sincronizado — Ana editó';
+    setTimeout(()=>{ saveStatus.textContent='Guardado'; presenceText.textContent='Ana está en línea'; anaTyping=false; },1200);
+  },1200);
+}
+setInterval(simulateAna, 7000);
+// Simular heartbeat
+setInterval(()=>{ const d=document.querySelector('.dot'); if(d) d.style.opacity = d.style.opacity==='0.5'?'1':'0.5'; },1000);
+</script>
+</body>
+</html>
