@@ -60,6 +60,7 @@
       <button data-tab="experience">Experiencia</button>
       <button data-tab="portfolio">Portafolio</button>
       <button data-tab="gamedev">3D & Videojuegos</button>
+      <button data-tab="gallery3d">3D Gallery</button>
       <button data-tab="projects">Proyectos</button>
       <button data-tab="contact">Contacto</button>
       <button data-tab="site">Sitio</button>
@@ -214,6 +215,150 @@
             <div class="field"><label>Subtítulo</label><textarea id="gd_sub" rows="2"></textarea></div>
             <div id="gd_cats"></div><div style="display:flex;gap:8px;margin-top:8px"><input id="gd_newCat" placeholder="Nueva categoría" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--panel2);color:var(--text)"><button class="btn small ghost" id="gd_addCat">+ Añadir</button></div>
             <div id="gd_list"></div><button class="btn small" id="gd_add">+ Trabajo demo</button>
+          </div>
+        </div>
+      </div>
+      <!-- GALLERY 3D — gallery.html Interactive Gallery -->
+      <div data-panel="gallery3d" class="hidden">
+        <div class="panel"><h3>3D Gallery — gallery.html <span class="hint">salón expositivo interactivo con 6 booths</span></h3>
+              <div class="hint" style="margin-bottom:12px">Configura la galería 2.5D interactiva: booths de proyectos, controles, colores, iluminación y modelos 3D. <a href="gallery.html" target="_blank" style="color:var(--accent);">Ver Gallery ↗</a></div>
+          <!-- Start Screen / Hero -->
+          <div class="panel"><h3>🎬 Start Screen — Pantalla de entrada</h3>
+            <div class="field"><label>Título principal</label><input id="g3d_start_title" placeholder="DEVQUEST"></div>
+            <div class="field"><label>Subtítulo</label><input id="g3d_start_sub" placeholder="3D PORTFOLIO GALLERY"></div>
+            <div class="field"><label>Descripción</label><textarea id="g3d_start_desc" rows="3" placeholder="Descripción que aparece en la pantalla de inicio..."></textarea></div>
+            <div class="grid2">
+              <div class="field"><label>Botón entrar texto</label><input id="g3d_start_btn_text" placeholder="ENTER THE GALLERY"></div>
+              <div class="field"><label>Hint tecla</label><input id="g3d_start_hint" placeholder="PRESS ENTER"></div>
+            </div>
+            <div class="field"><label>Color acento proyectos (comma separated: 6 colores hex)</label><input id="g3d_start_dots" placeholder="#22d3ee, #fb923c, #fbbf24, #4ade80, #f0f, #38bdf8"></div>
+          </div>
+          <!-- HUD & Controls -->
+          <div class="panel"><h3>🎮 HUD & Controles</h3>
+            <div class="field"><label>Título HUD</label><input id="g3d_hud_title" placeholder="DEVQUEST"></div>
+            <div class="field"><label>Subtítulo HUD</label><input id="g3d_hud_sub" placeholder="INTERACTIVE 3D PORTFOLIO"></div>
+            <div class="field"><label>Texto hint barra inferior</label><input id="g3d_hint_text" placeholder="DRAG TO LOOK · SCROLL TO ZOOM · WASD TO MOVE · CLICK A PROJECT"></div>
+            <div class="grid2">
+              <div class="field"><label>Auto-ocultar hint (ms)</label><input type="number" id="g3d_hint_autohide" min="0" max="60000" value="11000"></div>
+              <div class="field"><label>Idle cursor (ms)</label><input type="number" id="g3d_idle_hide" min="0" max="10000" value="3000"></div>
+            </div>
+            <div class="field"><label>Teclas movimiento (coma separadas)</label><input id="g3d_keys_move" placeholder="KeyW,KeyA,KeyS,KeyD,ArrowUp,ArrowDown,ArrowLeft,ArrowRight"></div>
+            <div class="field"><label>Tecla mute</label><input id="g3d_key_mute" placeholder="KeyM"></div>
+            <div class="field"><label>Tecla help</label><input id="g3d_key_help" placeholder="KeyH"></div>
+          </div>
+          <!-- Camera & Scene -->
+          <div class="panel"><h3>📷 Cámara & Escena 3D</h3>
+            <div class="grid2">
+              <div class="field"><label>Posición inicial X</label><input type="number" step="0.1" id="g3d_cam_x" value="0"></div>
+              <div class="field"><label>Posición inicial Y</label><input type="number" step="0.1" id="g3d_cam_y" value="3.6"></div>
+              <div class="field"><label>Posición inicial Z</label><input type="number" step="0.1" id="g3d_cam_z" value="12.8"></div>
+              <div class="field"><label>Target X</label><input type="number" step="0.1" id="g3d_target_x" value="0"></div>
+              <div class="field"><label>Target Y</label><input type="number" step="0.1" id="g3d_target_y" value="0"></div>
+              <div class="field"><label>Target Z</label><input type="number" step="0.1" id="g3d_target_z" value="0"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label>FOV</label><input type="number" step="1" id="g3d_fov" min="30" max="90" value="55"></div>
+              <div class="field"><label>Near</label><input type="number" step="0.1" id="g3d_near" value="0.1"></div>
+              <div class="field"><label>Far</label><input type="number" step="1" id="g3d_far" value="220"></div>
+              <div class="field"><label>Min Distance</label><input type="number" step="0.1" id="g3d_minDist" value="2.2"></div>
+              <div class="field"><label>Max Distance</label><input type="number" step="0.1" id="g3d_maxDist" value="20"></div>
+              <div class="field"><label>Auto Rotate Speed</label><input type="number" step="0.01" id="g3d_autoRotSpeed" value="0.55"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label>Damping Factor</label><input type="number" step="0.01" id="g3d_damping" value="0.08"></div>
+              <div class="field"><label>Min Polar Angle</label><input type="number" step="0.01" id="g3d_minPolar" value="0.15"></div>
+              <div class="field"><label>Max Polar Angle</label><input type="number" step="0.01" id="g3d_maxPolar" value="1.52"></div>
+              <div class="field"><label>Enable Pan</label><select id="g3d_enablePan"><option value="false">No</option><option value="true">Sí</option></select></div>
+              <div class="field"><label>Walk Speed</label><input type="number" step="0.1" id="g3d_walkSpeed" value="7.5"></div>
+              <div class="field"><label>Walk Lerp</label><input type="number" step="0.1" id="g3d_walkLerp" value="9"></div>
+            </div>
+          </div>
+          <!-- Colors & Visual Effects -->
+          <div class="panel"><h3>🎨 Colores & Efectos Visuales</h3>
+            <div class="grid2">
+              <div class="field"><label>Fondo escena (hex)</label><input type="color" id="g3d_scene_bg" data-k="g3d_scene_bg"><input type="text" id="g3d_scene_bg_hex" class="mono" placeholder="#0a1128" data-k="g3d_scene_bg"></div>
+              <div class="field"><label>Fog color (hex)</label><input type="color" id="g3d_fog_color" data-k="g3d_fog_color"><input type="text" id="g3d_fog_color_hex" class="mono" placeholder="#0b1230" data-k="g3d_fog_color"></div>
+              <div class="field"><label>Fog near</label><input type="number" step="1" id="g3d_fog_near" value="22"></div>
+              <div class="field"><label>Fog far</label><input type="number" step="1" id="g3d_fog_far" value="62"></div>
+              <div class="field"><label>Cursor color (hex)</label><input type="color" id="g3d_cursor_color" data-k="g3d_cursor_color"><input type="text" id="g3d_cursor_color_hex" class="mono" placeholder="#00d4ff" data-k="g3d_cursor_color"></div>
+              <div class="field"><label>Cursor ring color (hex)</label><input type="color" id="g3d_cursor_ring_color" data-k="g3d_cursor_ring_color"><input type="text" id="g3d_cursor_ring_color_hex" class="mono" placeholder="#00d4ff" data-k="g3d_cursor_ring_color"></div>
+              <div class="field"><label>Cursor hover color (hex)</label><input type="color" id="g3d_cursor_hover_color" data-k="g3d_cursor_hover_color"><input type="text" id="g3d_cursor_hover_color_hex" class="mono" placeholder="#7df9ff" data-k="g3d_cursor_hover_color"></div>
+              <div class="field"><label>HUD accent (hex)</label><input type="color" id="g3d_hud_accent" data-k="g3d_hud_accent"><input type="text" id="g3d_hud_accent_hex" class="mono" placeholder="#22d3ee" data-k="g3d_hud_accent"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label>CRT Scanlines opacity (0-1)</label><input type="number" step="0.01" id="g3d_scanlines_op" min="0" max="1" value="0.03"></div>
+              <div class="field"><label>Vignette opacity (0-1)</label><input type="number" step="0.01" id="g3d_vignette_op" min="0" max="1" value="0.7"></div>
+              <div class="field"><label>Shadow map type</label><select id="g3d_shadow_type"><option value="PCFSoftShadowMap">PCF Soft Shadows</option><option value="PCFShadowMap">PCF Shadows</option><option value="BasicShadowMap">Basic</option></select></div>
+              <div class="field"><label>Tone Mapping</label><select id="g3d_tone_mapping"><option value="ACESFilmicToneMapping">ACES Filmic</option><option value="ReinhardToneMapping">Reinhard</option><option value="CineonToneMapping">Cineon</option><option value="NoToneMapping">None</option></select></div>
+              <div class="field"><label>Tone Exposure</label><input type="number" step="0.01" id="g3d_exposure" min="0.5" max="3" value="1.15"></div>
+              <div class="field"><label>Pixel Ratio Max</label><input type="number" step="0.5" id="g3d_pixel_ratio" min="1" max="3" value="2"></div>
+            </div>
+          </div>
+          <!-- Lighting -->
+          <div class="panel"><h3>💡 Iluminación</h3>
+            <div id="g3d_lights_list"></div>
+            <button class="btn small ghost" id="g3d_addLight">+ Luz</button>
+            <div class="hint" style="margin-top:8px">Configura luces: Hemisphere (ambiental), Directional (sol), Point (puntual). Ajusta color, intensidad y posición.</div>
+          </div>
+          <!-- Projects / Booths (6 projects) -->
+          <div class="panel"><h3>🖼️ Proyectos / Booths (6 items)</h3>
+            <div class="hint" style="margin-bottom:12px">Cada booth representa un proyecto. Cubre: imagen, título, tagline, datos técnicos, stats, tech stack, features y color acento.</div>
+            <div id="g3d_projects_list"></div>
+            <button class="btn small ghost" id="g3d_addProject">+ Añadir Proyecto (máx 6)</button>
+          </div>
+          <!-- 3D Models for Booths -->
+          <div class="panel"><h3>📦 Modelos 3D para Booths</h3>
+            <div class="hint" style="margin-bottom:8px">Formatos: <b>.glb</b> (recomendado), <b>.gltf</b>, <b>.fbx</b>, <b>.obj</b>. Máx 10MB. Se usan como representaciones 3D en cada booth.</div>
+            <div id="g3d_models_list"></div>
+            <div class="field"><label>Subir modelo 3D</label><input type="file" id="g3d_model_file" accept=".glb,.gltf,.fbx,.obj"></div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <input type="text" id="g3d_model_url" placeholder="o pega URL https://.../modelo.glb" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--panel2);color:var(--text)">
+              <button class="btn small ghost" id="g3d_addModelUrl">+ URL</button>
+            </div>
+          </div>
+          <!-- Particles & Environment -->
+          <div class="panel"><h3>✨ Partículas & Entorno</h3>
+            <div class="grid2">
+              <div class="field"><label>Partículas count</label><input type="number" id="g3d_particles_count" min="100" max="5000" step="50" value="420"></div>
+              <div class="field"><label>Partículas radius</label><input type="number" step="0.1" id="g3d_particles_radius" value="82"></div>
+              <div class="field"><label>Partículas color (hex)</label><input type="color" id="g3d_particles_color" data-k="g3d_particles_color"><input type="text" id="g3d_particles_color_hex" class="mono" placeholder="#cfe0ff" data-k="g3d_particles_color"></div>
+              <div class="field"><label>Partículas size</label><input type="number" step="0.01" id="g3d_particles_size" min="0.05" max="1" value="0.22"></div>
+              <div class="field"><label>Partículas opacity</label><input type="number" step="0.01" id="g3d_particles_op" min="0.1" max="1" value="0.85"></div>
+              <div class="field"><label>Hub radius</label><input type="number" step="0.1" id="g3d_hub_radius" value="2.7"></div>
+            </div>
+          </div>
+          <!-- Floor -->
+          <div class="panel"><h3>🏗️ Suelo & Grid</h3>
+            <div class="grid2">
+              <div class="field"><label>Grid color (hex)</label><input type="color" id="g3d_grid_color" data-k="g3d_grid_color"><input type="text" id="g3d_grid_color_hex" class="mono" placeholder="#22d3ee" data-k="g3d_grid_color"></div>
+              <div class="field"><label>Grid opacity</label><input type="number" step="0.01" id="g3d_grid_opacity" min="0" max="1" value="0.28"></div>
+              <div class="field"><label>Center dot color (hex)</label><input type="color" id="g3d_center_dot_color" data-k="g3d_center_dot_color"><input type="text" id="g3d_center_dot_color_hex" class="mono" placeholder="#22d3ee" data-k="g3d_center_dot_color"></div>
+              <div class="field"><label>Floor radius</label><input type="number" step="0.1" id="g3d_floor_radius" value="34"></div>
+              <div class="field"><label>Floor segments</label><input type="number" id="g3d_floor_segments" value="72"></div>
+              <div class="field"><label>Floor color (hex)</label><input type="color" id="g3d_floor_color" data-k="g3d_floor_color"><input type="text" id="g3d_floor_color_hex" class="mono" placeholder="#93a7d8" data-k="g3d_floor_color"></div>
+              <div class="field"><label>Floor roughness</label><input type="number" step="0.01" id="g3d_floor_roughness" min="0" max="1" value="0.4"></div>
+              <div class="field"><label>Floor metalness</label><input type="number" step="0.01" id="g3d_floor_metalness" min="0" max="1" value="0.3"></div>
+              <div class="field"><label>Rim color (hex)</label><input type="color" id="g3d_rim_color" data-k="g3d_rim_color"><input type="text" id="g3d_rim_color_hex" class="mono" placeholder="#22d3ee" data-k="g3d_rim_color"></div>
+              <div class="field"><label>Rim intensity</label><input type="number" step="0.1" id="g3d_rim_intensity" value="1.6"></div>
+            </div>
+          </div>
+          <!-- Fonts & Typography -->
+          <div class="panel"><h3>🔤 Fuentes & Tipografía</h3>
+            <div class="grid2">
+              <div class="field"><label>Fuente títulos (--font-heading)</label>
+                <select id="g3d_font_heading"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="Outfit">Outfit</option><option value="DM Sans">DM Sans</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Syne">Syne</option><option value="Clash Display">Clash Display</option><option value="Sora">Sora</option><option value="custom">Personalizada...</option></select>
+                <input type="text" id="g3d_font_heading_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
+              </div>
+              <div class="field"><label>Fuente cuerpo (--font-body)</label>
+                <select id="g3d_font_body"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="DM Sans">DM Sans</option><option value="Outfit">Outfit</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="custom">Personalizada...</option></select>
+                <input type="text" id="g3d_font_body_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
+              </div>
+              <div class="field"><label>Fuente mono (--font-mono)</label>
+                <select id="g3d_font_mono"><option value="JetBrains Mono">JetBrains Mono</option><option value="Fira Code">Fira Code</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Code Pro">Source Code Pro</option><option value="Space Mono">Space Mono</option><option value="custom">Personalizada...</option></select>
+                <input type="text" id="g3d_font_mono_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
+              </div>
+              <div class="field"><label>Tamaño base (--font-size-base)</label><input type="number" id="g3d_font_size_base" min="12" max="18" step="1" value="14"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -440,7 +585,21 @@ async function loadState(){
   if(!state.site) state.site={}; if(!state.hero) state.hero={}; if(!state.about) state.about={}; if(!state.services) state.services=[]; if(!state.experience) state.experience=[]; if(!state.projects) state.projects=[]; if(!state.portfolio) state.portfolio={label:'PORTFOLIO',title:'Selected works',subtitle:'A curated selection of shipped platforms, 3D experiences and AI products — from concept to production.',categories:['All','3D','AI','IoT','Web'],items:[]}; if(!state.contact) state.contact={}; if(!state.design) state.design={}; if(!state.seo) state.seo={}; if(!state.settings) state.settings={lang:'es',maintenance:false,maintenanceMsg:'',analyticsId:'',customCss:'',customJs:'',showSections:{hero:true,about:true,services:true,experience:true,portfolio:true,projects:true,contact:true}};
   if(!state.portfolio.categories) state.portfolio.categories=['All','3D','AI','IoT','Web'];
   if(!state.gamedev) state.gamedev={label:'3D & VIDEOJUEGOS',title:'3D & Videojuegos — Demo',subtitle:'Espacio de demostración para experiencias interactivas, entornos 3D y videojuegos.',categories:['All','3D','Videojuegos','Demo'],items:[]};
-  if(!state.threeDPage) state.threeDPage={hero:{tag:'CREATIVE TECHNOLOGIST — v2.6',titleLines:[{text:'CODE.'},{text:'RENDER.',class:'glitch',dataText:'RENDER.'},{text:'INTELLIGENCE.'}],sub:'Ingeniero...',cta:[{text:'Ver Proyectos',href:'#work'},{text:'Contactar →',href:'#contact'}],stats:[{num:'10',label:'Años'},{num:'40',label:'% Reducción'},{num:'80',label:'% Optimización'},{num:'1200',label:'Unidades'}]},about:{num:'01 // ABOUT',title:'HYBRID <span class="accent">MINDSET</span>',desc:'Un perfil...',manifesto:{label:'// MANIFIESTO',paragraphs:[]},terminal:{lines:[]}},skills:{num:'02 // CAPABILITIES',title:'TECH <span class="accent">MATRIX</span>',desc:'',clusters:[]},work:{num:'03 // SELECTED WORK',title:'CASE <span class="accent">STUDIES</span>',desc:'',projects:[]},experience:{num:'04 // TRAJECTORY',title:'EXPERIENCE <span class="accent">LOG</span>',desc:'',items:[]},contact:{num:"// LET'S BUILD",title:'READY TO <span class="accent">RENDER</span>',sub:'',links:[],email:'',footer:'',coords:[]}};
+  if(!state.gallery3d) state.gallery3d={
+    start:{title:'DEVQUEST',sub:'3D PORTFOLIO GALLERY',desc:'A floating exhibition hall with six game projects. Walk around, orbit the booths, and click any installation — the camera flies in and the project expands with its full story, data, and credits.',btnText:'ENTER THE GALLERY',hint:'PRESS ENTER',dots:['#22d3ee','#fb923c','#fbbf24','#4ade80','#f0f','#38bdf8']},
+    hud:{title:'DEVQUEST',sub:'INTERACTIVE 3D PORTFOLIO',hintText:'DRAG TO LOOK · SCROLL TO ZOOM · WASD TO MOVE · CLICK A PROJECT',autohide:11000,idleHide:3000},
+    keys:{move:['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],mute:'KeyM',help:'KeyH'},
+    camera:{position:{x:0,y:3.6,z:12.8},target:{x:0,y:0,z:0},fov:55,near:0.1,far:220,minDist:2.2,maxDist:20,autoRotSpeed:0.55,damping:0.08,minPolar:0.15,maxPolar:1.52,enablePan:false,walkSpeed:7.5,walkLerp:9},
+    colors:{sceneBg:'#0a1128',fogColor:'#0b1230',fogNear:22,fogFar:62,cursor:'#00d4ff',cursorRing:'#00d4ff',cursorHover:'#7df9ff',hudAccent:'#22d3ee',scanlines:0.03,vignette:0.7},
+    lighting:[{type:'Hemisphere',sky:'#cfe0ff',ground:'#0a1128',intensity:0.4},{type:'Directional',color:'#ffffff',intensity:0.7,pos:{x:10,y:20,z:10},castShadow:true},{type:'Point',color:'#22d3ee',intensity:1.5,pos:{x:0,y:5,z:0},distance:40,decay:2}],
+    shadow:{type:'PCFSoftShadowMap',toneMapping:'ACESFilmicToneMapping',exposure:1.15,pixelRatio:2},
+    projects:[{id:'neon-racer',title:'NEON RACER',tagline:'Arcade antigravity racing',year:'2025',platform:'PC · Switch',engine:'Unity',role:'Lead Designer & Developer',description:'A synthwave arcade racer about pure speed. I designed the handling model, the 12-track campaign, and a dynamic music system that layers instruments as your boost meter fills. Built from a greybox prototype to a 60fps shipped build in 9 months.',image:'images/p1.jpg',accent:'#22d3ee',kind:'cabinet',stats:[{label:'Plays',value:'120k+'},{label:'Rating',value:'4.8/5'},{label:'Tracks',value:'12'},{label:'Dev time',value:'9 mo'}],tech:['Unity','C#','HDRP','Wwise','Shader Graph'],features:['Boost-chaining handling model with slipstream drafting','Dynamic music layering synced to gameplay intensity','Split-screen 2P and 8-player online time trials']},{id:'skyfall-td',title:'SKYFALL TD',tagline:'Tower defense on floating islands',year:'2024',platform:'Mobile · PC',engine:'Godot',role:'Designer & Developer',description:'A lane-based tower defense set on crumbling sky islands. I built the tower upgrade web, the 40-wave balance sheet, and an editor that lets players design and share islands. Soft-launched in two regions with 40k installs in the first month.',image:'images/p2.jpg',accent:'#fb923c',kind:'tower',stats:[{label:'Installs',value:'40k+'},{label:'Waves',value:'40'},{label:'Towers',value:'9'},{label:'D1 retention',value:'42%'}],tech:['Godot','GDScript','Aseprite','Firebase'],features:['Player-built islands with online level sharing','Tower fusion mechanic — merge two towers mid-wave','Falling island hazards that reshape the battlefield']},{id:'pixel-dungeon',title:'PIXEL DUNGEON',tagline:'A roguelike with hand-placed soul',year:'2023',platform:'PC',engine:'Custom (TypeScript)',role:'Solo Developer',description:'A bite-sized roguelike dungeon crawler where every room is hand-designed but the dungeon is procedurally assembled. I wrote a custom ECS engine, a roguelike FOV system, and 120+ items with real combos. Featured in two indie showcases.',image:'images/p3.jpg',accent:'#fbbf24',kind:'dungeon',stats:[{label:'Players',value:'25k+'},{label:'Items',value:'120+'},{label:'Rooms',value:'300'},{label:'Showcases',value:'2'}],tech:['TypeScript','Canvas 2D','ECS','Web Audio'],features:['Hand-crafted rooms, procedurally woven dungeons','Item combo system with emergent builds','Daily seeded runs with global leaderboards']},{id:'starfarm-idle',title:'STARFARM IDLE',tagline:'The coziest farm off-world',year:'2024',platform:'Mobile · Web',engine:'React + Three.js',role:'Designer & Developer',description:'An idle farming game on a space station greenhouse. I tuned the 14-day prestige loop, wrote the crop mutation system, and built a layered idle economy that keeps paying out while you sleep. 8k daily active players at peak.',image:'images/p4.jpg',accent:'#4ade80',kind:'rocket',stats:[{label:'DAU peak',value:'8k'},{label:'Crops',value:'48'},{label:'Prestiges',value:'14 days'},{label:'Avg. rating',value:'4.7/5'}],tech:['React','Three.js','Zustand','Web Workers'],features:['Offline progression with smart catch-up pacing','Crop mutation breeding with rare hybrids','Seasonal events that reskin the station']},{id:'robo-rush',title:'ROBO RUSH',tagline:'A 2.5D platformer with punch',year:'2025',platform:'PC · Web',engine:'Custom (WebGL)',role:'Game Feel Engineer',description:'A tight, juicy 2.5D platformer about a little robot delivering ideas. I owned the game-feel layer: squash & stretch, particle budgets, screen shake, and an input-buffering system that makes every jump feel forgiving. 30fps-to-60fps feel pass on mobile was my favorite problem.',image:'images/p5.jpg',accent:'#f0f',kind:'robot',stats:[{label:'Plays',value:'60k+'},{label:'Levels',value:'24'},{label:'Frame budget',value:'3.2 ms'},{label:'Mobile',value:'60 fps'}],tech:['WebGL','TypeScript','Web Audio','Vite'],features:['Coyote time + input buffering for butter jumps','Pooled particle system, zero per-frame allocs','Touch + keyboard controls with haptic feedback']},{id:'cosmic-defender',title:'COSMIC DEFENDER',tagline:'A love letter to arcade shooters',year:'2023',platform:'Web · PC',engine:'Phaser 3',role:'Developer & Juice Designer',description:'A wave-based arcade shooter with a 4-weapon combo system. I built the enemy AI director, the 30-wave difficulty ramp, and a 200-particle explosion budget. Shipped in 6 weeks for a game jam and kept alive as a live arcade title.',image:'images/p6.jpg',accent:'#38bdf8',kind:'ship',stats:[{label:'Plays',value:'90k+'},{label:'Waves',value:'30'},{label:'Weapons',value:'4'},{label:'Jam result',value:'1st'}],tech:['Phaser 3','TypeScript','Tiled','Howler'],features:['4-weapon combo system with synergies','AI director that adapts to your skill','Local co-op and global wave leaderboards']}],
+    models:[],
+    particles:{count:420,radius:82,color:'#cfe0ff',size:0.22,opacity:0.85},
+    hub:{radius:2.7},
+    floor:{gridColor:'#22d3ee',gridOpacity:0.28,centerDot:'#22d3ee',radius:34,segments:72,color:'#93a7d8',roughness:0.4,metalness:0.3,rimColor:'#22d3ee',rimIntensity:1.6},
+    fonts:{heading:'Space Grotesk',body:'Space Grotesk',mono:'JetBrains Mono',size:14}
+  };
   if(!state.gamedev.categories) state.gamedev.categories=['All','3D','Videojuegos','Demo'];
   if(!state.gamedev.items) state.gamedev.items=[];
   if(!state.gamedev.label) state.gamedev.label='3D & VIDEOJUEGOS';
@@ -587,6 +746,123 @@ function renderAll(){
     }).join('');
     if(!(bg.models||[]).length) list.innerHTML='<div class="hint">No hay modelos. Sube un .glb/.gltf/.fbx/.obj (max 10MB) — aparecerá en el fondo de 3D Portfolio.</div>';
   }
+  // Gallery 3D — gallery.html
+  const g3d = state.gallery3d || {};
+  if(!g3d.start) g3d.start={}; if(!g3d.hud) g3d.hud={}; if(!g3d.keys) g3d.keys={}; if(!g3d.camera) g3d.camera={position:{},target:{}}; if(!g3d.colors) g3d.colors={}; if(!g3d.shadow) g3d.shadow={}; if(!g3d.projects) g3d.projects=[]; if(!g3d.particles) g3d.particles={}; if(!g3d.hub) g3d.hub={}; if(!g3d.floor) g3d.floor={}; if(!g3d.fonts) g3d.fonts={};
+  $('#g3d_start_title').value=g3d.start.title||'DEVQUEST'; $('#g3d_start_sub').value=g3d.start.sub||'3D PORTFOLIO GALLERY'; $('#g3d_start_desc').value=g3d.start.desc||'';
+  $('#g3d_start_btn_text').value=g3d.start.btnText||'ENTER THE GALLERY'; $('#g3d_start_hint').value=g3d.start.hint||'PRESS ENTER';
+  $('#g3d_start_dots').value=(g3d.start.dots||[]).join(', ');
+  $('#g3d_hud_title').value=g3d.hud.title||'DEVQUEST'; $('#g3d_hud_sub').value=g3d.hud.sub||'INTERACTIVE 3D PORTFOLIO';
+  $('#g3d_hint_text').value=g3d.hud.hintText||'DRAG TO LOOK · SCROLL TO ZOOM · WASD TO MOVE · CLICK A PROJECT';
+  $('#g3d_hint_autohide').value=g3d.hud.autohide||11000; $('#g3d_idle_hide').value=g3d.hud.idleHide||3000;
+  $('#g3d_keys_move').value=(g3d.keys.move||[]).join(', '); $('#g3d_key_mute').value=g3d.keys.mute||'KeyM'; $('#g3d_key_help').value=g3d.keys.help||'KeyH';
+  $('#g3d_cam_x').value=g3d.camera.position?.x||0; $('#g3d_cam_y').value=g3d.camera.position?.y||3.6; $('#g3d_cam_z').value=g3d.camera.position?.z||12.8;
+  $('#g3d_target_x').value=g3d.camera.target?.x||0; $('#g3d_target_y').value=g3d.camera.target?.y||0; $('#g3d_target_z').value=g3d.camera.target?.z||0;
+  $('#g3d_fov').value=g3d.camera.fov||55; $('#g3d_near').value=g3d.camera.near||0.1; $('#g3d_far').value=g3d.camera.far||220;
+  $('#g3d_minDist').value=g3d.camera.minDist||2.2; $('#g3d_maxDist').value=g3d.camera.maxDist||20; $('#g3d_autoRotSpeed').value=g3d.camera.autoRotSpeed||0.55;
+  $('#g3d_damping').value=g3d.camera.damping||0.08; $('#g3d_minPolar').value=g3d.camera.minPolar||0.15; $('#g3d_maxPolar').value=g3d.camera.maxPolar||1.52;
+  $('#g3d_enablePan').value=g3d.camera.enablePan?'true':'false'; $('#g3d_walkSpeed').value=g3d.camera.walkSpeed||7.5; $('#g3d_walkLerp').value=g3d.camera.walkLerp||9;
+  $('#g3d_scene_bg').value=g3d.colors.sceneBg||'#0a1128'; $('#g3d_scene_bg_hex').value=g3d.colors.sceneBg||'#0a1128';
+  $('#g3d_fog_color').value=g3d.colors.fogColor||'#0b1230'; $('#g3d_fog_color_hex').value=g3d.colors.fogColor||'#0b1230';
+  $('#g3d_fog_near').value=g3d.colors.fogNear||22; $('#g3d_fog_far').value=g3d.colors.fogFar||62;
+  $('#g3d_cursor_color').value=g3d.colors.cursor||'#00d4ff'; $('#g3d_cursor_color_hex').value=g3d.colors.cursor||'#00d4ff';
+  $('#g3d_cursor_ring_color').value=g3d.colors.cursorRing||'#00d4ff'; $('#g3d_cursor_ring_color_hex').value=g3d.colors.cursorRing||'#00d4ff';
+  $('#g3d_cursor_hover_color').value=g3d.colors.cursorHover||'#7df9ff'; $('#g3d_cursor_hover_color_hex').value=g3d.colors.cursorHover||'#7df9ff';
+  $('#g3d_hud_accent').value=g3d.colors.hudAccent||'#22d3ee'; $('#g3d_hud_accent_hex').value=g3d.colors.hudAccent||'#22d3ee';
+  $('#g3d_scanlines_op').value=g3d.colors.scanlines||0.03; $('#g3d_vignette_op').value=g3d.colors.vignette||0.7;
+  $('#g3d_shadow_type').value=g3d.shadow?.type||'PCFSoftShadowMap'; $('#g3d_tone_mapping').value=g3d.shadow?.toneMapping||'ACESFilmicToneMapping';
+  $('#g3d_exposure').value=g3d.shadow?.exposure||1.15; $('#g3d_pixel_ratio').value=g3d.shadow?.pixelRatio||2;
+  // Projects list
+  const g3dProjList = document.getElementById('g3d_projects_list');
+  if(g3dProjList){
+    g3dProjList.innerHTML = (state.gallery3d?.projects||[]).map((pr,i)=>`<div class="panel g3d-proj-item" style="background:var(--panel2);border:1px solid var(--border);margin-bottom:12px;">
+      <input type="hidden" data-g3d-id value="${escAttr(pr.id||`proj-${i+1}`)}">
+      <div class="grid2">
+        <div class="field"><label>ID</label><input data-g3d-id value="${escAttr(pr.id||`proj-${i+1}`)}"></div>
+        <div class="field"><label>Título</label><input data-g3d-title value="${escAttr(pr.title||'')}"></div>
+        <div class="field"><label>Tagline</label><input data-g3d-tagline value="${escAttr(pr.tagline||'')}"></div>
+        <div class="field"><label>Año</label><input data-g3d-year value="${escAttr(pr.year||'')}"></div>
+        <div class="field"><label>Plataforma</label><input data-g3d-platform value="${escAttr(pr.platform||'')}"></div>
+        <div class="field"><label>Motor</label><input data-g3d-engine value="${escAttr(pr.engine||'')}"></div>
+        <div class="field"><label>Rol</label><input data-g3d-role value="${escAttr(pr.role||'')}"></div>
+      </div>
+      <div class="field"><label>Imagen (url)</label><input data-g3d-image value="${escAttr(pr.image||'')}"><input type="file" accept="image/*" data-up="g3d_proj_img" data-i="${i}"></div>
+      <div class="field"><label>Acento (hex)</label><input type="color" data-g3d-accent value="${pr.accent||'#22d3ee'}"><input data-g3d-accent class="mono" value="${pr.accent||'#22d3ee'}"></div>
+      <div class="field"><label>Kind (cabinet/tower/dungeon/rocket/robot/ship)</label><input data-g3d-kind value="${escAttr(pr.kind||'cabinet')}"></div>
+      <div class="field"><label>Descripción</label><textarea data-g3d-desc rows="3">${esc(pr.description||'')}</textarea></div>
+      <div class="grid2">
+        <div class="field"><label>Stat 1 label</label><input data-g3d-stat1l value="${escAttr(pr.stats?.[0]?.label||'')}"></div>
+        <div class="field"><label>Stat 1 value</label><input data-g3d-stat1v value="${escAttr(pr.stats?.[0]?.value||'')}"></div>
+        <div class="field"><label>Stat 2 label</label><input data-g3d-stat2l value="${escAttr(pr.stats?.[1]?.label||'')}"></div>
+        <div class="field"><label>Stat 2 value</label><input data-g3d-stat2v value="${escAttr(pr.stats?.[1]?.value||'')}"></div>
+        <div class="field"><label>Stat 3 label</label><input data-g3d-stat3l value="${escAttr(pr.stats?.[2]?.label||'')}"></div>
+        <div class="field"><label>Stat 3 value</label><input data-g3d-stat3v value="${escAttr(pr.stats?.[2]?.value||'')}"></div>
+        <div class="field"><label>Stat 4 label</label><input data-g3d-stat4l value="${escAttr(pr.stats?.[3]?.label||'')}"></div>
+        <div class="field"><label>Stat 4 value</label><input data-g3d-stat4v value="${escAttr(pr.stats?.[3]?.value||'')}"></div>
+      </div>
+      <div class="field"><label>Tech Stack (coma)</label><input data-g3d-tech value="${escAttr((pr.tech||[]).join(', '))}"></div>
+      <div class="field"><label>Features (una por línea)</label><textarea data-g3d-features rows="3">${esc((pr.features||[]).join('\n'))}</textarea></div>
+      <button class="btn danger small" data-del="g3d_proj" data-i="${i}">Eliminar proyecto</button>
+    </div>`).join('');
+  }
+  // Lights
+  const g3dLightsList = document.getElementById('g3d_lights_list');
+  if(g3dLightsList){
+    g3dLightsList.innerHTML = (state.gallery3d?.lighting||[]).map((l,i)=>`<div class="panel" style="background:var(--panel2);">
+      <div class="field"><label><input type="checkbox" data-k="g3d_light_enabled" data-i="${i}" ${l.enabled!==false?'checked':''}> ${l.type} — habilitada</label></div>
+      <div class="grid2">
+        <div class="field"><label>Tipo</label><select data-k="g3d_light_type" data-i="${i}"><option value="Hemisphere" ${l.type==='Hemisphere'?'selected':''}>Hemisphere</option><option value="Directional" ${l.type==='Directional'?'selected':''}>Directional</option><option value="Point" ${l.type==='Point'?'selected':''}>Point</option></select></div>
+        <div class="field"><label>Color</label><input type="color" data-k="g3d_light_color" data-i="${i}" value="${l.color||'#ffffff'}"></div>
+        <div class="field"><label>Intensidad</label><input type="range" data-k="g3d_light_intensity" data-i="${i}" min="0" max="5" step="0.1" value="${l.intensity||1}"><span class="mono">${l.intensity||1}</span></div>
+        ${l.type!=='Hemisphere' ? `<div class="field"><label>Posición (x,y,z coma)</label><input data-k="g3d_light_pos" data-i="${i}" value="${(l.pos||[]).join(', ')}" placeholder="10,20,10"></div>` : `<div class="field"><label>Ground color</label><input type="color" data-k="g3d_light_ground" data-i="${i}" value="${l.ground||'#0a1128'}"></div>`}
+      </div>
+      <button class="btn ghost small" data-del="g3d_light" data-i="${i}">✕</button>
+    </div>`).join('');
+  }
+  // Models
+  const g3dModelsList = document.getElementById('g3d_models_list');
+  if(g3dModelsList){
+    g3dModelsList.innerHTML = (state.gallery3d?.models||[]).map((m,i)=>{
+      const pos = m.position || {x:0, y:0, z:0};
+      const rot = m.rotation || {x:0, y:0, z:0};
+      return `<div class="item"><div class="grow"><div class="mono" style="font-size:0.75rem; word-break:break-all;">${m.url} <span class="hint">(${m.name||'modelo'}${m.animations?' • animado':''})</span></div>
+        <div style="display:flex;gap:8px; margin-top:4px; flex-wrap:wrap;">
+          <label class="field" style="flex:1"><span class="hint">Escala</span><input type="number" data-k="g3d_model_scale" data-i="${i}" value="${m.scale||1}" step="0.1" style="width:80px"></label>
+          <label style="display:flex;align-items:center;gap:4px; font-size:0.8rem;"><input type="checkbox" data-k="g3d_model_autorotate" data-i="${i}" ${m.autoRotate!==false?'checked':''}> Auto-rotar</label>
+        </div>
+        <div style="display:flex;gap:8px; margin-top:8px; flex-wrap:wrap;">
+          <label class="field"><span class="hint">Pos X</span><input type="number" data-k="g3d_model_pos_x" data-i="${i}" value="${pos.x||0}" step="0.5" style="width:70px"></label>
+          <label class="field"><span class="hint">Pos Y</span><input type="number" data-k="g3d_model_pos_y" data-i="${i}" value="${pos.y||0}" step="0.5" style="width:70px"></label>
+          <label class="field"><span class="hint">Pos Z</span><input type="number" data-k="g3d_model_pos_z" data-i="${i}" value="${pos.z||0}" step="0.5" style="width:70px"></label>
+        </div>
+        <div style="display:flex;gap:8px; margin-top:8px; flex-wrap:wrap;">
+          <label class="field"><span class="hint">Rot X (rad)</span><input type="number" data-k="g3d_model_rot_x" data-i="${i}" value="${rot.x||0}" step="0.1" style="width:90px"></label>
+          <label class="field"><span class="hint">Rot Y (rad)</span><input type="number" data-k="g3d_model_rot_y" data-i="${i}" value="${rot.y||0}" step="0.1" style="width:90px"></label>
+          <label class="field"><span class="hint">Rot Z (rad)</span><input type="number" data-k="g3d_model_rot_z" data-i="${i}" value="${rot.z||0}" step="0.1" style="width:90px"></label>
+        </div>
+      </div><button class="btn ghost small" data-del="g3d_model" data-i="${i}">✕</button></div>`;
+    }).join('');
+    if(!(state.gallery3d?.models||[]).length) g3dModelsList.innerHTML='<div class="hint">No hay modelos. Sube un .glb/.gltf/.fbx/.obj (max 10MB).</div>';
+  }
+  // Particles & Hub
+  $('#g3d_particles_count').value=state.gallery3d?.particles?.count||420; $('#g3d_particles_radius').value=state.gallery3d?.particles?.radius||82;
+  $('#g3d_particles_color').value=state.gallery3d?.particles?.color||'#cfe0ff'; $('#g3d_particles_color_hex').value=state.gallery3d?.particles?.color||'#cfe0ff';
+  $('#g3d_particles_size').value=state.gallery3d?.particles?.size||0.22; $('#g3d_particles_op').value=state.gallery3d?.particles?.opacity||0.85;
+  $('#g3d_hub_radius').value=state.gallery3d?.hub?.radius||2.7;
+  // Floor
+  $('#g3d_grid_color').value=state.gallery3d?.floor?.gridColor||'#22d3ee'; $('#g3d_grid_color_hex').value=state.gallery3d?.floor?.gridColor||'#22d3ee';
+  $('#g3d_grid_opacity').value=state.gallery3d?.floor?.gridOpacity||0.28; $('#g3d_center_dot_color').value=state.gallery3d?.floor?.centerDot||'#22d3ee';
+  $('#g3d_center_dot_color_hex').value=state.gallery3d?.floor?.centerDot||'#22d3ee';
+  $('#g3d_floor_radius').value=state.gallery3d?.floor?.radius||34; $('#g3d_floor_segments').value=state.gallery3d?.floor?.segments||72;
+  $('#g3d_floor_color').value=state.gallery3d?.floor?.color||'#93a7d8'; $('#g3d_floor_color_hex').value=state.gallery3d?.floor?.color||'#93a7d8';
+  $('#g3d_floor_roughness').value=state.gallery3d?.floor?.roughness||0.4; $('#g3d_floor_metalness').value=state.gallery3d?.floor?.metalness||0.3;
+  $('#g3d_rim_color').value=state.gallery3d?.floor?.rimColor||'#22d3ee'; $('#g3d_rim_color_hex').value=state.gallery3d?.floor?.rimColor||'#22d3ee';
+  $('#g3d_rim_intensity').value=state.gallery3d?.floor?.rimIntensity||1.6;
+  // Fonts
+  $('#g3d_font_heading').value=state.gallery3d?.fonts?.heading||'Space Grotesk'; $('#g3d_font_heading_custom').value=state.gallery3d?.fonts?.heading_custom||''; $('#g3d_font_heading_custom').style.display=state.gallery3d?.fonts?.heading==='custom'?'block':'none';
+  $('#g3d_font_body').value=state.gallery3d?.fonts?.body||'Space Grotesk'; $('#g3d_font_body_custom').value=state.gallery3d?.fonts?.body_custom||''; $('#g3d_font_body_custom').style.display=state.gallery3d?.fonts?.body==='custom'?'block':'none';
+  $('#g3d_font_mono').value=state.gallery3d?.fonts?.mono||'JetBrains Mono'; $('#g3d_font_mono_custom').value=state.gallery3d?.fonts?.mono_custom||''; $('#g3d_font_mono_custom').style.display=state.gallery3d?.fonts?.mono==='custom'?'block':'none';
+  $('#g3d_font_size_base').value=state.gallery3d?.fonts?.size||14;
   $('#pf_list').innerHTML = (pf.items||[]).map((it,i)=>`<div class="panel"><div class="grid2"><div class="field"><label>Visible</label><input type="checkbox" data-k="pf_v" data-i="${i}" ${it.visible!==false?'checked':''}></div><div class="field"><label>Destacado</label><input type="checkbox" data-k="pf_feat" data-i="${i}" ${it.featured?'checked':''}></div><div class="field"><label>Título</label><input data-k="pf_t" data-i="${i}" value="${escAttr(it.title||'')}"></div><div class="field"><label>Categoría</label><input list="pf_cat_list" data-k="pf_catv" data-i="${i}" value="${escAttr(it.category||'')}"><datalist id="pf_cat_list">${(pf.categories||[]).map(c=>`<option value="${escAttr(c)}">`).join('')}</datalist></div><div class="field"><label>Cliente</label><input data-k="pf_client" data-i="${i}" value="${escAttr(it.client||'')}"></div><div class="field"><label>Año</label><input data-k="pf_year" data-i="${i}" value="${escAttr(it.year||'')}"></div></div><div class="field"><label>Cover (url)</label><input data-k="pf_cover" data-i="${i}" value="${escAttr(it.cover||'')}"></div><div class="field"><label>Cover (subir PC)</label><input type="file" accept="image/*" data-up="pf_cover" data-i="${i}"></div><div class="field"><label>Galería (urls, una por línea)</label><textarea data-k="pf_gallery" data-i="${i}" rows="2">${esc((it.gallery||[]).join('\\n'))}</textarea></div><div class="field"><label>Galería (subir múltiple)</label><input type="file" accept="image/*" multiple data-up="pf_gallery" data-i="${i}"></div><div class="field"><label>Descripción</label><textarea data-k="pf_desc" data-i="${i}" rows="3">${esc(it.desc||'')}</textarea></div><div class="field"><label>Tools (coma)</label><input data-k="pf_tools" data-i="${i}" value="${escAttr((it.tools||[]).join(', '))}"></div><div class="grid2"><div class="field"><label>Link</label><input data-k="pf_link" data-i="${i}" value="${escAttr(it.link||'')}"></div><div class="field"><label>Link label</label><input data-k="pf_linkLabel" data-i="${i}" value="${escAttr(it.linkLabel||'')}"></div></div><button class="btn danger small" data-del="pf_item" data-i="${i}">Eliminar trabajo</button></div>`).join('');
     // 3D Portfolio already handled above — no duplicates
 // Contact
@@ -667,6 +943,46 @@ function renderAll(){
   // Settings
   state.settings.lang=$('#st_lang').checked?'en':'es'; state.settings.maintenance=$('#st_maintenance').checked; state.settings.maintenanceMsg=$('#st_maintMsg').value; state.settings.analyticsId=$('#st_analytics').value; state.settings.customCss=$('#st_customCss').value; state.settings.customJs=$('#st_customJs').value;
   state.settings.showSections={hero:$('#st_showHero').checked,about:$('#st_showAbout').checked,services:$('#st_showServices').checked,experience:$('#st_showExperience').checked,portfolio:$('#st_showPortfolio').checked,projects:$('#st_showProjects').checked,contact:$('#st_showContact').checked};
+  // Gallery 3D
+  if(state.gallery3d){
+    const g=state.gallery3d;
+    g.start.title=$('#g3d_start_title').value; g.start.sub=$('#g3d_start_sub').value; g.start.desc=$('#g3d_start_desc').value;
+    g.start.btnText=$('#g3d_start_btn_text').value; g.start.hint=$('#g3d_start_hint').value; g.start.dots=$('#g3d_start_dots').value.split(',').map(s=>s.trim()).filter(Boolean);
+    g.hud.title=$('#g3d_hud_title').value; g.hud.sub=$('#g3d_hud_sub').value; g.hud.hintText=$('#g3d_hint_text').value;
+    g.hud.autohide=parseInt($('#g3d_hint_autohide').value)||11000; g.hud.idleHide=parseInt($('#g3d_idle_hide').value)||3000;
+    g.keys.move=$('#g3d_keys_move').value.split(',').map(s=>s.trim()).filter(Boolean);
+    g.keys.mute=$('#g3d_key_mute').value; g.keys.help=$('#g3d_key_help').value;
+    g.camera.position.x=parseFloat($('#g3d_cam_x').value)||0; g.camera.position.y=parseFloat($('#g3d_cam_y').value)||3.6; g.camera.position.z=parseFloat($('#g3d_cam_z').value)||12.8;
+    g.camera.target.x=parseFloat($('#g3d_target_x').value)||0; g.camera.target.y=parseFloat($('#g3d_target_y').value)||0; g.camera.target.z=parseFloat($('#g3d_target_z').value)||0;
+    g.camera.fov=parseInt($('#g3d_fov').value)||55; g.camera.near=parseFloat($('#g3d_near').value)||0.1; g.camera.far=parseInt($('#g3d_far').value)||220;
+    g.camera.minDist=parseFloat($('#g3d_minDist').value)||2.2; g.camera.maxDist=parseFloat($('#g3d_maxDist').value)||20;
+    g.camera.autoRotSpeed=parseFloat($('#g3d_autoRotSpeed').value)||0.55; g.camera.damping=parseFloat($('#g3d_damping').value)||0.08;
+    g.camera.minPolar=parseFloat($('#g3d_minPolar').value)||0.15; g.camera.maxPolar=parseFloat($('#g3d_maxPolar').value)||1.52;
+    g.camera.enablePan=$('#g3d_enablePan').value==='true';
+    g.camera.walkSpeed=parseFloat($('#g3d_walkSpeed').value)||7.5; g.camera.walkLerp=parseFloat($('#g3d_walkLerp').value)||9;
+    g.colors.sceneBg=$('#g3d_scene_bg').value; g.colors.fogColor=$('#g3d_fog_color').value;
+    g.colors.fogNear=parseInt($('#g3d_fog_near').value)||22; g.colors.fogFar=parseInt($('#g3d_fog_far').value)||62;
+    g.colors.cursor=$('#g3d_cursor_color').value; g.colors.cursorRing=$('#g3d_cursor_ring_color').value;
+    g.colors.cursorHover=$('#g3d_cursor_hover_color').value; g.colors.hudAccent=$('#g3d_hud_accent').value;
+    g.colors.scanlines=parseFloat($('#g3d_scanlines_op').value)||0.03; g.colors.vignette=parseFloat($('#g3d_vignette_op').value)||0.7;
+    g.shadow.type=$('#g3d_shadow_type').value; g.shadow.toneMapping=$('#g3d_tone_mapping').value;
+    g.shadow.exposure=parseFloat($('#g3d_exposure').value)||1.15; g.shadow.pixelRatio=parseFloat($('#g3d_pixel_ratio').value)||2;
+    // Projects
+    const projList=document.getElementById('g3d_projects_list');
+    if(projList){
+      g.projects=[]; projList.querySelectorAll('.g3d-proj-item').forEach((item,i)=>{
+        const get=(sel)=>item.querySelector(sel)?.value||'';
+        g.projects.push({
+          id:get('[data-g3d-id]')||`proj-${i+1}`,title:get('[data-g3d-title]'),tagline:get('[data-g3d-tagline]'),
+          year:get('[data-g3d-year]'),platform:get('[data-g3d-platform]'),engine:get('[data-g3d-engine]'),role:get('[data-g3d-role]'),
+          description:get('[data-g3d-desc]'),image:get('[data-g3d-image]'),accent:get('[data-g3d-accent]'),kind:get('[data-g3d-kind]'),
+          stats:[{label:get('[data-g3d-stat1l]'),value:get('[data-g3d-stat1v]')},{label:get('[data-g3d-stat2l]'),value:get('[data-g3d-stat2v]')},{label:get('[data-g3d-stat3l]'),value:get('[data-g3d-stat3v]')},{label:get('[data-g3d-stat4l]'),value:get('[data-g3d-stat4v]')}],
+          tech:get('[data-g3d-tech]').split(',').map(s=>s.trim()).filter(Boolean),
+          features:get('[data-g3d-features]').split('\n').map(s=>s.trim()).filter(Boolean)
+        });
+      });
+    }
+  }
   // GH
   try{ const gh=JSON.parse(localStorage.getItem('pa_gh_v1')||'{}'); $('#gh_owner').value=gh.owner||''; $('#gh_repo').value=gh.repo||''; $('#gh_branch').value=gh.branch||'main'; $('#gh_token').value=gh.token||''; }catch(e){}
 }
@@ -907,6 +1223,9 @@ document.addEventListener('click',e=>{
   else if(k==='t3d_exp') state.threeDPage.experience.items.splice(i,1);
   else if(k==='t3d_link') state.threeDPage.contact.links.splice(i,1);
   else if(k==='t3d_model') state.threeDPage.background.models.splice(i,1);
+  else if(k==='g3d_proj') state.gallery3d.projects.splice(i,1);
+  else if(k==='g3d_light') state.gallery3d.lighting.splice(i,1);
+  else if(k==='g3d_model') state.gallery3d.models.splice(i,1);
   else if(k==='c_l') state.contact.links.splice(i,1);
   else if(k==='nav') state.site.nav.splice(i,1);
   renderAll();
@@ -927,7 +1246,13 @@ $('#c_addLink').onclick=()=>{ state.contact.links.push({icon:'mail',label:'Nuevo
   $('#site_addNav').onclick=()=>{ state.site.nav.push({label:'Nuevo',href:'#about'}); renderAll(); };
   $('#t3d_addCS').onclick=()=>{ if(!state.threeDPage.caseStudies) state.threeDPage.caseStudies=[]; state.threeDPage.caseStudies.push({slug:'new-case-study-'+Date.now(),title:'New Case Study',tag:'TAG',heroImage:'',meta:[],overview:'',challenge:'',solution:'',approach:[],stack:[],metrics:[],results:'',gallery:[],links:[]}); renderAll(); };
 
-// File input handlers - safe null guards, consolidated
+$('#t3d_addCS').onclick=()=>{ if(!state.threeDPage.caseStudies) state.threeDPage.caseStudies=[]; state.threeDPage.caseStudies.push({slug:'new-case-study-'+Date.now(),title:'New Case Study',tag:'TAG',heroImage:'',meta:[],overview:'',challenge:'',solution:'',approach:[],stack:[],metrics:[],results:'',gallery:[],links:[]}); renderAll(); };
+  // Gallery 3D add handlers
+  $('#g3d_addProject').onclick=()=>{ if(!state.gallery3d.projects) state.gallery3d.projects=[]; state.gallery3d.projects.push({id:'proj-'+Date.now(),title:'New Project',tagline:'Project tagline',year:String(new Date().getFullYear()),platform:'PC',engine:'Unity',role:'Developer',description:'Project description',image:'images/p1.jpg',accent:'#22d3ee',kind:'cabinet',stats:[{label:'Stat 1',value:'100'},{label:'Stat 2',value:'200'},{label:'Stat 3',value:'300'},{label:'Stat 4',value:'400'}],tech:['Unity','C#'],features:['Feature 1','Feature 2']}); renderAll(); };
+  $('#g3d_addLight').onclick=()=>{ if(!state.gallery3d.lighting) state.gallery3d.lighting=[]; state.gallery3d.lighting.push({type:'Point',color:'#ffffff',intensity:1,enabled:true,pos:{x:0,y:5,z:0},ground:'#0a1128'}); renderAll(); };
+  $('#g3d_addModelUrl').onclick=()=>{ const url=$('#g3d_model_url').value.trim(); if(!url) return; if(!state.gallery3d.models) state.gallery3d.models=[]; state.gallery3d.models.push({url:url,name:url.split('/').pop(),scale:1,autoRotate:true,animations:true,position:{x:0,y:0,z:0},rotation:{x:0,y:0,z:0}}); $('#g3d_model_url').value=''; renderAll(); };
+
+  // File input handlers - safe null guards, consolidated
 function setupFileInputs(){
   const safe=(id,fn)=>{ const el=$(id); if(el) el.addEventListener('change', fn); };
   safe('#d_favicon_file', async (e)=>{ const file=e.target.files[0]; if(file){ const d=await fileToDataURL(file); state.design.favicon_url=d; $('#d_favicon_url').value=d; } });
@@ -964,7 +1289,34 @@ function setupFileInputs(){
     }
     e.target.value='';
   });
-  // Dynamic-list image uploads (services/experience/projects/portfolio) via event delegation — uses server /__api/upload when available
+  // Gallery 3D model file upload
+  safe('#g3d_model_file', async (e)=>{
+    const files=Array.from(e.target.files||[]);
+    for(const file of files){
+      if(file.size > 10*1024*1024){ alert(file.name + ' excede 10MB (' + (file.size/1024/1024).toFixed(1) + 'MB)'); continue; }
+      const ext=file.name.split('.').pop().toLowerCase();
+      if(!['glb','gltf','fbx','obj'].includes(ext)){ alert(file.name + ' no es glb/gltf/fbx/obj'); continue; }
+      const dataURL=await fileToDataURL(file);
+      try{
+        const res=await fetch('/__api/upload', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name: file.name, data: dataURL})});
+        if(res.ok){
+          const j=await res.json();
+          if(j.ok && j.path){
+            if(!state.gallery3d.models) state.gallery3d.models=[];
+            state.gallery3d.models.push({url:j.path, name:file.name, scale:1, autoRotate:true, animations:true, position:{x:0,y:0,z:0}, rotation:{x:0,y:0,z:0}});
+            renderAll();
+            continue;
+          }
+        }
+      }catch(err){}
+      // Fallback to dataURL if upload fails
+      if(!state.gallery3d.models) state.gallery3d.models=[];
+      state.gallery3d.models.push({url:dataURL, name:file.name, scale:1, autoRotate:true, animations:true, position:{x:0,y:0,z:0}, rotation:{x:0,y:0,z:0}});
+      renderAll();
+    }
+    e.target.value='';
+  });
+  // Dynamic-list image uploads
   document.addEventListener('change', async (e)=>{
     const t=e.target;
     if(!(t && t.dataset && t.dataset.up)) return;
@@ -1020,6 +1372,7 @@ function setupFileInputs(){
         else if(t.dataset.up==='t3d_work_cover'){ state.threeDPage.work.projects[i].cover=uploadedPath; state.threeDPage.work.projects[i].image=uploadedPath; }
         else if(t.dataset.up==='t3d_cs_heroImage'){ if(!state.threeDPage.caseStudies[i]) state.threeDPage.caseStudies[i]={}; state.threeDPage.caseStudies[i].heroImage=uploadedPath; }
         else if(t.dataset.up==='t3d_model'){ state.threeDPage.background.models.push({url:uploadedPath, name:file.name, scale:1, autoRotate:true, animations:true}); renderAll(); }
+        else if(t.dataset.up==='g3d_proj_img'){ state.gallery3d.projects[i].image=uploadedPath; renderAll(); }
         const urlInp=document.querySelector('[data-k="'+t.dataset.up+'"][data-i="'+i+'"]');
         if(urlInp) urlInp.value=uploadedPath;
         if(t.dataset.up==='pf_cover' || t.dataset.up==='t3d_work_cover' || t.dataset.up==='t3d_cs_heroImage') renderAll();
@@ -1042,6 +1395,7 @@ function setupFileInputs(){
         else if(t.dataset.up==='ex_img') state.experience[i].image=d;
         else if(t.dataset.up==='pr_img') state.projects[i].image=d;
         else if(t.dataset.up==='pf_cover') { state.portfolio.items[i].cover=d; renderAll(); }
+        else if(t.dataset.up==='g3d_proj_img'){ state.gallery3d.projects[i].image=d; renderAll(); }
         const urlInp=document.querySelector('[data-k="'+t.dataset.up+'"][data-i="'+i+'"]');
         if(urlInp) urlInp.value=d;
       }catch(e2){ alert('Error al procesar imagen: '+e2.message); }
@@ -1156,6 +1510,8 @@ $('#gh_publish').onclick=async()=>{
   (state.threeDPage?.work?.projects||[]).forEach(p=>{ if(p.cover && p.cover.startsWith('images/') && !p.cover.startsWith('data:')) imgPaths.add(p.cover); if(p.image && p.image.startsWith('images/') && !p.image.startsWith('data:')) imgPaths.add(p.image); });
   // 3D Portfolio case studies (heroImage/gallery)
   (state.threeDPage?.caseStudies||[]).forEach(c=>{ if(c.heroImage && c.heroImage.startsWith('images/') && !c.heroImage.startsWith('data:')) imgPaths.add(c.heroImage); (c.gallery||[]).forEach(g=>{ if(g && g.startsWith('images/') && !g.startsWith('data:')) imgPaths.add(g); }); });
+  // Gallery images (p1-p6)
+  ['images/p1.jpg','images/p2.jpg','images/p3.jpg','images/p4.jpg','images/p5.jpg','images/p6.jpg'].forEach(p=>{ if(p) imgPaths.add(p); });
   try{
     if(imgPaths.size){
       ghLog('Sincronizando imágenes ('+imgPaths.size+')...');
@@ -1176,7 +1532,7 @@ $('#gh_publish').onclick=async()=>{
     }
     // Sync HTML files
     ghLog('Sincronizando archivos HTML...');
-    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'vendor_three.module.js'];
+    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'gallery.html', 'vendor_three.module.js'];
     for(const p of htmlFiles){
       try{
         const sha=await shaOf(p);
