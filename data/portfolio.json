@@ -1329,40 +1329,42 @@
         "fbx",
         "obj"
       ],
-      "materialMode": "wireframe",
+      "materialMode": "original",
       "showParticles": true,
       "showLines": true,
-      "showTorus": false,
-      "showIco": false,
+      "showTorus": true,
+      "showIco": true,
       "lights": [
         {
-          "type": "hemisphere",
+          "type": "Hemisphere",
+          "sky": "#cfe0ff",
+          "ground": "#0a1128",
+          "intensity": 0.6,
+          "enabled": true
+        },
+        {
+          "type": "Directional",
           "color": "#ffffff",
-          "groundColor": "#0a0e18",
-          "intensity": 2.8,
-          "enabled": true
-        },
-        {
-          "type": "directional",
-          "color": "#abafb5",
-          "intensity": 2.7,
+          "intensity": 1.2,
           "position": [
-            6,
             10,
-            4
+            20,
+            10
           ],
-          "enabled": true
+          "enabled": true,
+          "castShadow": true
         },
         {
-          "type": "point",
-          "color": "#a855f7",
-          "intensity": 2.8,
+          "type": "Point",
+          "color": "#22d3ee",
+          "intensity": 2,
           "position": [
-            -4,
-            4,
-            -2
+            0,
+            8,
+            0
           ],
-          "distance": 20,
+          "distance": 50,
+          "decay": 2,
           "enabled": true
         }
       ]
