@@ -1532,7 +1532,7 @@ $('#gh_publish').onclick=async()=>{
     }
     // Sync HTML files
     ghLog('Sincronizando archivos HTML...');
-    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'gallery.html', 'vendor_three.module.js'];
+    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'gallery.html', 'gallery.js', 'vendor_three.module.js', 'favicon.ico'];
     for(const p of htmlFiles){
       try{
         const sha=await shaOf(p);
