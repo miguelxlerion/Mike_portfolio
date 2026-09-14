@@ -582,10 +582,10 @@
   },
   "design": {
     "bg": "#0a0a0f",
-    "bg2": "#0000ff",
+    "bg2": "#000000",
     "bg3": "#1a1a25",
     "bg_card": "#16161f",
-    "texto": "#80ff00",
+    "texto": "#00ffee",
     "text2": "#a0a0b5",
     "muted": "#6a6a80",
     "border": "#2a2a3a",
