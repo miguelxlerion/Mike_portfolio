@@ -149,7 +149,7 @@
       "desc": "Real-time 3D platforms that connect IoT sensors to interactive WebGL dashboards for industrial monitoring.",
       "image": "images/Oficina0013.jpg",
       "icon": "chart",
-      "color": "#4f8cff",
+      "color": "#ffffff",
       "features": [
         "3D dashboards with live telemetry",
         "WebSockets / MQTT ingestion",
@@ -170,7 +170,7 @@
       "desc": "LLM assistants that ground corporate knowledge bases with Retrieval-Augmented Generation.",
       "image": "images/documentacion-parallax.jpg",
       "icon": "cpu",
-      "color": "#a855f7",
+      "color": "#fafafa",
       "features": [
         "Complex PDF processing & semantic chunking",
         "Hybrid vector + lexical search",
@@ -191,7 +191,7 @@
       "desc": "Interactive browser experiences that turn complex data into navigable, gamified 3D environments.",
       "image": "images/proyectos-parallax.jpg",
       "icon": "cube",
-      "color": "#10b981",
+      "color": "#ffffff",
       "features": [
         "Three.js / WebGL",
         "Asset optimization for web",
@@ -212,7 +212,7 @@
       "desc": "Complete platforms from scratch with scalable, fault-tolerant architectures.",
       "image": "images/servicios-productos-parallax.jpg",
       "icon": "dashboard",
-      "color": "#f59e0b",
+      "color": "#00ffb3",
       "features": [
         "React / Next.js / Django / FastAPI",
         "PostgreSQL / pgvector / Redis",
@@ -2162,7 +2162,7 @@
         "desplázate para acercar y alejar la imagen",
         "Haz clic en los marcadores para obtener más información."
       ],
-      "mapImage": "images/1789360895545-e8px.webp",
+      "mapImage": "images/1789368981270-mbic.webp",
       "indexCountSuffix": "interventions mapped",
       "indexOpen": "abrir índice +",
       "indexHide": "ocultar índice −",
