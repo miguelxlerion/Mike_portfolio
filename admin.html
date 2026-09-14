@@ -16,11 +16,12 @@
   .app{display:none;min-height:100vh}
   .topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(10,10,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
   .brand{font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)} @media(max-width:900px){.layout{grid-template-columns:1fr} nav.tabs{flex-direction:row;overflow:auto}}
-  nav.tabs{background:var(--panel);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:6px}
+  .layout{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 56px)}
+  .sidebar{min-width:0;background:var(--panel);border-right:1px solid var(--border)}
+  nav.tabs{padding:12px;display:flex;flex-direction:column;gap:6px}
   nav.tabs button{padding:10px 12px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--muted);text-align:left;font-weight:500}
   nav.tabs button.active{background:var(--panel2);border-color:var(--border);color:var(--text)}
-  .content{padding:20px;max-width:1000px;width:100%}
+  .content{min-width:0;padding:20px;max-width:1000px;width:100%}
   .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px}
   .panel h3{font-size:.95rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
   .panel h3::before{content:'';width:8px;height:8px;border-radius:3px;background:linear-gradient(135deg,var(--accent),var(--accent2))}
@@ -39,6 +40,7 @@
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px} @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
   .stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center} .stat strong{font-size:1.4rem;display:block}
   .hidden{display:none !important}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--border)}nav.tabs{flex-direction:row;overflow:auto}}
 </style>
 </head>
 <body>
@@ -52,7 +54,8 @@
     </div>
   </div>
   <div class="layout">
-    <nav class="tabs" id="tabs">
+    <aside class="sidebar">
+      <nav class="tabs" id="tabs">
       <button data-tab="dash" class="active">Dashboard</button>
       <button data-tab="hero">Hero</button>
       <button data-tab="about">Sobre Mí</button>
@@ -61,13 +64,15 @@
       <button data-tab="portfolio">Portafolio</button>
       <button data-tab="gamedev">3D & Videojuegos</button>
       <button data-tab="gallery3d">3D Gallery</button>
+      <button data-tab="renders">Renders</button>
       <button data-tab="projects">Proyectos</button>
       <button data-tab="contact">Contacto</button>
       <button data-tab="site">Sitio</button>
       <button data-tab="seo">SEO & Ajustes</button>
       <button data-tab="design">Diseño</button>
       <button data-tab="publish">Publicar</button>
-    </nav>
+      </nav>
+    </aside>
     <div class="content">
       <!-- DASH -->
       <div data-panel="dash">
@@ -346,19 +351,513 @@
           <div class="panel"><h3>🔤 Fuentes & Tipografía</h3>
             <div class="grid2">
               <div class="field"><label>Fuente títulos (--font-heading)</label>
-                <select id="g3d_font_heading"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="Outfit">Outfit</option><option value="DM Sans">DM Sans</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Syne">Syne</option><option value="Clash Display">Clash Display</option><option value="Sora">Sora</option><option value="custom">Personalizada...</option></select>
+                <select id="g3d_font_heading"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="Outfit">Outfit</option><option value="DM Sans">DM Sans</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Syne">Syne</option><option value="Clash Display">Clash Display</option><option value="Sora">Sora</option></select>
                 <input type="text" id="g3d_font_heading_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
               </div>
               <div class="field"><label>Fuente cuerpo (--font-body)</label>
-                <select id="g3d_font_body"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="DM Sans">DM Sans</option><option value="Outfit">Outfit</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="custom">Personalizada...</option></select>
+                <select id="g3d_font_body"><option value="Space Grotesk">Space Grotesk</option><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="DM Sans">DM Sans</option><option value="Outfit">Outfit</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="IBM Plex Sans">IBM Plex Sans</option></select>
                 <input type="text" id="g3d_font_body_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
               </div>
               <div class="field"><label>Fuente mono (--font-mono)</label>
-                <select id="g3d_font_mono"><option value="JetBrains Mono">JetBrains Mono</option><option value="Fira Code">Fira Code</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Code Pro">Source Code Pro</option><option value="Space Mono">Space Mono</option><option value="custom">Personalizada...</option></select>
+                <select id="g3d_font_mono"><option value="JetBrains Mono">JetBrains Mono</option><option value="Fira Code">Fira Code</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Code Pro">Source Code Pro</option><option value="Space Mono">Space Mono</option></select>
                 <input type="text" id="g3d_font_mono_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
               </div>
               <div class="field"><label>Tamaño base (--font-size-base)</label><input type="number" id="g3d_font_size_base" min="12" max="18" step="1" value="14"></div>
             </div>
+          </div>
+        </div>
+      </div>
+      <!-- RENDERS — Xlerion — EDICIÓN COMPLETA -->
+      <div data-panel="renders" class="hidden">
+        <div class="panel"><h3><span id="ren_sectionTitleDisplay">Renders — Xlerion</span> <span class="hint">experiencia Render3DWeb — todo editable</span></h3>
+          <div class="field"><label>Nombre de sección (título del panel Admin y frontend)</label><input id="ren_sectionTitle" placeholder="Renders — Xlerion"><div class="hint">Este es el título que ves arriba. Cámbialo al nombre que quieras — ej: <b>Renders — Mi Museo 3D</b></div></div>
+          <div class="hint" style="margin-bottom:12px">Edita <b>todos</b> los textos, imágenes, botones y flujos de <code>renders.html</code>. Todo lo que ves en el frontend está aquí. <a href="renders.html" target="_blank" style="color:var(--accent)">Ver Renders ↗</a></div>
+
+          <div class="panel"><h3>🎨 Colores base</h3>
+            <div class="grid2">
+              <div class="field"><label>Paper (#f4efe6)</label><input type="color" id="ren_color_paper" data-k="ren_color_paper"><input type="text" id="ren_color_paper_hex" class="mono" data-k="ren_color_paper"></div>
+              <div class="field"><label>Ink (#0d0c0b)</label><input type="color" id="ren_color_ink" data-k="ren_color_ink"><input type="text" id="ren_color_ink_hex" class="mono" data-k="ren_color_ink"></div>
+              <div class="field"><label>Clay (#E4572E)</label><input type="color" id="ren_color_clay" data-k="ren_color_clay"><input type="text" id="ren_color_clay_hex" class="mono" data-k="ren_color_clay"></div>
+              <div class="field"><label>Visitas base</label><input type="number" id="ren_visits"></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>🧭 Header</h3>
+            <div class="grid2">
+              <div class="field"><label>Título header</label><input id="ren_headerTitle"></div>
+              <div class="field"><label>Subtítulo header</label><input id="ren_headerSub"></div>
+              <div class="field"><label>Nav About</label><input id="ren_navAbout"></div>
+              <div class="field"><label>Nav Voices</label><input id="ren_navVoices"></div>
+              <div class="field"><label>Nav CMS</label><input id="ren_navCms"></div>
+              <div class="field"><label>Sound ON</label><input id="ren_soundOn"></div>
+              <div class="field"><label>Sound OFF</label><input id="ren_soundOff"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label>Título — fuente</label><select id="ren_header_title_font"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Título — tamaño</label><select id="ren_header_title_size"><option value="1.25rem">Pequeño</option><option value="1.5rem">Normal</option><option value="2rem">Grande</option><option value="2.5rem">Muy grande</option></select></div>
+              <div class="field"><label>Título — color</label><input type="color" id="ren_header_title_color"><input type="text" id="ren_header_title_color_hex" class="mono"></div>
+              <div class="field"><label>Título — peso</label><select id="ren_header_title_weight"><option value="400">Normal</option><option value="600">Semibold</option><option value="700">Bold</option></select></div>
+              <div class="field"><label>Subtítulo — fuente</label><select id="ren_header_subtitle_font"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Subtítulo — tamaño</label><select id="ren_header_subtitle_size"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+              <div class="field"><label>Subtítulo — color</label><input type="color" id="ren_header_subtitle_color"><input type="text" id="ren_header_subtitle_color_hex" class="mono"></div>
+              <div class="field"><label>Navegación — fuente</label><select id="ren_header_nav_font"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Navegación — tamaño</label><select id="ren_header_nav_size"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+              <div class="field"><label>Navegación — color</label><input type="color" id="ren_header_nav_color"><input type="text" id="ren_header_nav_color_hex" class="mono"></div>
+              <div class="field"><label>Sonido — fuente</label><select id="ren_header_sound_font"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Sonido — color</label><input type="color" id="ren_header_sound_color"><input type="text" id="ren_header_sound_color_hex" class="mono"></div>
+            </div>
+            <div class="hint">Estos controles afectan directamente al header visible: título, subtítulo, About, Voices, CMS y Sound.</div>
+          </div>
+
+          <div class="panel"><h3>⏳ Loader</h3>
+            <div class="grid2">
+              <div class="field"><label>Loader bg imagen</label><input id="ren_loaderBg" placeholder="images/Oficina0013.jpg"><input type="file" accept="image/*" data-up="ren_loaderBg" style="margin-top:6px"></div>
+              <div class="field"><label>Coords</label><input id="ren_loaderCoords"></div>
+              <div class="field"><label>Location</label><input id="ren_loaderLocation"></div>
+              <div class="field"><label>Powered label</label><input id="ren_loaderPowered"></div>
+              <div class="field"><label>Fly to</label><input id="ren_loaderFlyTo"></div>
+              <div class="field"><label>Título loader</label><input id="ren_loaderTitle"></div>
+              <div class="field"><label>Título loader — tamaño/estilo</label>
+                <select id="ren_style_loaderTitle">
+                  <option value="display text-[19vw] leading-[0.82] text-[#f4efe6] sm:text-[15vw] lg:text-[13rem]">Gigante responsive (19vw)</option>
+                  <option value="display text-[14vw] leading-[0.85] text-[#f4efe6] sm:text-[11vw] lg:text-[9rem]">Grande (14vw)</option>
+                  <option value="display text-[10vw] leading-[0.9] text-[#f4efe6] sm:text-[8vw] lg:text-[6rem]">Mediano (10vw)</option>
+                  <option value="display text-[8vw] leading-[0.95] text-[#f4efe6] sm:text-[6vw] lg:text-[4rem]">Compacto (8vw)</option>
+                </select>
+              </div>
+              <div class="field"><label>Desc loader</label><textarea id="ren_loaderDesc" rows="2"></textarea></div>
+              <div class="field"><label>Loading label</label><input id="ren_loaderLoading"></div>
+              <div class="field"><label>Enter label</label><input id="ren_loaderEnter"></div>
+              <div class="field"><label>Título — fuente</label><select id="ren_style_loaderTitleFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Título — color</label><input type="color" id="ren_style_loaderTitleColor" data-k="ren_style_loaderTitleColor"><input type="text" id="ren_style_loaderTitleColor_hex" class="mono" data-k="ren_style_loaderTitleColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Textos meta — fuente (coords, visitas, loading)</label><select id="ren_style_loaderMetaFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Textos meta — tamaño</label><select id="ren_style_loaderMetaSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+              <div class="field"><label>Textos meta — color</label><input type="color" id="ren_style_loaderMetaColor" data-k="ren_style_loaderMetaColor"><input type="text" id="ren_style_loaderMetaColor_hex" class="mono" data-k="ren_style_loaderMetaColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Descripción — fuente</label><select id="ren_style_loaderDescFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Descripción — tamaño</label><select id="ren_style_loaderDescSize"><option value="14px">Pequeño</option><option value="15px">Normal</option><option value="17px">Grande</option></select></div>
+              <div class="field"><label>Descripción — color</label><input type="color" id="ren_style_loaderDescColor" data-k="ren_style_loaderDescColor"><input type="text" id="ren_style_loaderDescColor_hex" class="mono" data-k="ren_style_loaderDescColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Barra progreso — color</label><input type="color" id="ren_style_loaderBarColor" data-k="ren_style_loaderBarColor"><input type="text" id="ren_style_loaderBarColor_hex" class="mono" data-k="ren_style_loaderBarColor" placeholder="#E4572E"></div>
+              <div class="field"><label>Fondo imagen — opacidad</label><select id="ren_style_loaderBgOpacity"><option value="0.2">20%</option><option value="0.4">40%</option><option value="0.5">50% — original</option><option value="0.7">70%</option><option value="1">100%</option></select></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>💬 Hints (3)</h3>
+            <div class="field"><label>Hint 1</label><input id="ren_hint1"></div>
+            <div class="field"><label>Hint 2</label><input id="ren_hint2"></div>
+            <div class="field"><label>Hint 3</label><input id="ren_hint3"></div>
+          </div>
+
+          <div class="panel"><h3>🗺️ Mapa</h3>
+            <div class="grid2">
+              <div class="field"><label>Imagen mapa</label><input id="ren_mapImage" placeholder="images/proyectos-parallax.jpg"><input type="file" accept="image/*" data-up="ren_mapImage" style="margin-top:6px"></div>
+              <div class="field"><label>Zoom label</label><input id="ren_indexCountSuffix" placeholder="interventions mapped"></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>📋 Index bottom</h3>
+            <div class="grid2">
+              <div class="field"><label>Count suffix</label><input id="ren_indexCountSuffix2"></div>
+              <div class="field"><label>Open label</label><input id="ren_indexOpen"></div>
+              <div class="field"><label>Hide label</label><input id="ren_indexHide"></div>
+              <div class="field"><label>Marquee</label><textarea id="ren_marquee" rows="2"></textarea></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>ℹ️ About overlay</h3>
+            <div class="field"><label>Label</label><input id="ren_aboutLabel"></div>
+            <div class="field"><label>Título</label><input id="ren_aboutTitle"></div>
+            <div class="grid2">
+              <div class="field"><label>Stat 1 k</label><input id="ren_aboutStat1k"></div><div class="field"><label>Stat 1 v</label><input id="ren_aboutStat1v"></div>
+              <div class="field"><label>Stat 2 k</label><input id="ren_aboutStat2k"></div><div class="field"><label>Stat 2 v</label><input id="ren_aboutStat2v"></div>
+              <div class="field"><label>Stat 3 k</label><input id="ren_aboutStat3k"></div><div class="field"><label>Stat 3 v</label><input id="ren_aboutStat3v"></div>
+              <div class="field"><label>Stat 4 k</label><input id="ren_aboutStat4k"></div><div class="field"><label>Stat 4 v</label><input id="ren_aboutStat4v"></div>
+            </div>
+            <div class="field"><label>Párrafo 1</label><textarea id="ren_aboutPara1" rows="2"></textarea></div>
+            <div class="field"><label>Párrafo 2</label><textarea id="ren_aboutPara2" rows="2"></textarea></div>
+            <div class="field"><label>Párrafo 3</label><textarea id="ren_aboutPara3" rows="2"></textarea></div>
+            <div class="grid2">
+              <div class="field"><label>Meta 1 k</label><input id="ren_aboutMeta1k"></div><div class="field"><label>Meta 1 v</label><input id="ren_aboutMeta1v"></div>
+              <div class="field"><label>Meta 2 k</label><input id="ren_aboutMeta2k"></div><div class="field"><label>Meta 2 v</label><input id="ren_aboutMeta2v"></div>
+              <div class="field"><label>Meta 3 k</label><input id="ren_aboutMeta3k"></div><div class="field"><label>Meta 3 v</label><input id="ren_aboutMeta3v"></div>
+              <div class="field"><label>Video — etiqueta</label><input id="ren_aboutVideoLabel" placeholder="film"></div>
+              <div class="field"><label>Video YouTube — link (vacío = ocultar)</label><input id="ren_aboutVideoUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>🗣️ Voices overlay</h3>
+            <div class="field"><label>Label</label><input id="ren_voicesLabel"></div>
+            <div class="field"><label>Título</label><input id="ren_voicesTitle"></div>
+            <div class="field"><label>Intro</label><textarea id="ren_voicesIntro" rows="2"></textarea></div>
+            <div class="field"><label>Video — etiqueta</label><input id="ren_voicesVideoLabel" placeholder="film"></div>
+            <div class="field"><label>Video YouTube — link (vacío = ocultar)</label><input id="ren_voicesVideoUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+            <div class="grid2">
+              <div class="field"><label>Name placeholder</label><input id="ren_voicesNamePh"></div>
+              <div class="field"><label>Place placeholder</label><input id="ren_voicesPlacePh"></div>
+              <div class="field"><label>Message placeholder</label><input id="ren_voicesMsgPh"></div>
+              <div class="field"><label>Submit</label><input id="ren_voicesSubmit"></div>
+              <div class="field"><label>Saving...</label><input id="ren_voicesSaving" placeholder="writing…"></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>✉️ Contacto overlay (información + formulario)</h3>
+            <div class="field"><label>Label</label><input id="ren_cmsLabel"></div>
+            <div class="field"><label>Título</label><input id="ren_cmsTitle"></div>
+            <div class="field"><label>Intro</label><textarea id="ren_cmsIntro" rows="2"></textarea></div>
+            <div class="field"><label>Video — etiqueta</label><input id="ren_cmsVideoLabel" placeholder="film"></div>
+            <div class="field"><label>Video YouTube — link (vacío = ocultar)</label><input id="ren_cmsVideoUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+            <div class="grid2">
+              <div class="field"><label>Correo destino *</label><input id="ren_cmsEmail" placeholder="miguelxlerion@gmail.com"></div>
+              <div class="field"><label>Info — título</label><input id="ren_cmsInfoTitle" placeholder="información · contacto"></div>
+              <div class="field"><label>Info — texto</label><textarea id="ren_cmsInfoText" rows="2" placeholder="Ubicación, horario, redes…"></textarea></div>
+              <div class="field"><label>Nombre placeholder</label><input id="ren_cmsNamePh" placeholder="Tu nombre *"></div>
+              <div class="field"><label>Correo placeholder</label><input id="ren_cmsEmailPh" placeholder="Tu correo *"></div>
+              <div class="field"><label>Asunto placeholder</label><input id="ren_cmsSubjectPh" placeholder="Asunto"></div>
+              <div class="field"><label>Mensaje placeholder</label><input id="ren_cmsMsgPh" placeholder="Tu mensaje…"></div>
+              <div class="field"><label>Enviar</label><input id="ren_cmsSubmit" placeholder="enviar mensaje"></div>
+              <div class="field"><label>Enviando…</label><input id="ren_cmsSending" placeholder="enviando…"></div>
+              <div class="field"><label>Enviado ✓</label><input id="ren_cmsSent" placeholder="¡Gracias! Se abrió tu correo…"></div>
+              <div class="field"><label>Título — fuente</label><select id="ren_style_cmsTitleFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Título — tamaño</label><select id="ren_style_cmsTitleSize"><option value="3rem">Mediano (5xl)</option><option value="3.75rem">Grande (6xl)</option><option value="4.5rem">Gigante (7xl)</option></select></div>
+              <div class="field"><label>Título — color</label><input type="color" id="ren_style_cmsTitleColor" data-k="ren_style_cmsTitleColor"><input type="text" id="ren_style_cmsTitleColor_hex" class="mono" data-k="ren_style_cmsTitleColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Intro — fuente</label><select id="ren_style_cmsIntroFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Intro — tamaño</label><select id="ren_style_cmsIntroSize"><option value="14px">Pequeño</option><option value="15px">Normal</option><option value="17px">Grande</option></select></div>
+              <div class="field"><label>Intro — color</label><input type="color" id="ren_style_cmsIntroColor" data-k="ren_style_cmsIntroColor"><input type="text" id="ren_style_cmsIntroColor_hex" class="mono" data-k="ren_style_cmsIntroColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Email — fuente</label><select id="ren_style_cmsEmailFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Email — tamaño</label><select id="ren_style_cmsEmailSize"><option value="1.25rem">Mediano</option><option value="1.5rem">Grande</option><option value="1.875rem">Muy grande</option></select></div>
+              <div class="field"><label>Email — color</label><input type="color" id="ren_style_cmsEmailColor" data-k="ren_style_cmsEmailColor"><input type="text" id="ren_style_cmsEmailColor_hex" class="mono" data-k="ren_style_cmsEmailColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Formulario — fuente</label><select id="ren_style_cmsFormFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Formulario — tamaño</label><select id="ren_style_cmsFormSize"><option value="13px">Pequeño</option><option value="14px">Normal</option><option value="16px">Grande</option></select></div>
+              <div class="field"><label>Formulario — color</label><input type="color" id="ren_style_cmsFormColor" data-k="ren_style_cmsFormColor"><input type="text" id="ren_style_cmsFormColor_hex" class="mono" data-k="ren_style_cmsFormColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Pin close</label><input id="ren_pinClose"></div>
+              <div class="field"><label>Pin prev</label><input id="ren_pinPrev"></div>
+              <div class="field"><label>Pin next</label><input id="ren_pinNext"></div>
+              <div class="field"><label>Cerrar overlays (about/voices/cms)</label><input id="ren_overlayClose" placeholder="close ✕"></div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>🎛️ Clases y botones — control visual</h3>
+            <div class="hint" style="margin-bottom:12px">Elige una opción del menú — <b>sin escribir código</b>. Vista previa instantánea.</div>
+            <div class="field"><label>Nav — separación entre botones</label>
+              <select id="ren_style_navGap">
+                <option value="gap-3 sm:gap-5">Compacto — juntos (gap-3)</option>
+                <option value="gap-5 sm:gap-7" selected>Normal — equilibrado (gap-5)</option>
+                <option value="gap-8 sm:gap-10">Amplio — separados (gap-8)</option>
+                <option value="gap-10 sm:gap-12">Extra — muy separados (gap-10)</option>
+              </select>
+            </div>
+            <div class="field"><label>Nav — estilo de botones about / voices / [cms]</label>
+              <select id="ren_style_navItem">
+                <option value="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 transition-colors hover:text-[#f4efe6]">Normal — pequeño translúcido</option>
+                <option value="mono text-[11px] uppercase tracking-[0.3em] text-[#f4efe6]/80 transition-colors hover:text-[#f4efe6]">Grande — más visible</option>
+                <option value="mono text-[9px] uppercase tracking-[0.2em] text-[#f4efe6]/40 transition-colors hover:text-[#f4efe6]/80">Minimal — sutil</option>
+                <option value="mono text-[10px] uppercase tracking-[0.35em] font-bold text-[#f4efe6] transition-colors hover:text-[#E4572E]">Bold — destacado</option>
+                <option value="mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]">Píldora — borde fino translúcido</option>
+                <option value="mono rounded-lg border border-[#f4efe6]/15 bg-[#f4efe6]/10 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-[#f4efe6] transition-colors hover:bg-[#E4572E] hover:border-transparent">Caja — fondo claro, hover naranja</option>
+                <option value="mono border-b-2 border-transparent pb-1 text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 transition-colors hover:border-[#E4572E] hover:text-[#f4efe6]">Subrayado — línea naranja al hover</option>
+                <option value="mono rounded-full bg-[#E4572E] px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-[#0d0c0b] transition-colors hover:bg-[#f4efe6]">Pastilla sólida naranja</option>
+              </select>
+            </div>
+            <div class="field"><label>Subtítulo bajo Xlerion</label>
+              <select id="ren_style_subtitle">
+                <option value="mono mt-1 block text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/45">Pequeño tenue (9px)</option>
+                <option value="mono mt-2 block text-[10px] uppercase tracking-[0.32em] text-[#f4efe6]/60">Mediano visible (10px)</option>
+                <option value="mono mt-1 block text-[11px] uppercase tracking-[0.25em] text-[#f4efe6]/70">Grande claro (11px)</option>
+                <option value="mono mt-1 block text-[9px] uppercase tracking-[0.4em] text-[#E4572E]">Acento naranja</option>
+              </select>
+            </div>
+            <div class="field"><label>Header — posición y espaciado</label>
+              <select id="ren_style_topBar">
+                <option value="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-5 sm:p-7 transition-all duration-1000 translate-y-0 opacity-100">Default — normal (p-5)</option>
+                <option value="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-3 sm:p-4 transition-all duration-1000 translate-y-0 opacity-100">Compacto — pegado arriba (p-3)</option>
+                <option value="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-8 sm:p-10 transition-all duration-1000 translate-y-0 opacity-100">Amplio — aireado (p-8)</option>
+                <option value="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-5 sm:p-7 transition-all duration-1000 translate-y-0 opacity-100 bg-gradient-to-b from-[#0d0c0b]/80 to-transparent">Con fondo degradado sutil</option>
+              </select>
+            </div>
+            <div class="panel" style="background:var(--panel2);">
+              <h3>🧩 Componentes de interfaz</h3>
+              <div class="hint" style="margin-bottom:12px">Controla logo, navegación, índice inferior y zoom. Los textos se editan arriba, en Header e Index bottom.</div>
+              <div class="grid2">
+                <div class="field"><label>Logo — tipografía</label><select id="ren_style_logoFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Logo — tamaño</label><select id="ren_style_logoSize"><option value="1.25rem">Pequeño</option><option value="1.5rem">Normal</option><option value="2rem">Grande</option><option value="2.5rem">Muy grande</option></select></div>
+                <div class="field"><label>Logo — color</label><input type="color" id="ren_style_logoColor" data-k="ren_style_logoColor"><input type="text" id="ren_style_logoColor_hex" class="mono" data-k="ren_style_logoColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Logo — peso</label><select id="ren_style_logoWeight"><option value="400">Normal</option><option value="600">Semibold</option><option value="700">Bold</option></select></div>
+                <div class="field"><label>Subtítulo — tipografía</label><select id="ren_style_subtitleFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Subtítulo — tamaño</label><select id="ren_style_subtitleSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Subtítulo — color</label><input type="color" id="ren_style_subtitleColor" data-k="ren_style_subtitleColor"><input type="text" id="ren_style_subtitleColor_hex" class="mono" data-k="ren_style_subtitleColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Nav — tipografía</label><select id="ren_style_navFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Nav — tamaño</label><select id="ren_style_navSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Nav — color</label><input type="color" id="ren_style_navColor" data-k="ren_style_navColor"><input type="text" id="ren_style_navColor_hex" class="mono" data-k="ren_style_navColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Índice — tipografía</label><select id="ren_style_indexFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Índice — tamaño</label><select id="ren_style_indexSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Índice — color</label><input type="color" id="ren_style_indexColor" data-k="ren_style_indexColor"><input type="text" id="ren_style_indexColor_hex" class="mono" data-k="ren_style_indexColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Zoom — fondo</label><input type="color" id="ren_style_zoomBg" data-k="ren_style_zoomBg"><input type="text" id="ren_style_zoomBg_hex" class="mono" data-k="ren_style_zoomBg" placeholder="#0d0c0b"></div>
+                <div class="field"><label>Zoom — color</label><input type="color" id="ren_style_zoomColor" data-k="ren_style_zoomColor"><input type="text" id="ren_style_zoomColor_hex" class="mono" data-k="ren_style_zoomColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Zoom — borde</label><input type="color" id="ren_style_zoomBorder" data-k="ren_style_zoomBorder"><input type="text" id="ren_style_zoomBorder_hex" class="mono" data-k="ren_style_zoomBorder" placeholder="#f4efe6"></div>
+                <div class="field"><label>Zoom — radio</label><select id="ren_style_zoomRadius"><option value="0">Cuadrado</option><option value="8px">Redondeado</option><option value="999px">Píldora</option></select></div>
+                <div class="field"><label>Pin nav — tipografía (prev / count / next)</label><select id="ren_style_pinNavFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Pin nav — tamaño</label><select id="ren_style_pinNavSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Pin nav — color</label><input type="color" id="ren_style_pinNavColor" data-k="ren_style_pinNavColor"><input type="text" id="ren_style_pinNavColor_hex" class="mono" data-k="ren_style_pinNavColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Pin nav — tipo de botón (prev / next)</label>
+                  <select id="ren_style_pinNavItem">
+                    <option value="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 transition-colors hover:text-[#E4572E]">Texto — naranja al hover</option>
+                    <option value="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 transition-colors hover:text-[#f4efe6]">Texto — claro al hover</option>
+                    <option value="mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[9px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]">Píldora — borde fino</option>
+                    <option value="mono rounded-md border border-[#f4efe6]/15 bg-[#f4efe6]/10 px-3 py-2 text-[9px] uppercase tracking-[0.28em] text-[#f4efe6] transition-colors hover:bg-[#E4572E] hover:border-transparent">Caja — hover naranja</option>
+                  </select>
+                </div>
+                <div class="field"><label>Tarjeta índice — fondo</label><input type="color" id="ren_style_indexCardBg" data-k="ren_style_indexCardBg"><input type="text" id="ren_style_indexCardBg_hex" class="mono" data-k="ren_style_indexCardBg" placeholder="#0d0c0b"></div>
+                <div class="field"><label>Tarjeta índice — radio</label><select id="ren_style_indexCardRadius"><option value="0">Cuadrado</option><option value="8px">Redondeado</option><option value="16px">Muy redondeado</option></select></div>
+                <div class="field"><label>Tarjeta título — fuente</label><select id="ren_style_indexCardTitleFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Tarjeta título — tamaño</label><select id="ren_style_indexCardTitleSize"><option value="1.25rem">Mediano</option><option value="1.5rem">Grande (2xl)</option><option value="1.875rem">Muy grande</option></select></div>
+                <div class="field"><label>Tarjeta título — color</label><input type="color" id="ren_style_indexCardTitleColor" data-k="ren_style_indexCardTitleColor"><input type="text" id="ren_style_indexCardTitleColor_hex" class="mono" data-k="ren_style_indexCardTitleColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Tarjeta meta — fuente</label><select id="ren_style_indexCardMetaFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Tarjeta meta — tamaño</label><select id="ren_style_indexCardMetaSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Tarjeta meta — color</label><input type="color" id="ren_style_indexCardMetaColor" data-k="ren_style_indexCardMetaColor"><input type="text" id="ren_style_indexCardMetaColor_hex" class="mono" data-k="ren_style_indexCardMetaColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Zoom — posición en pantalla</label>
+                  <select id="ren_style_zoomPos">
+                    <option value="absolute right-5 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur">Mitad borde derecho</option>
+                    <option value="absolute bottom-6 right-5 z-20 flex flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur">Abajo derecha (original)</option>
+                    <option value="absolute left-5 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur">Mitad borde izquierdo</option>
+                    <option value="absolute right-5 top-24 z-20 flex flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur">Arriba derecha (bajo header)</option>
+                    <option value="absolute bottom-24 left-5 z-20 flex flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur">Abajo izquierda</option>
+                  </select>
+                </div>
+                <div class="field"><label>Cerrar overlays — tipo (×3)</label>
+                  <select id="ren_style_overlayCloseItem">
+                    <option value="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">Texto — claro al hover</option>
+                    <option value="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#E4572E]">Texto — naranja al hover</option>
+                    <option value="mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[9px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]">Píldora — borde fino</option>
+                  </select>
+                </div>
+                <div class="field"><label>Cerrar overlays — hover color</label><input type="color" id="ren_style_overlayCloseHover" data-k="ren_style_overlayCloseHover"><input type="text" id="ren_style_overlayCloseHover_hex" class="mono" data-k="ren_style_overlayCloseHover" placeholder="#f4efe6"></div>
+                <div class="field"><label>Cerrar overlays — tipografía</label><select id="ren_style_overlayCloseFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+                <div class="field"><label>Cerrar overlays — tamaño</label><select id="ren_style_overlayCloseSize"><option value="9px">Pequeño</option><option value="10px">Normal</option><option value="12px">Grande</option></select></div>
+                <div class="field"><label>Cerrar overlays — color texto</label><input type="color" id="ren_style_overlayCloseColor" data-k="ren_style_overlayCloseColor"><input type="text" id="ren_style_overlayCloseColor_hex" class="mono" data-k="ren_style_overlayCloseColor" placeholder="#f4efe6"></div>
+                <div class="field"><label>Pin cerrar — tipo</label>
+                  <select id="ren_style_pinCloseItem">
+                    <option value="mono absolute right-4 top-4 rounded-full border border-[#f4efe6]/30 bg-[#0d0c0b]/60 px-4 py-2 text-[10px] uppercase tracking-[0.25em] text-[#f4efe6] backdrop-blur hover:bg-[#E4572E] hover:text-[#0d0c0b]">Píldora — hover naranja (original)</option>
+                    <option value="mono absolute right-4 top-4 rounded-full border border-[#f4efe6]/30 bg-[#0d0c0b]/60 px-4 py-2 text-[10px] uppercase tracking-[0.25em] text-[#f4efe6] backdrop-blur hover:border-[#f4efe6]">Píldora — hover claro</option>
+                    <option value="mono absolute right-4 top-4 rounded-md border border-[#f4efe6]/15 bg-[#f4efe6]/10 px-4 py-2 text-[10px] uppercase tracking-[0.25em] text-[#f4efe6] backdrop-blur hover:bg-[#E4572E] hover:text-[#0d0c0b]">Caja — hover naranja</option>
+                  </select>
+                </div>
+                <div class="field"><label>Índice — hover tarjeta</label><input type="color" id="ren_style_indexHover" data-k="ren_style_indexHover"><input type="text" id="ren_style_indexHover_hex" class="mono" data-k="ren_style_indexHover" placeholder="#171513"></div>
+              </div>
+            </div>
+            <div class="panel"><h3>🎨 Diseño — Colores globales del sitio</h3>
+              <div class="hint" style="margin-bottom:12px">Mismos colores del tab <b>Diseño</b> — edítalos aquí o allá, se guardan en el mismo lugar.</div>
+              <div class="grid2">
+                <div class="field"><label>Fondo primario</label><input type="color" id="ren_design_bg" data-k="ren_design_bg"><input type="text" id="ren_design_bg_hex" class="mono" data-k="ren_design_bg"></div>
+                <div class="field"><label>Fondo secundario</label><input type="color" id="ren_design_bg2" data-k="ren_design_bg2"><input type="text" id="ren_design_bg2_hex" class="mono" data-k="ren_design_bg2"></div>
+                <div class="field"><label>Fondo terciario</label><input type="color" id="ren_design_bg3" data-k="ren_design_bg3"><input type="text" id="ren_design_bg3_hex" class="mono" data-k="ren_design_bg3"></div>
+                <div class="field"><label>Fondo tarjeta</label><input type="color" id="ren_design_bg_card" data-k="ren_design_bg_card"><input type="text" id="ren_design_bg_card_hex" class="mono" data-k="ren_design_bg_card"></div>
+                <div class="field"><label>Texto primario</label><input type="color" id="ren_design_text" data-k="ren_design_text"><input type="text" id="ren_design_text_hex" class="mono" data-k="ren_design_text"></div>
+                <div class="field"><label>Texto secundario</label><input type="color" id="ren_design_text2" data-k="ren_design_text2"><input type="text" id="ren_design_text2_hex" class="mono" data-k="ren_design_text2"></div>
+              </div>
+              <div class="grid2">
+                <div class="field"><label>Texto muteado</label><input type="color" id="ren_design_muted" data-k="ren_design_muted"><input type="text" id="ren_design_muted_hex" class="mono" data-k="ren_design_muted"></div>
+                <div class="field"><label>Borde</label><input type="color" id="ren_design_border" data-k="ren_design_border"><input type="text" id="ren_design_border_hex" class="mono" data-k="ren_design_border"></div>
+                <div class="field"><label>Borde hover</label><input type="color" id="ren_design_border_hover" data-k="ren_design_border_hover"><input type="text" id="ren_design_border_hover_hex" class="mono" data-k="ren_design_border_hover"></div>
+                <div class="field"><label>Acento azul</label><input type="color" id="ren_design_accent" data-k="ren_design_accent"><input type="text" id="ren_design_accent_hex" class="mono" data-k="ren_design_accent"></div>
+                <div class="field"><label>Acento morado</label><input type="color" id="ren_design_accent2" data-k="ren_design_accent2"><input type="text" id="ren_design_accent2_hex" class="mono" data-k="ren_design_accent2"></div>
+                <div class="field"><label>Esmeralda</label><input type="color" id="ren_design_accent_emerald" data-k="ren_design_accent_emerald"><input type="text" id="ren_design_accent_emerald_hex" class="mono" data-k="ren_design_accent_emerald"></div>
+              </div>
+              <div class="grid2">
+                <div class="field"><label>Ámbar</label><input type="color" id="ren_design_accent_amber" data-k="ren_design_accent_amber"><input type="text" id="ren_design_accent_amber_hex" class="mono" data-k="ren_design_accent_amber"></div>
+                <div class="field"><label>Rosa</label><input type="color" id="ren_design_accent_rose" data-k="ren_design_accent_rose"><input type="text" id="ren_design_accent_rose_hex" class="mono" data-k="ren_design_accent_rose"></div>
+                <div class="field"><label>Cian</label><input type="color" id="ren_design_accent_cyan" data-k="ren_design_accent_cyan"><input type="text" id="ren_design_accent_cyan_hex" class="mono" data-k="ren_design_accent_cyan"></div>
+                <div class="field"><label>Gradiente 1 inicio</label><input type="color" id="ren_design_grad_from" data-k="ren_design_grad_from"><input type="text" id="ren_design_grad_from_hex" class="mono" data-k="ren_design_grad_from"></div>
+                <div class="field"><label>Gradiente 1 medio</label><input type="color" id="ren_design_grad_mid" data-k="ren_design_grad_mid"><input type="text" id="ren_design_grad_mid_hex" class="mono" data-k="ren_design_grad_mid"></div>
+                <div class="field"><label>Gradiente 1 fin</label><input type="color" id="ren_design_grad_to" data-k="ren_design_grad_to"><input type="text" id="ren_design_grad_to_hex" class="mono" data-k="ren_design_grad_to"></div>
+              </div>
+            </div>
+            <div class="field"><label>Pin — comportamiento</label>
+              <select id="ren_style_pinBtn">
+                <option value="group absolute">Normal — fijo</option>
+                <option value="group absolute hover:scale-110">Hover — crece</option>
+                <option value="group absolute hover:rotate-3">Hover — gira</option>
+                <option value="group absolute opacity-80 hover:opacity-100">Translúcido</option>
+              </select>
+            </div>
+            <div class="grid2">
+              <div class="field"><label>Pin opacidad</label><select id="ren_style_pinOpacity"><option value="1">100% — sólido</option><option value="0.8">80% — suave</option><option value="0.6">60% — translúcido</option><option value="0.4">40% — sutil</option></select></div>
+              <div class="field"><label>Pin color base</label><input type="color" id="ren_style_pinColor" data-k="ren_style_pinColor"><input type="text" id="ren_style_pinColor_hex" class="mono" data-k="ren_style_pinColor" placeholder="#E4572E"></div>
+              <div class="field"><label>Pin forma</label><select id="ren_style_pinShape"><option value="circle">Círculo (50%)</option><option value="rounded">Redondeado (8px)</option><option value="square">Cuadrado (0)</option><option value="pill">Píldora (999px)</option></select></div>
+              <div class="field"><label>Pin fondo color (cuadrado detrás)</label><input type="color" id="ren_style_pinBg" data-k="ren_style_pinBg"><input type="text" id="ren_style_pinBg_hex" class="mono" data-k="ren_style_pinBg" placeholder="#0d0c0b"></div>
+              <div class="field"><label>Pin fondo opacidad</label><select id="ren_style_pinBgOpacity"><option value="0">0% — transparente</option><option value="0.2">20%</option><option value="0.4">40%</option><option value="0.6">60% — original</option><option value="0.8">80%</option><option value="1">100% — sólido</option></select></div>
+              <div class="field"><label>Pulso opacidad</label><select id="ren_style_pinPulseOpacity"><option value="0">Oculto</option><option value="0.25">25% — sutil</option><option value="0.5">50% — normal</option><option value="0.75">75% — intenso</option><option value="1">100% — sólido</option></select></div>
+              <div class="field"><label>Pulso tamaño</label><select id="ren_style_pinPulseScale"><option value="0.75">Pequeño</option><option value="1">Normal</option><option value="1.5">Grande</option><option value="2">Muy grande</option></select></div>
+              <div class="field"><label>Pulso color</label><input type="color" id="ren_style_pinPulseColor" data-k="ren_style_pinPulseColor"><input type="text" id="ren_style_pinPulseColor_hex" class="mono" data-k="ren_style_pinPulseColor" placeholder="Usar color del pin"></div>
+            </div>
+            <div class="hint">Estructura visual: el <b>pin</b> es el círculo/cuadro con número y el <b>pulso</b> es el halo animado que se expande detrás. Estos controles afectan solo al halo.</div>
+            <div class="grid2">
+              <div class="field"><label>⭐ Pin destacado (nth-child)</label>
+                <select id="ren_style_featPin">
+                  <option value="0">Ninguno</option>
+                  <option value="1">Pin 1</option>
+                  <option value="2">Pin 2</option>
+                  <option value="3">Pin 3</option>
+                  <option value="4">Pin 4</option>
+                  <option value="5">Pin 5</option>
+                  <option value="6">Pin 6</option>
+                  <option value="7">Pin 7</option>
+                  <option value="8">Pin 8</option>
+                </select>
+              </div>
+              <div class="field"><label>Destacado escala</label>
+                <select id="ren_style_featScale">
+                  <option value="1.25">1.25× — sutil</option>
+                  <option value="1.5">1.5× — notable</option>
+                  <option value="2">2× — protagonista</option>
+                </select>
+              </div>
+              <div class="field"><label>Destacado anillo color</label><input type="color" id="ren_style_featRing" data-k="ren_style_featRing"><input type="text" id="ren_style_featRing_hex" class="mono" data-k="ren_style_featRing" placeholder="#E4572E"></div>
+            </div>
+            <div class="field"><label>Botón Index — open index / hide index</label>
+              <select id="ren_style_indexToggle">
+                <option value="mono text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/40 hover:text-[#f4efe6]">Sutil — gris</option>
+                <option value="mono text-[10px] uppercase tracking-[0.3em] text-[#f4efe6]/60 hover:text-[#E4572E]">Naranja al hover</option>
+                <option value="mono text-[10px] uppercase tracking-[0.25em] font-bold text-[#f4efe6] hover:text-[#E4572E]">Bold — destacado</option>
+                <option value="mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-1 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]">Píldora — borde fino</option>
+                <option value="mono rounded-md border border-[#f4efe6]/15 bg-[#f4efe6]/10 px-3 py-1 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6] transition-colors hover:bg-[#E4572E] hover:border-transparent">Caja — fondo claro, hover naranja</option>
+                </select>
+              </div>
+              <div class="field"><label>Open index — fondo</label><input type="color" id="ren_style_indexToggleBg" data-k="ren_style_indexToggleBg"><select id="ren_style_indexToggleBg_hex" data-k="ren_style_indexToggleBg_hex" class="mono"><option value="picker">Usar color del picker</option><option value="transparent">Transparente (sin fondo)</option></select></div>
+              <div class="field"><label>Open index — borde (requiere tipo con borde)</label><input type="color" id="ren_style_indexToggleBorder" data-k="ren_style_indexToggleBorder"><select id="ren_style_indexToggleBorder_hex" data-k="ren_style_indexToggleBorder" class="mono"><option value="picker">Usar color del picker</option><option value="transparent">Transparente (sin borde)</option></select></div>
+              <div class="field"><label>Open index — hover color</label><input type="color" id="ren_style_indexToggleHover" data-k="ren_style_indexToggleHover"><input type="text" id="ren_style_indexToggleHover_hex" class="mono" data-k="ren_style_indexToggleHover" placeholder="#f4efe6"></div>
+            <div class="field"><label>Botón Sound</label>
+              <select id="ren_style_soundBtn">
+                <option value="mono flex items-center gap-2 rounded-full border border-[#f4efe6]/20 px-4 py-2 text-[9px] uppercase tracking-[0.25em] text-[#f4efe6]/70 transition-colors hover:border-[#f4efe6]/60">Borde fino — translúcido</option>
+                <option value="mono flex items-center gap-2 rounded-full border border-[#f4efe6]/40 bg-[#f4efe6]/10 px-4 py-2 text-[9px] uppercase tracking-[0.25em] text-[#f4efe6]">Relleno claro</option>
+                <option value="mono flex items-center gap-2 rounded-full border border-[#E4572E] bg-[#E4572E] px-4 py-2 text-[9px] uppercase tracking-[0.25em] text-[#0d0c0b]">Sólido naranja</option>
+              </select>
+            </div>
+            <div class="field"><label>Hint pastilla central</label>
+              <select id="ren_style_hint">
+                <option value="mono rounded-full border border-[#f4efe6]/15 bg-[#0d0c0b]/40 px-5 py-2 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/60 backdrop-blur-sm">Translúcida — borde fino</option>
+                <option value="mono rounded-full border border-[#E4572E] bg-[#E4572E] px-5 py-2 text-[9px] uppercase tracking-[0.3em] text-[#0d0c0b]">Sólida naranja</option>
+                <option value="mono rounded-full bg-[#f4efe6] px-5 py-2 text-[9px] uppercase tracking-[0.3em] text-[#0d0c0b]">Clara — alto contraste</option>
+                <option value="mono rounded-full border-2 border-[#f4efe6] bg-transparent px-5 py-2 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6] backdrop-blur-sm">Solo borde grueso</option>
+              </select>
+            </div>
+            <div class="field"><label>Botones submit — efecto hover (relleno)</label>
+              <select id="ren_style_btnFill">
+                <option value="absolute inset-0 origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500">Rellena desde abajo</option>
+                <option value="absolute inset-0 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">Rellena desde arriba</option>
+                <option value="absolute inset-0 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">Rellena desde la izquierda</option>
+                <option value="absolute inset-0 origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500">Rellena desde la derecha</option>
+                <option value="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Fundido (sin movimiento)</option>
+              </select>
+              <div class="hint">Aplica a Enter + Voices + CMS submit</div>
+            </div>
+          </div>
+          <div class="panel"><h3>🔘 Botones submit — color, fuente, transparencia e icono</h3>
+            <div class="hint" style="margin-bottom:12px">Aplica a <b>Enter + Voices + CMS submit</b>. Sin escribir código.</div>
+            <div class="grid2">
+              <div class="field"><label>Texto color</label><input type="color" id="ren_style_btnText" data-k="ren_style_btnText"><input type="text" id="ren_style_btnText_hex" class="mono" data-k="ren_style_btnText" placeholder="#f4efe6"></div>
+              <div class="field"><label>Borde color</label><input type="color" id="ren_style_btnBorder" data-k="ren_style_btnBorder"><input type="text" id="ren_style_btnBorder_hex" class="mono" data-k="ren_style_btnBorder" placeholder="#f4efe6"></div>
+              <div class="field"><label>Relleno hover color</label><input type="color" id="ren_style_btnFillColor" data-k="ren_style_btnFillColor"><input type="text" id="ren_style_btnFillColor_hex" class="mono" data-k="ren_style_btnFillColor" placeholder="#E4572E"></div>
+              <div class="field"><label>Fondo</label>
+                <select id="ren_style_btnBg">
+                  <option value="transparent">Transparente</option>
+                  <option value="paper10">Sutil — papel 10%</option>
+                  <option value="paper25">Medio — papel 25%</option>
+                </select>
+              </div>
+              <div class="field"><label>Fuente</label>
+                <select id="ren_style_btnFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select>
+              </div>
+              <div class="field"><label>Tamaño texto</label>
+                <select id="ren_style_btnSize">
+                  <option value="10px">Pequeño (10px)</option>
+                  <option value="11px">Normal (11px)</option>
+                  <option value="12px">Grande (12px)</option>
+                </select>
+              </div>
+              <div class="field"><label>Icono</label>
+                <select id="ren_style_btnIcon">
+                  <option value="">Ninguno</option>
+                  <option value="→">→ Flecha</option>
+                  <option value="↗">↗ Diagonal</option>
+                  <option value="✦">✦ Destello</option>
+                  <option value="▶">▶ Play</option>
+                </select>
+              </div>
+              <div class="field"><label>Icono posición</label>
+                <select id="ren_style_btnIconPos">
+                  <option value="left">Izquierda</option>
+                  <option value="right">Derecha</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="panel"><h3>🔊 Botón Sound — color, fuente, transparencia e icono</h3>
+            <div class="hint" style="margin-bottom:12px">Aplica a <b>Sound header + Sound loader</b>. Texto y borde conservan la translucidez original. Sin escribir código.</div>
+            <div class="grid2">
+              <div class="field"><label>Texto color</label><input type="color" id="ren_style_sndText" data-k="ren_style_sndText"><input type="text" id="ren_style_sndText_hex" class="mono" data-k="ren_style_sndText" placeholder="#f4efe6"></div>
+              <div class="field"><label>Borde color</label><input type="color" id="ren_style_sndBorder" data-k="ren_style_sndBorder"><input type="text" id="ren_style_sndBorder_hex" class="mono" data-k="ren_style_sndBorder" placeholder="#f4efe6"></div>
+              <div class="field"><label>Fondo</label>
+                <select id="ren_style_sndBg">
+                  <option value="transparent">Transparente</option>
+                  <option value="paper10">Sutil — papel 10%</option>
+                  <option value="paper25">Medio — papel 25%</option>
+                </select>
+              </div>
+              <div class="field"><label>Fuente</label>
+                <select id="ren_style_sndFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select>
+              </div>
+              <div class="field"><label>Tamaño texto</label>
+                <select id="ren_style_sndSize">
+                  <option value="9px">Pequeño (9px)</option>
+                  <option value="10px">Normal (10px)</option>
+                  <option value="11px">Grande (11px)</option>
+                </select>
+              </div>
+              <div class="field"><label>Icono</label>
+                <select id="ren_style_sndIcon">
+                  <option value="bars">Barras animadas</option>
+                  <option value="none">Sin icono</option>
+                  <option value="→">→ Flecha</option>
+                  <option value="↗">↗ Diagonal</option>
+                  <option value="✦">✦ Destello</option>
+                  <option value="▶">▶ Play</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel"><h3>📍 Pins — intervenciones en el mapa (x/y 0-100)</h3>
+            <div class="hint" style="margin-bottom:8px">Click en el mapa para colocar pin · Arrastra para mover · Arrastra una imagen/gif/video encima del mapa para cambiar el fondo</div>
+            <div id="ren_mapPreviewWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#0d0c0b;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;cursor:crosshair">
+              <div id="ren_mapPreview" style="position:relative;width:100%;height:100%;background-size:cover;background-position:center"></div>
+              <label style="position:absolute;top:10px;right:10px;z-index:5;background:rgba(13,12,11,0.85);border:1px solid #f4efe6;color:#f4efe6;padding:8px 12px;border-radius:999px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;backdrop-filter:blur(6px)">
+                📷 Cambiar imagen del mapa
+                <input type="file" id="ren_mapFileDirect" accept="image/*,video/*,.gif,.webp" hidden>
+              </label>
+              <div id="ren_mapDropHint" style="position:absolute;inset:0;display:none;place-items:center;background:rgba(228,87,46,0.85);color:#0d0c0b;font-weight:700;letter-spacing:0.1em;pointer-events:none">Suelta la imagen/gif/video aquí</div>
+            </div>
+            <div id="ren_pins_list"></div><button class="btn small" id="ren_addPin">+ Pin</button>
+          </div>
+          <div class="panel"><h3>📄 Pin detalle — tipografías y fondo</h3>
+            <div class="hint" style="margin-bottom:12px">Controla el panel que se abre al hacer clic en un pin (<code>aside#pinDetail</code>). El contenido viene de cada pin; aquí el diseño.</div>
+            <div class="grid2">
+              <div class="field"><label>Título — fuente</label><select id="ren_style_pinDetailTitleFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Título — tamaño</label><select id="ren_style_pinDetailTitleSize"><option value="3rem">Grande (5xl)</option><option value="3.75rem">Muy grande (6xl)</option><option value="2.25rem">Mediano (4xl)</option><option value="4.5rem">Gigante (7xl)</option></select></div>
+              <div class="field"><label>Título — color</label><input type="color" id="ren_style_pinDetailTitleColor" data-k="ren_style_pinDetailTitleColor"><input type="text" id="ren_style_pinDetailTitleColor_hex" class="mono" data-k="ren_style_pinDetailTitleColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Subtítulo/meta — fuente</label><select id="ren_style_pinDetailMetaFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Subtítulo/meta — tamaño</label><select id="ren_style_pinDetailMetaSize"><option value="10px">Pequeño</option><option value="11px">Normal</option><option value="12px">Grande</option></select></div>
+              <div class="field"><label>Subtítulo/meta — color</label><input type="color" id="ren_style_pinDetailMetaColor" data-k="ren_style_pinDetailMetaColor"><input type="text" id="ren_style_pinDetailMetaColor_hex" class="mono" data-k="ren_style_pinDetailMetaColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Historia — fuente</label><select id="ren_style_pinDetailBodyFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Historia — tamaño</label><select id="ren_style_pinDetailBodySize"><option value="14px">Pequeño</option><option value="15px">Normal</option><option value="17px">Grande</option></select></div>
+              <div class="field"><label>Historia — color</label><input type="color" id="ren_style_pinDetailBodyColor" data-k="ren_style_pinDetailBodyColor"><input type="text" id="ren_style_pinDetailBodyColor_hex" class="mono" data-k="ren_style_pinDetailBodyColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Cita — fuente</label><select id="ren_style_pinDetailQuoteFont"><option value="mono">Mono — JetBrains Mono</option><option value="sans">Sans — Inter</option><option value="display">Display — Playfair</option><option value="Playfair Display">Playfair Display</option><option value="Inter">Inter</option><option value="Space Grotesk">Space Grotesk</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Montserrat">Montserrat</option><option value="Manrope">Manrope</option><option value="DM Sans">DM Sans</option><option value="Figtree">Figtree</option><option value="Sora">Sora</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="Oswald">Oswald</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="DM Serif Display">DM Serif Display</option><option value="JetBrains Mono">JetBrains Mono</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Sans 3">Source Sans 3</option><option value="Roboto Mono">Roboto Mono</option></select></div>
+              <div class="field"><label>Cita — tamaño</label><select id="ren_style_pinDetailQuoteSize"><option value="1.25rem">Normal</option><option value="1.5rem">Grande</option><option value="1.875rem">Muy grande</option></select></div>
+              <div class="field"><label>Cita — color</label><input type="color" id="ren_style_pinDetailQuoteColor" data-k="ren_style_pinDetailQuoteColor"><input type="text" id="ren_style_pinDetailQuoteColor_hex" class="mono" data-k="ren_style_pinDetailQuoteColor" placeholder="#f4efe6"></div>
+              <div class="field"><label>Panel — fondo</label><input type="color" id="ren_style_pinDetailBg" data-k="ren_style_pinDetailBg"><input type="text" id="ren_style_pinDetailBg_hex" class="mono" data-k="ren_style_pinDetailBg" placeholder="#131110"></div>
+              <div class="field"><label>Panel — opacidad fondo</label><select id="ren_style_pinDetailBgOpacity"><option value="0.7">70%</option><option value="0.8">80%</option><option value="0.9">90%</option><option value="0.95">95% — original</option><option value="1">100% — sólido</option></select></div>
+            </div>
+          </div>
+          <div class="panel"><h3>💬 Voices — muro abierto</h3>
+            <div id="ren_voices_list"></div><button class="btn small ghost" id="ren_addVoice">+ Voice</button>
           </div>
         </div>
       </div>
@@ -385,7 +884,7 @@
           <div class="field"><label>Portafolio URL</label><input id="site_portfolio"></div>
           <div class="field"><label>Teléfono</label><input id="site_phone"></div>
           <div class="field"><label>Texto footer</label><input id="site_footer"></div>
-          <div class="panel"><h3>Nav items</h3><div id="site_nav"></div><button class="btn small ghost" id="site_addNav">+ Item</button></div>
+          <div class="panel"><h3>Nav items</h3><div id="site_nav"></div><datalist id="navHrefList"><option value="#about"></option><option value="#services"></option><option value="#experience"></option><option value="#portfolio"></option><option value="#projects"></option><option value="#contact"></option><option value="renders.html"></option><option value="gallery.html"></option><option value="3d-portfolio.html"></option><option value="index.html"></option><option value="https://"></option></datalist><button class="btn small ghost" id="site_addNav">+ Item</button><div class="hint">Usa el menú desplegable del campo <b>href</b> — elige sección o escribe URL externa. Evita escribir a mano.</div></div>
         </div>
       </div>
       <!-- DESIGN -->
@@ -423,21 +922,37 @@
         <div class="panel"><h3>Tipografía</h3>
           <div class="grid2">
             <div class="field"><label>Fuente títulos (--font-heading)</label>
-              <select id="d_font_heading"><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="Space Grotesk">Space Grotesk</option><option value="Outfit">Outfit</option><option value="DM Sans">DM Sans</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Syne">Syne</option><option value="Clash Display">Clash Display</option><option value="Sora">Sora</option><option value="custom">Personalizada...</option></select>
+              <select id="d_font_heading"><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="Space Grotesk">Space Grotesk</option><option value="Outfit">Outfit</option><option value="DM Sans">DM Sans</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="Manrope">Manrope</option><option value="Sora">Sora</option><option value="Montserrat">Montserrat</option><option value="Urbanist">Urbanist</option><option value="Bricolage Grotesque">Bricolage Grotesque</option><option value="Archivo">Archivo</option><option value="Archivo Black">Archivo Black</option><option value="Barlow Condensed">Barlow Condensed</option><option value="Barlow Semi Condensed">Barlow Semi Condensed</option><option value="Oswald">Oswald</option><option value="Bebas Neue">Bebas Neue</option><option value="Anton">Anton</option><option value="League Spartan">League Spartan</option><option value="Barlow">Barlow</option><option value="Raleway">Raleway</option><option value="Josefin Sans">Josefin Sans</option><option value="Quicksand">Quicksand</option><option value="Comfortaa">Comfortaa</option><option value="Righteous">Righteous</option><option value="Syne">Syne</option><option value="Unbounded">Unbounded</option><option value="Orbitron">Orbitron</option><option value="Exo 2">Exo 2</option><option value="Michroma">Michroma</option><option value="Audiowide">Audiowide</option><option value="Playfair Display">Playfair Display</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="Cormorant">Cormorant</option><option value="Libre Baskerville">Libre Baskerville</option><option value="Bodoni Moda">Bodoni Moda</option><option value="DM Serif Display">DM Serif Display</option><option value="Instrument Serif">Instrument Serif</option><option value="Space Mono">Space Mono</option><option value="JetBrains Mono">JetBrains Mono</option><option value="custom">Personalizada...</option></select>
               <input type="text" id="d_font_heading_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
             </div>
             <div class="field"><label>Fuente cuerpo (--font-body)</label>
-              <select id="d_font_body"><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="DM Sans">DM Sans</option><option value="Outfit">Outfit</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="DM Sans">DM Sans</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Space Grotesk">Space Grotesk</option><option value="custom">Personalizada...</option></select>
+              <select id="d_font_body"><option value="Inter">Inter</option><option value="Poppins">Poppins</option><option value="DM Sans">DM Sans</option><option value="Outfit">Outfit</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="Manrope">Manrope</option><option value="Montserrat">Montserrat</option><option value="Nunito Sans">Nunito Sans</option><option value="Source Sans 3">Source Sans 3</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Work Sans">Work Sans</option><option value="Public Sans">Public Sans</option><option value="Lato">Lato</option><option value="Roboto">Roboto</option><option value="Open Sans">Open Sans</option><option value="Noto Sans">Noto Sans</option><option value="Noto Sans Display">Noto Sans Display</option><option value="Space Grotesk">Space Grotesk</option><option value="Barlow">Barlow</option><option value="Barlow Semi Condensed">Barlow Semi Condensed</option><option value="Rubik">Rubik</option><option value="Figtree">Figtree</option><option value="Karla">Karla</option><option value="Mulish">Mulish</option><option value="Heebo">Heebo</option><option value="Lexend">Lexend</option><option value="Albert Sans">Albert Sans</option><option value="Red Hat Display">Red Hat Display</option><option value="Cabin">Cabin</option><option value="Merriweather Sans">Merriweather Sans</option><option value="Titillium Web">Titillium Web</option><option value="Asap">Asap</option><option value="Signika">Signika</option><option value="Hind">Hind</option><option value="Oxygen">Oxygen</option><option value="custom">Personalizada...</option></select>
               <input type="text" id="d_font_body_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
             </div>
             <div class="field"><label>Fuente mono (--font-mono)</label>
-              <select id="d_font_mono"><option value="JetBrains Mono">JetBrains Mono</option><option value="Fira Code">Fira Code</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Code Pro">Source Code Pro</option><option value="Space Mono">Space Mono</option><option value="custom">Personalizada...</option></select>
+              <select id="d_font_mono"><option value="JetBrains Mono">JetBrains Mono</option><option value="Fira Code">Fira Code</option><option value="IBM Plex Mono">IBM Plex Mono</option><option value="Source Code Pro">Source Code Pro</option><option value="Space Mono">Space Mono</option><option value="Roboto Mono">Roboto Mono</option><option value="Inconsolata">Inconsolata</option><option value="Ubuntu Mono">Ubuntu Mono</option><option value="Share Tech Mono">Share Tech Mono</option><option value="Anonymous Pro">Anonymous Pro</option><option value="Red Hat Mono">Red Hat Mono</option><option value="Azeret Mono">Azeret Mono</option><option value="DM Mono">DM Mono</option><option value="Geist Mono">Geist Mono</option><option value="Martian Mono">Martian Mono</option><option value="Major Mono Display">Major Mono Display</option><option value="Cutive Mono">Cutive Mono</option><option value="Courier Prime">Courier Prime</option><option value="Nanum Gothic Coding">Nanum Gothic Coding</option><option value="Noto Sans Mono">Noto Sans Mono</option><option value="Overpass Mono">Overpass Mono</option><option value="PT Mono">PT Mono</option><option value="Syne Mono">Syne Mono</option><option value="Victor Mono">Victor Mono</option><option value="custom">Personalizada...</option></select>
               <input type="text" id="d_font_mono_custom" class="mono" placeholder="Nombre de fuente" style="display:none;margin-top:6px">
             </div>
             <div class="field"><label>Tamaño base (--font-size-base)</label><input type="number" id="d_font_size_base" min="14" max="20" step="1"></div>
           </div>
           <div class="hint">Las fuentes se cargan desde Google Fonts automáticamente. Usa "Personalizada..." para fuentes no listadas.</div>
       </div>
+
+        <div class="panel"><h3>🧱 Sistema visual global</h3>
+          <div class="hint" style="margin-bottom:12px">Estos valores se aplican a todas las secciones del sitio: layout, tarjetas, botones, navegación, modales y formularios.</div>
+          <div class="grid2">
+            <div class="field"><label>Radio general</label><select id="d_ui_radius"><option value="0px">Cuadrado</option><option value="8px">Suave</option><option value="12px">Redondeado</option><option value="20px">Orgánico</option></select></div>
+            <div class="field"><label>Radio botones</label><select id="d_ui_button_radius"><option value="0px">Cuadrado</option><option value="8px">Suave</option><option value="999px">Píldora</option></select></div>
+            <div class="field"><label>Espaciado de secciones</label><select id="d_ui_section_gap"><option value="32px">Compacto</option><option value="64px">Normal</option><option value="96px">Amplio</option><option value="128px">Editorial</option></select></div>
+            <div class="field"><label>Ancho máximo contenido</label><select id="d_ui_content_width"><option value="1100px">Compacto</option><option value="1280px">Normal</option><option value="1440px">Amplio</option><option value="100%">Pantalla completa</option></select></div>
+            <div class="field"><label>Grosor de borde</label><select id="d_ui_border_width"><option value="0px">Sin borde</option><option value="1px">Fino</option><option value="2px">Marcado</option></select></div>
+            <div class="field"><label>Opacidad superficies</label><select id="d_ui_surface_opacity"><option value="0.7">70%</option><option value="0.85">85%</option><option value="1">100%</option></select></div>
+            <div class="field"><label>Desenfoque superficies</label><select id="d_ui_surface_blur"><option value="0px">Sin blur</option><option value="8px">Suave</option><option value="16px">Medio</option><option value="24px">Intenso</option></select></div>
+            <div class="field"><label>Sombra tarjetas</label><select id="d_ui_card_shadow"><option value="none">Sin sombra</option><option value="0 8px 24px rgba(0,0,0,.18)">Sutil</option><option value="0 16px 40px rgba(0,0,0,.28)">Profunda</option></select></div>
+            <div class="field"><label>Estilo botones</label><select id="d_ui_button_style"><option value="solid">Sólido</option><option value="outline">Contorno</option><option value="soft">Suave</option></select></div>
+            <div class="field"><label>Animaciones</label><select id="d_ui_motion"><option value="full">Completas</option><option value="reduced">Reducidas</option><option value="off">Desactivadas</option></select></div>
+          </div>
+        </div>
 
         <div class="panel"><h3>Iconos y Favicon</h3>
           <div class="grid2">
@@ -582,6 +1097,7 @@ async function loadState(){
   let remote=null; try{ const r=await fetch('data/portfolio.json',{cache:'no-store'}); if(r.ok) remote=await r.json(); }catch(e){}
   let saved=null; try{ saved=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
   state = remote || saved || {};
+  window.__rendersLoadedAt=Date.now(); window.__rendersDeleted=[];
   if(!state.site) state.site={}; if(!state.hero) state.hero={}; if(!state.about) state.about={}; if(!state.services) state.services=[]; if(!state.experience) state.experience=[]; if(!state.projects) state.projects=[]; if(!state.portfolio) state.portfolio={label:'PORTFOLIO',title:'Selected works',subtitle:'A curated selection of shipped platforms, 3D experiences and AI products — from concept to production.',categories:['All','3D','AI','IoT','Web'],items:[]}; if(!state.contact) state.contact={}; if(!state.design) state.design={}; if(!state.seo) state.seo={}; if(!state.settings) state.settings={lang:'es',maintenance:false,maintenanceMsg:'',analyticsId:'',customCss:'',customJs:'',showSections:{hero:true,about:true,services:true,experience:true,portfolio:true,projects:true,contact:true}};
   if(!state.portfolio.categories) state.portfolio.categories=['All','3D','AI','IoT','Web'];
   if(!state.gamedev) state.gamedev={label:'3D & VIDEOJUEGOS',title:'3D & Videojuegos — Demo',subtitle:'Espacio de demostración para experiencias interactivas, entornos 3D y videojuegos.',categories:['All','3D','Videojuegos','Demo'],items:[]};
@@ -606,14 +1122,17 @@ async function loadState(){
   if(!state.portfolio.items) state.portfolio.items=[];
   if(!state.portfolio.label) state.portfolio.label='PORTFOLIO';
   if(!state.settings.showSections) state.settings.showSections={hero:true,about:true,services:true,experience:true,portfolio:true,projects:true,contact:true};
+  state.design.ui_radius=state.design.ui_radius||'12px'; state.design.ui_button_radius=state.design.ui_button_radius||'8px'; state.design.ui_section_gap=state.design.ui_section_gap||'64px'; state.design.ui_content_width=state.design.ui_content_width||'1280px'; state.design.ui_border_width=state.design.ui_border_width||'1px'; state.design.ui_surface_opacity=state.design.ui_surface_opacity||'1'; state.design.ui_surface_blur=state.design.ui_surface_blur||'0px'; state.design.ui_card_shadow=state.design.ui_card_shadow||'none'; state.design.ui_button_style=state.design.ui_button_style||'solid'; state.design.ui_motion=state.design.ui_motion||'full';
   if(state.settings.showSections.portfolio===undefined) state.settings.showSections.portfolio=true;
   localStorage.setItem(KEY, JSON.stringify(state));
 }
 async function saveState(){
   const json=JSON.stringify(state,null,2);
-  try{ localStorage.setItem(KEY, json); }catch(e){}
+  try{ localStorage.setItem(KEY, json); localStorage.setItem('portfolio', json); localStorage.setItem('pa_portfolio', json); }catch(e){}
   const r=await fetch('/__api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:json});
   if(!r.ok) throw new Error('No se pudo guardar en disco (¿serve.js corriendo?)');
+  const preview=document.getElementById('ren_livePreview');
+  if(preview?.contentWindow) preview.contentWindow.postMessage({type:'portfolio-update',data:JSON.parse(json)},'*');
 }
 
 function renderAll(){
@@ -802,6 +1321,9 @@ function renderAll(){
       </div>
       <div class="field"><label>Tech Stack (coma)</label><input data-g3d-tech value="${escAttr((pr.tech||[]).join(', '))}"></div>
       <div class="field"><label>Features (una por línea)</label><textarea data-g3d-features rows="3">${esc((pr.features||[]).join('\n'))}</textarea></div>
+      <div class="field"><label>Media Type</label><select data-g3d-media_type><option value="image">Imagen</option><option value="video">Video (MP4/WebM)</option><option value="gif">GIF</option></select></div>
+      <div class="field"><label>Media URL</label><input data-g3d-media_url value="${escAttr(pr.media_url||'')}"></div>
+      <div class="field"><label>Subir Media (PC)</label><input type="file" accept="image/*,video/mp4,video/webm,image/gif" data-up="g3d_proj_media" data-i="${i}"></div>
       <button class="btn danger small" data-del="g3d_proj" data-i="${i}">Eliminar proyecto</button>
     </div>`).join('');
   }
@@ -870,7 +1392,7 @@ function renderAll(){
   $('#c_links').innerHTML=(state.contact.links||[]).map((l,i)=>`<div class="item"><div class="grow grid2"><input data-k="c_l_label" data-i="${i}" value="${escAttr(l.label)}" placeholder="Email"><input data-k="c_l_value" data-i="${i}" value="${escAttr(l.value)}" placeholder="merm@..."><input data-k="c_l_href" data-i="${i}" value="${escAttr(l.href)}" placeholder="mailto:..."><select data-k="c_l_icon" data-i="${i}"><option value="mail" ${l.icon==='mail'?'selected':''}>mail</option><option value="linkedin" ${l.icon==='linkedin'?'selected':''}>linkedin</option><option value="github" ${l.icon==='github'?'selected':''}>github</option><option value="globe" ${l.icon==='globe'?'selected':''}>globe</option><option value="phone" ${l.icon==='phone'?'selected':''}>phone</option></select></div><button class="btn ghost small" data-del="c_l" data-i="${i}">✕</button></div>`).join('');
   // Site
   $('#site_brand').value=state.site.brand||''; $('#site_email').value=state.site.email||''; $('#site_linkedin').value=state.site.linkedin||''; $('#site_github').value=state.site.github||''; $('#site_portfolio').value=state.site.portfolio||''; $('#site_phone').value=state.site.telefono||state.site.phone||''; $('#site_footer').value=state.site.footer||'';
-  $('#site_nav').innerHTML=(state.site.nav||[]).map((n,i)=>`<div class="item"><input data-k="nav_l" data-i="${i}" value="${escAttr(n.label)}" placeholder="Label"><input data-k="nav_h" data-i="${i}" value="${escAttr(n.href)}" placeholder="#about"><button class="btn ghost small" data-del="nav" data-i="${i}">✕</button></div>`).join('');
+  $('#site_nav').innerHTML=(state.site.nav||[]).map((n,i)=>`<div class="item"><input data-k="nav_l" data-i="${i}" value="${escAttr(n.label)}" placeholder="Label"><input data-k="nav_h" list="navHrefList" data-i="${i}" value="${escAttr(n.href)}" placeholder="#about — elige del menú"><button class="btn ghost small" data-del="nav" data-i="${i}">✕</button></div>`).join('');
   // SEO
   $('#seo_title').value=state.seo.title||''; $('#seo_desc').value=state.seo.description||''; $('#seo_keywords').value=(state.seo.keywords||[]).join(', '); $('#seo_author').value=state.seo.author||''; $('#seo_canonical').value=state.seo.canonical||''; $('#seo_robots').value=state.seo.robots||'index, follow'; $('#seo_ogImage').value=state.seo.ogImage||'';
   // Settings
@@ -905,6 +1427,7 @@ function renderAll(){
   $('#d_font_body').value=state.design.font_body||'Inter'; $('#d_font_body_custom').value=state.design.font_body_custom||''; $('#d_font_body_custom').style.display=state.design.font_body==='custom'?'block':'none';
   $('#d_font_mono').value=state.design.font_mono||'JetBrains Mono'; $('#d_font_mono_custom').value=state.design.font_mono_custom||''; $('#d_font_mono_custom').style.display=state.design.font_mono==='custom'?'block':'none';
   $('#d_font_size_base').value=state.design.font_size_base||16;
+  $('#d_ui_radius').value=state.design.ui_radius||'12px'; $('#d_ui_button_radius').value=state.design.ui_button_radius||'8px'; $('#d_ui_section_gap').value=state.design.ui_section_gap||'64px'; $('#d_ui_content_width').value=state.design.ui_content_width||'1280px'; $('#d_ui_border_width').value=state.design.ui_border_width||'1px'; $('#d_ui_surface_opacity').value=state.design.ui_surface_opacity||'1'; $('#d_ui_surface_blur').value=state.design.ui_surface_blur||'0px'; $('#d_ui_card_shadow').value=state.design.ui_card_shadow||'none'; $('#d_ui_button_style').value=state.design.ui_button_style||'solid'; $('#d_ui_motion').value=state.design.ui_motion||'full';
   $('#d_favicon_url').value=state.design.favicon_url||'';
   $('#d_logo_url').value=state.design.logo_url||'';
   $('#d_parallax_enabled').checked=state.design.parallax_enabled!==false;
@@ -988,6 +1511,7 @@ function renderAll(){
 }
 
 function collectFromDOM(){
+  try{ if(window.collectRendersSettings) window.collectRendersSettings(); }catch(e){}
   // Hero
   state.hero.badge=$('#h_badge').value; state.hero.h1a=$('#h_h1a').value; state.hero.h1b=$('#h_h1b').value; state.hero.subtitle=$('#h_sub').value;
   // About
@@ -1013,6 +1537,7 @@ function collectFromDOM(){
   state.design.font_body=$('#d_font_body').value; state.design.font_body_custom=$('#d_font_body_custom').value;
   state.design.font_mono=$('#d_font_mono').value; state.design.font_mono_custom=$('#d_font_mono_custom').value;
   state.design.font_size_base=$('#d_font_size_base').value;
+  state.design.ui_radius=$('#d_ui_radius').value; state.design.ui_button_radius=$('#d_ui_button_radius').value; state.design.ui_section_gap=$('#d_ui_section_gap').value; state.design.ui_content_width=$('#d_ui_content_width').value; state.design.ui_border_width=$('#d_ui_border_width').value; state.design.ui_surface_opacity=$('#d_ui_surface_opacity').value; state.design.ui_surface_blur=$('#d_ui_surface_blur').value; state.design.ui_card_shadow=$('#d_ui_card_shadow').value; state.design.ui_button_style=$('#d_ui_button_style').value; state.design.ui_motion=$('#d_ui_motion').value;
   state.design.favicon_url=$('#d_favicon_url').value;
   state.design.logo_url=$('#d_logo_url').value;
   state.design.parallax_enabled=$('#d_parallax_enabled').checked;
@@ -1032,10 +1557,91 @@ function collectFromDOM(){
   // Settings
   state.settings.lang=$('#st_lang').checked?'en':'es'; state.settings.maintenance=$('#st_maintenance').checked; state.settings.maintenanceMsg=$('#st_maintMsg').value; state.settings.analyticsId=$('#st_analytics').value; state.settings.customCss=$('#st_customCss').value; state.settings.customJs=$('#st_customJs').value;
   state.settings.showSections={hero:$('#st_showHero').checked,about:$('#st_showAbout').checked,services:$('#st_showServices').checked,experience:$('#st_showExperience').checked,portfolio:$('#st_showPortfolio').checked,projects:$('#st_showProjects').checked,contact:$('#st_showContact').checked};
+  // Gallery 3D
+  if(state.gallery3d){
+    const g=state.gallery3d;
+    g.start.title=$('#g3d_start_title').value; g.start.sub=$('#g3d_start_sub').value; g.start.desc=$('#g3d_start_desc').value;
+    g.start.btnText=$('#g3d_start_btn_text').value; g.start.hint=$('#g3d_start_hint').value; g.start.dots=$('#g3d_start_dots').value.split(',').map(s=>s.trim()).filter(Boolean);
+    g.hud.title=$('#g3d_hud_title').value; g.hud.sub=$('#g3d_hud_sub').value; g.hud.hintText=$('#g3d_hint_text').value;
+    g.hud.autohide=parseInt($('#g3d_hint_autohide').value)||11000; g.hud.idleHide=parseInt($('#g3d_idle_hide').value)||3000;
+    g.keys.move=$('#g3d_keys_move').value.split(',').map(s=>s.trim()).filter(Boolean);
+    g.keys.mute=$('#g3d_key_mute').value; g.keys.help=$('#g3d_key_help').value;
+    g.camera.position.x=parseFloat($('#g3d_cam_x').value)||0; g.camera.position.y=parseFloat($('#g3d_cam_y').value)||3.6; g.camera.position.z=parseFloat($('#g3d_cam_z').value)||12.8;
+    g.camera.target.x=parseFloat($('#g3d_target_x').value)||0; g.camera.target.y=parseFloat($('#g3d_target_y').value)||0; g.camera.target.z=parseFloat($('#g3d_target_z').value)||0;
+    g.camera.fov=parseInt($('#g3d_fov').value)||55; g.camera.near=parseFloat($('#g3d_near').value)||0.1; g.camera.far=parseInt($('#g3d_far').value)||220;
+    g.camera.minDist=parseFloat($('#g3d_minDist').value)||2.2; g.camera.maxDist=parseFloat($('#g3d_maxDist').value)||20;
+    g.camera.autoRotSpeed=parseFloat($('#g3d_autoRotSpeed').value)||0.55; g.camera.damping=parseFloat($('#g3d_damping').value)||0.08;
+    g.camera.minPolar=parseFloat($('#g3d_minPolar').value)||0.15; g.camera.maxPolar=parseFloat($('#g3d_maxPolar').value)||1.52;
+    g.camera.enablePan=$('#g3d_enablePan').value==='true';
+    g.camera.walkSpeed=parseFloat($('#g3d_walkSpeed').value)||7.5; g.camera.walkLerp=parseFloat($('#g3d_walkLerp').value)||9;
+    g.colors.sceneBg=$('#g3d_scene_bg').value; g.colors.fogColor=$('#g3d_fog_color').value;
+    g.colors.fogNear=parseInt($('#g3d_fog_near').value)||22; g.colors.fogFar=parseInt($('#g3d_fog_far').value)||62;
+    g.colors.cursor=$('#g3d_cursor_color').value; g.colors.cursorRing=$('#g3d_cursor_ring_color').value;
+    g.colors.cursorHover=$('#g3d_cursor_hover_color').value; g.colors.hudAccent=$('#g3d_hud_accent').value;
+    g.colors.scanlines=parseFloat($('#g3d_scanlines_op').value)||0.03; g.colors.vignette=parseFloat($('#g3d_vignette_op').value)||0.7;
+    g.shadow.type=$('#g3d_shadow_type').value; g.shadow.toneMapping=$('#g3d_tone_mapping').value;
+    g.shadow.exposure=parseFloat($('#g3d_exposure').value)||1.15; g.shadow.pixelRatio=parseFloat($('#g3d_pixel_ratio').value)||2;
+    // Projects
+const projList=document.getElementById('g3d_projects_list');
+  if(projList){
+    g.projects=[]; projList.querySelectorAll('.g3d-proj-item').forEach((item,i)=>{
+      const get=(sel)=>item.querySelector(sel)?.value||'';
+      g.projects.push({
+        id:get('[data-g3d-id]')||`proj-${i+1}`,title:get('[data-g3d-title]'),tagline:get('[data-g3d-tagline]'),
+        year:get('[data-g3d-year]'),platform:get('[data-g3d-platform]'),engine:get('[data-g3d-engine]'),role:get('[data-g3d-role]'),
+        description:get('[data-g3d-desc]'),image:get('[data-g3d-image]'),accent:get('[data-g3d-accent]'),kind:get('[data-g3d-kind]'),
+        media_type:get('[data-g3d-media_type]')||'image',media_url:get('[data-g3d-media_url]')||'',
+        stats:[{label:get('[data-g3d-stat1l]'),value:get('[data-g3d-stat1v]')},{label:get('[data-g3d-stat2l]'),value:get('[data-g3d-stat2v]')},{label:get('[data-g3d-stat3l]'),value:get('[data-g3d-stat3v]')},{label:get('[data-g3d-stat4l]'),value:get('[data-g3d-stat4v]')}],
+        tech:get('[data-g3d-tech]').split(',').map(s=>s.trim()).filter(Boolean),
+        features:get('[data-g3d-features]').split('\n').map(s=>s.trim()).filter(Boolean)
+      });
+    });
+  }
+  // Lights
+    g.lighting=[]; document.querySelectorAll('[data-k="g3d_light_type"]').forEach((el,i)=>{
+      const panel=el.closest('.panel');
+      if(panel) g.lighting.push({
+        type:el.value,
+        color:panel.querySelector('[data-k="g3d_light_color"]')?.value||'#ffffff',
+        intensity:parseFloat(panel.querySelector('[data-k="g3d_light_intensity"]')?.value)||1,
+        enabled:panel.querySelector('[data-k="g3d_light_enabled"]')?.checked||true,
+        pos:panel.querySelector('[data-k="g3d_light_pos"]')?.value.split(',').map(s=>parseFloat(s.trim())).filter(Boolean)||[0,0,0],
+        ground:panel.querySelector('[data-k="g3d_light_ground"]')?.value||'#0a1128'
+      });
+    });
+    // Models
+    g.models=[]; document.querySelectorAll('#g3d_models_list .item').forEach((item,i)=>{
+      g.models.push({
+        url:item.querySelector('.mono')?.textContent?.split(' ')[0]||'',
+        name:item.querySelector('.hint')?.textContent?.replace(/[()]/g,'')||'modelo',
+        scale:parseFloat(item.querySelector('[data-k="g3d_model_scale"]')?.value)||1,
+        autoRotate:item.querySelector('[data-k="g3d_model_autorotate"]')?.checked||false,
+        animations:true,
+        position:{x:parseFloat(item.querySelector('[data-k="g3d_model_pos_x"]')?.value)||0,y:parseFloat(item.querySelector('[data-k="g3d_model_pos_y"]')?.value)||0,z:parseFloat(item.querySelector('[data-k="g3d_model_pos_z"]')?.value)||0},
+        rotation:{x:parseFloat(item.querySelector('[data-k="g3d_model_rot_x"]')?.value)||0,y:parseFloat(item.querySelector('[data-k="g3d_model_rot_y"]')?.value)||0,z:parseFloat(item.querySelector('[data-k="g3d_model_rot_z"]')?.value)||0}
+      });
+    });
+    // Particles & Hub
+    g.particles.count=parseInt($('#g3d_particles_count').value)||420; g.particles.radius=parseFloat($('#g3d_particles_radius').value)||82;
+    g.particles.color=$('#g3d_particles_color').value; g.particles.size=parseFloat($('#g3d_particles_size').value)||0.22; g.particles.opacity=parseFloat($('#g3d_particles_op').value)||0.85;
+    g.hub.radius=parseFloat($('#g3d_hub_radius').value)||2.7;
+    // Floor
+    g.floor.gridColor=$('#g3d_grid_color').value; g.floor.gridOpacity=parseFloat($('#g3d_grid_opacity').value)||0.28; g.floor.centerDot=$('#g3d_center_dot_color').value;
+    g.floor.radius=parseFloat($('#g3d_floor_radius').value)||34; g.floor.segments=parseInt($('#g3d_floor_segments').value)||72;
+    g.floor.color=$('#g3d_floor_color').value; g.floor.roughness=parseFloat($('#g3d_floor_roughness').value)||0.4; g.floor.metalness=parseFloat($('#g3d_floor_metalness').value)||0.3;
+    g.floor.rimColor=$('#g3d_rim_color').value; g.floor.rimIntensity=parseFloat($('#g3d_rim_intensity').value)||1.6;
+    // Fonts
+    g.fonts.heading=$('#g3d_font_heading').value; g.fonts.heading_custom=$('#g3d_font_heading_custom').value;
+    g.fonts.body=$('#g3d_font_body').value; g.fonts.body_custom=$('#g3d_font_body_custom').value;
+    g.fonts.mono=$('#g3d_font_mono').value; g.fonts.mono_custom=$('#g3d_font_mono_custom').value;
+    g.fonts.size=parseInt($('#g3d_font_size_base').value)||14;
+  }
 }
 
-// Tabs
-$('#tabs').addEventListener('click',e=>{
+  // Renders inject
+  try{ if(!state.renders) state.renders={visits:12840,pins:[{id:1,slug:'la-abuela',number:1,title:'La Abuela',subtitle:'Block C',artist:'Roque Espinoza',category:'mural',year:'2024',accent:'#E4572E',x:26,y:31,imageUrl:'images/p1.jpg',body:'Mural',quote:'',quoteAuthor:''}],voices:[],settings:{title:'Xlerion',subtitle:'open air museum · sv',aboutTitle:'More than just buildings.',mapImage:'images/proyectos-parallax.jpg',loaderImage:'images/Oficina0013.jpg'}}; }catch{}
+  // Tabs
+  $('#tabs').addEventListener('click',e=>{
   const b=e.target.closest('button[data-tab]'); if(!b) return;
   $$('#tabs button').forEach(x=>x.classList.toggle('active',x===b));
   $$('[data-panel]').forEach(p=>p.classList.toggle('hidden', p.getAttribute('data-panel')!==b.dataset.tab));
@@ -1316,10 +1922,11 @@ function setupFileInputs(){
     }
     e.target.value='';
   });
-  // Dynamic-list image uploads
+  // Dynamic-list image uploads (renders handled by renders-admin.js)
   document.addEventListener('change', async (e)=>{
     const t=e.target;
     if(!(t && t.dataset && t.dataset.up)) return;
+    if(String(t.dataset.up).startsWith('ren_')) return;
     const i=Number(t.dataset.i);
     const isMulti = t.multiple && t.files && t.files.length>1;
     // Handle portfolio gallery multiple
@@ -1373,6 +1980,7 @@ function setupFileInputs(){
         else if(t.dataset.up==='t3d_cs_heroImage'){ if(!state.threeDPage.caseStudies[i]) state.threeDPage.caseStudies[i]={}; state.threeDPage.caseStudies[i].heroImage=uploadedPath; }
         else if(t.dataset.up==='t3d_model'){ state.threeDPage.background.models.push({url:uploadedPath, name:file.name, scale:1, autoRotate:true, animations:true}); renderAll(); }
         else if(t.dataset.up==='g3d_proj_img'){ state.gallery3d.projects[i].image=uploadedPath; renderAll(); }
+        else if(t.dataset.up==='g3d_proj_media'){ state.gallery3d.projects[i].media_url=uploadedPath; renderAll(); }
         const urlInp=document.querySelector('[data-k="'+t.dataset.up+'"][data-i="'+i+'"]');
         if(urlInp) urlInp.value=uploadedPath;
         if(t.dataset.up==='pf_cover' || t.dataset.up==='t3d_work_cover' || t.dataset.up==='t3d_cs_heroImage') renderAll();
@@ -1396,6 +2004,7 @@ function setupFileInputs(){
         else if(t.dataset.up==='pr_img') state.projects[i].image=d;
         else if(t.dataset.up==='pf_cover') { state.portfolio.items[i].cover=d; renderAll(); }
         else if(t.dataset.up==='g3d_proj_img'){ state.gallery3d.projects[i].image=d; renderAll(); }
+        else if(t.dataset.up==='g3d_proj_media'){ state.gallery3d.projects[i].media_url=d; renderAll(); }
         const urlInp=document.querySelector('[data-k="'+t.dataset.up+'"][data-i="'+i+'"]');
         if(urlInp) urlInp.value=d;
       }catch(e2){ alert('Error al procesar imagen: '+e2.message); }
@@ -1412,10 +2021,42 @@ loadState().then(renderAll).then(() => {
 
 // Save all
 async function doSave(){
-  collectFromDOM();
-  await saveState();
-  renderAll();
-  alert('Guardado ✔');
+  try{
+    // merge voices/pins added from the frontend (wall + CMS) after this admin loaded — union by id so save never wipes them
+    // + restore settings keys unknown to this (possibly stale/cached) JS so old tabs can't delete new fields
+    try{
+      const rr=await fetch('data/portfolio.json',{cache:'no-store'});
+      if(rr.ok){
+        const dj=await rr.json();
+        const since=window.__rendersLoadedAt||0, gone=new Set(window.__rendersDeleted||[]);
+        if(state.renders){
+          const mv=(state.renders.voices||[]), dv=(dj.renders?.voices||[]);
+          const vids=new Set(mv.map(v=>v.id));
+          dv.forEach(v=>{ if(!vids.has(v.id) && !gone.has(v.id) && (v.id||0)>since){ mv.push(v); vids.add(v.id); } });
+          const mp=(state.renders.pins||[]), dp=(dj.renders?.pins||[]);
+          const pids=new Set(mp.map(p=>p.id));
+          dp.forEach(p=>{ if(!pids.has(p.id) && !gone.has(p.id) && (p.id||0)>since){ mp.push(p); pids.add(p.id); } });
+        }
+        window.__rendersDisk=dj;
+      }
+    }catch(e){}
+    collectFromDOM();
+    try{
+      const dj=window.__rendersDisk;
+      if(dj && state.renders){
+        const ms=state.renders.settings||{}, ds=dj.renders?.settings||{};
+        for(const k of Object.keys(ds)){ if(ms[k]===undefined) ms[k]=ds[k]; }
+        const mst=ms.styles||{}, dst=ds.styles||{};
+        for(const k of Object.keys(dst)){ if(mst[k]===undefined) mst[k]=dst[k]; }
+      }
+    }catch(e){}
+    await saveState();
+    renderAll();
+    alert('Guardado ✔');
+  }catch(e){
+    console.error(e);
+    alert('✘ No se pudo guardar: '+(e.message||e)+'\n¿Está corriendo serve.js en localhost:5173?');
+  }
 }
 $('#saveAllBtn').onclick=doSave;
 
@@ -1512,6 +2153,11 @@ $('#gh_publish').onclick=async()=>{
   (state.threeDPage?.caseStudies||[]).forEach(c=>{ if(c.heroImage && c.heroImage.startsWith('images/') && !c.heroImage.startsWith('data:')) imgPaths.add(c.heroImage); (c.gallery||[]).forEach(g=>{ if(g && g.startsWith('images/') && !g.startsWith('data:')) imgPaths.add(g); }); });
   // Gallery images (p1-p6)
   ['images/p1.jpg','images/p2.jpg','images/p3.jpg','images/p4.jpg','images/p5.jpg','images/p6.jpg'].forEach(p=>{ if(p) imgPaths.add(p); });
+  // Renders map/pins/loader images
+  { const rs=state.renders?.settings||{};
+    ['mapImage','loaderBg','loaderImage'].forEach(k=>{ const v=rs[k]; if(v && v.startsWith('images/') && !v.startsWith('data:')) imgPaths.add(v); });
+    (state.renders?.pins||[]).forEach(p=>{ if(p.imageUrl && p.imageUrl.startsWith('images/') && !p.imageUrl.startsWith('data:')) imgPaths.add(p.imageUrl); });
+  }
   try{
     if(imgPaths.size){
       ghLog('Sincronizando imágenes ('+imgPaths.size+')...');
@@ -1532,7 +2178,7 @@ $('#gh_publish').onclick=async()=>{
     }
     // Sync HTML files
     ghLog('Sincronizando archivos HTML...');
-    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'gallery.html', 'gallery.js', 'vendor_three.module.js', 'favicon.ico'];
+    const htmlFiles = ['index.html', '3d-portfolio.html', 'admin.html', 'case-study.html', 'gallery.html', 'gallery.js', 'renders.html', 'renders.js', 'vendor_three.module.js', 'favicon.ico'];
     for(const p of htmlFiles){
       try{
         const sha=await shaOf(p);
@@ -1553,3 +2199,4 @@ $('#gh_publish').onclick=async()=>{
 </script>
 </body>
 </html>
+<script src="renders-admin.js?v=4"></script>
