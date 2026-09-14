@@ -66,6 +66,16 @@ canvas{position:fixed;inset:0;z-index:0}
 @keyframes slide-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @media(min-width:640px){.panel-aside{max-height:none;width:470px;border-top:none;border-left:2px solid #1a2340;animation:panel-in .45s cubic-bezier(0.22,1,0.36,1)}}
 @keyframes panel-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
+
+/* Panel Grid Layout */
+.panel-grid{display:grid;grid-template-columns:1fr;gap:0;width:100%;max-width:100%;height:100%}
+@media(min-width:900px){.panel-grid{grid-template-columns:1fr 1fr}}
+.panel-media{position:relative;min-height:300px;background:#05080f;display:flex;align-items:center;justify-content:center}
+.panel-media img,.panel-media video{width:100%;height:100%;object-fit:cover}
+.media-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#6b7a99;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em}
+.panel-detail{position:relative;display:flex;flex-direction:column;max-height:100%;overflow:hidden}
+@media(min-width:640px){.panel-aside{max-height:none;width:auto;border-top:none;border-left:2px solid #1a2340;animation:panel-in .45s cubic-bezier(0.22,1,0.36,1)}}
+@keyframes panel-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
 .panel-accent{height:3px;width:100%;shrink:0}
 .panel-close{position:absolute;right:12px;top:12px;z-index:1;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid #1a2340;background:rgba(5,7,13,0.8);color:#6b7a99;cursor:none;transition:all .2s}
 .panel-close:hover{transform:scale(1.05);color:#c7d2e8}
@@ -94,6 +104,13 @@ canvas{position:fixed;inset:0;z-index:0}
 .feature-item svg{width:16px;height:16px;shrink:0;margin-top:2px}
 .panel-btn{width:100%;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a2340;background:transparent;color:#c7d2e8;cursor:none;transition:all .2s;margin-top:10px}
 .panel-btn:hover{border-color:#00d4ff;color:#00d4ff}
+
+/* Panel Grid Layout - Mobile first, desktop split */
+@media(min-width:900px){
+  .panel-grid{grid-template-columns:1fr 1fr}
+  .panel-aside{width:auto;max-width:none;border-top:none;border-left:2px solid #1a2340}
+  .panel-detail{border-left:1px solid #1a2340}
+}
 
 /* Help modal */
 .help{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(5,7,13,0.7);backdrop-filter:blur(4px);animation:fade-in .3s ease-out}
@@ -195,17 +212,23 @@ canvas{position:fixed;inset:0;z-index:0}
   <div class="panel-backdrop" id="panelBackdrop"></div>
   <aside class="panel-aside scroll-thin">
     <div class="panel-accent" id="panelAccent"></div>
-    <button class="panel-close" id="panelClose" aria-label="Close details">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <div class="panel-scroll">
-      <div class="panel-cover">
-        <img id="panelCover" src="" alt="">
-        <div class="proj-num" id="panelNum" style="color:#00d4ff"></div>
-        <h2 id="panelTitle"></h2>
-        <div class="proj-tag" id="panelTag"></div>
+    <div class="panel-grid">
+      <div class="panel-media" id="panelMedia">
+        <div class="media-placeholder" id="mediaPlaceholder"></div>
       </div>
-      <div class="panel-body">
+      <div class="panel-detail scroll-thin">
+        <div class="panel-accent" id="panelAccent"></div>
+        <button class="panel-close" id="panelClose" aria-label="Close details">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="panel-scroll">
+          <div class="panel-cover">
+            <img id="panelCover" src="" alt="">
+            <div class="proj-num" id="panelNum" style="color:#00d4ff"></div>
+            <h2 id="panelTitle"></h2>
+            <div class="proj-tag" id="panelTag"></div>
+          </div>
+          <div class="panel-body">
         <div class="meta-grid">
           <div class="meta-row"><span class="meta-label">YEAR</span><span class="meta-val" id="panelYear"></span></div>
           <div class="meta-row"><span class="meta-label">PLATFORM</span><span class="meta-val" id="panelPlatform"></span></div>
@@ -222,11 +245,30 @@ canvas{position:fixed;inset:0;z-index:0}
         <button class="panel-btn" id="panelBackBtn">← BACK TO GALLERY</button>
       </div>
     </div>
+  </div>
   </aside>
 </div>
 
 <script type="module">
-import { Gallery, projects } from './gallery.js';
+import { Gallery } from './gallery.js?v=3';
+
+// ---- Load config from portfolio.json ----
+let projects = [];
+let galleryConfig = {};
+
+async function loadConfig() {
+  try {
+    const r = await fetch('data/portfolio.json', {cache:'no-store'});
+    if (r.ok) {
+      const d = await r.json();
+      projects = d.gallery3d?.projects || [];
+      galleryConfig = d.gallery3d || {};
+    }
+  } catch (e) {
+    console.warn('Could not load portfolio.json, using defaults');
+  }
+  initGallery();
+}
 
 // ---- Custom cursor ----
 const cursor = document.getElementById('cursor');
@@ -238,119 +280,157 @@ document.addEventListener('mousemove', (e) => {
   cursorRing.style.top = e.clientY + 'px';
 });
 
-// ---- Canvas ----
-const container = document.getElementById('canvasContainer');
-const canvas = document.createElement('canvas');
-container.appendChild(canvas);
-
-// ---- Gallery engine ----
-const engine = new Gallery(canvas, {
-  onSelect: (idx) => showDetail(idx),
-  onClose: () => closeDetail(),
-});
-engine.start();
-
-// ---- Resize ----
-function resize() {
-  const w = window.innerWidth, h = window.innerHeight;
-  engine.resize(w, h);
-}
-window.addEventListener('resize', resize);
-resize();
-
-// ---- Project dots on start screen ----
-const dotsContainer = document.getElementById('projectDots');
-projects.forEach((p, i) => {
-  const dot = document.createElement('span');
-  dot.className = 'project-dot';
-  dot.innerHTML = `<span class="dot" style="background:${p.accent};box-shadow:0 0 8px ${p.accent}"></span><span>${p.title}</span>`;
-  dotsContainer.appendChild(dot);
-});
-
-// ---- Start screen ----
-const startScreen = document.getElementById('startScreen');
-const hud = document.getElementById('hud');
-const hint = document.getElementById('hint');
-const enterBtn = document.getElementById('enterBtn');
-const helpModal = document.getElementById('helpModal');
-const detailPanel = document.getElementById('detailPanel');
-
-function enterGallery() {
-  engine.unlock();
-  startScreen.style.display = 'none';
-  hud.style.display = 'flex';
-  hint.style.display = 'block';
-  setTimeout(() => { hint.style.display = 'none'; }, 11000);
-}
-enterBtn.addEventListener('click', enterGallery);
-window.addEventListener('keydown', (e) => {
-  if ((e.code === 'Enter' || e.code === 'Space') && startScreen.style.display !== 'none') { e.preventDefault(); enterGallery(); }
-  if (e.code === 'Escape') {
-    if (detailPanel.style.display !== 'none') closeDetail();
-    else if (helpModal.style.display !== 'none') helpModal.style.display = 'none';
+function initGallery() {
+  // ---- Apply config from portfolio.json ----
+  if (galleryConfig.start) {
+    document.querySelector('.start-title').textContent = galleryConfig.start.title || 'DEVQUEST';
+    document.querySelector('.start-sub').textContent = galleryConfig.start.sub || '3D PORTFOLIO GALLERY';
+    document.querySelector('.start-desc').textContent = galleryConfig.start.desc || '';
+    document.getElementById('enterBtn').textContent = galleryConfig.start.btnText || 'ENTER THE GALLERY';
+    document.querySelector('.start-hint').textContent = galleryConfig.start.hint || 'PRESS ENTER';
+    if (galleryConfig.start.dots) {
+      const dotsContainer = document.getElementById('projectDots');
+      dotsContainer.innerHTML = '';
+      galleryConfig.start.dots.forEach((color, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'project-dot';
+        dot.innerHTML = `<span class="dot" style="background:${color};box-shadow:0 0 8px ${color}"></span><span>${projects[i]?.title || `Project ${i+1}`}</span>`;
+        dotsContainer.appendChild(dot);
+      });
+    }
   }
-  if (e.code === 'KeyM') toggleMute();
-});
 
-// ---- Mute ----
-let muted = false;
-function toggleMute() {
-  muted = !muted;
-  engine.setMuted(muted);
-  const btn = document.getElementById('muteBtn');
-  btn.innerHTML = muted
-    ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
-    : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+  // ---- Canvas ----
+  const container = document.getElementById('canvasContainer');
+  const canvas = document.createElement('canvas');
+  container.appendChild(canvas);
+
+  // ---- Gallery engine ----
+  const engine = new Gallery(canvas, {
+    onSelect: (idx) => showDetail(idx),
+    onClose: () => closeDetail(),
+  }, galleryConfig);
+  engine.start();
+
+  // ---- Resize ----
+  function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    engine.resize(w, h);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---- Project dots on start screen ----
+  const dotsContainer = document.getElementById('projectDots');
+  projects.forEach((p, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'project-dot';
+    dot.innerHTML = `<span class="dot" style="background:${p.accent};box-shadow:0 0 8px ${p.accent}"></span><span>${p.title}</span>`;
+    dotsContainer.appendChild(dot);
+  });
+
+  // ---- Start screen ----
+  const startScreen = document.getElementById('startScreen');
+  const hud = document.getElementById('hud');
+  const hint = document.getElementById('hint');
+  const enterBtn = document.getElementById('enterBtn');
+  const helpModal = document.getElementById('helpModal');
+  const detailPanel = document.getElementById('detailPanel');
+
+  function enterGallery() {
+    engine.unlock();
+    startScreen.style.display = 'none';
+    hud.style.display = 'flex';
+    hint.style.display = 'block';
+    setTimeout(() => { hint.style.display = 'none'; }, 11000);
+  }
+  enterBtn.addEventListener('click', enterGallery);
+  window.addEventListener('keydown', (e) => {
+    if ((e.code === 'Enter' || e.code === 'Space') && startScreen.style.display !== 'none') { e.preventDefault(); enterGallery(); }
+    if (e.code === 'Escape') {
+      if (detailPanel.style.display !== 'none') closeDetail();
+      else if (helpModal.style.display !== 'none') helpModal.style.display = 'none';
+    }
+    if (e.code === 'KeyM') toggleMute();
+  });
+
+  // ---- Mute ----
+  let muted = false;
+  function toggleMute() {
+    muted = !muted;
+    engine.setMuted(muted);
+    const btn = document.getElementById('muteBtn');
+    btn.innerHTML = muted
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+  }
+  document.getElementById('muteBtn').addEventListener('click', toggleMute);
+
+  // ---- Help ----
+  document.getElementById('helpBtn').addEventListener('click', () => { helpModal.style.display = 'flex'; });
+  document.getElementById('helpClose').addEventListener('click', () => { helpModal.style.display = 'none'; });
+  helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.style.display = 'none'; });
+
+  // ---- Detail panel ----
+  function showDetail(idx) {
+    const p = projects[idx];
+    if (!p) return;
+    hint.style.display = 'none';
+    detailPanel.style.display = 'flex';
+    document.getElementById('panelAccent').style.background = `linear-gradient(90deg, ${p.accent}, transparent 70%)`;
+    document.getElementById('panelNum').textContent = `PROJECT 0${idx + 1}`;
+    document.getElementById('panelNum').style.color = p.accent;
+    document.getElementById('panelTitle').textContent = p.title;
+    document.getElementById('panelTag').textContent = p.tagline.toUpperCase();
+    document.getElementById('panelCover').src = p.image;
+    document.getElementById('panelCover').alt = p.title;
+    document.getElementById('panelYear').textContent = p.year;
+    document.getElementById('panelPlatform').textContent = p.platform;
+    document.getElementById('panelEngine').textContent = p.engine;
+    document.getElementById('panelRole').textContent = p.role;
+    document.getElementById('panelDesc').textContent = p.description;
+    document.getElementById('panelStats').innerHTML = p.stats.map(s => `<div class="stat-card"><div class="stat-val" style="color:${p.accent}">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('');
+    document.getElementById('panelTech').innerHTML = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+    document.getElementById('panelFeatures').innerHTML = p.features.map(f => `<li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="${p.accent}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><span>${f}</span></li>`).join('');
+    // ---- Panel Media ----
+    const mediaContainer = document.getElementById('panelMedia');
+    if (mediaContainer) {
+      const mediaType = p.media_type || 'image';
+      const mediaUrl = p.media_url || p.image || '';
+      let mediaHtml = '';
+      if (mediaType === 'video') {
+        mediaHtml = `<video src="${mediaUrl}" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover"></video>`;
+      } else if (mediaType === 'gif') {
+        mediaHtml = `<img src="${mediaUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover">`;
+      } else {
+        mediaHtml = `<img src="${mediaUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover">`;
+      }
+      mediaContainer.innerHTML = mediaHtml;
+    }
+  }
+  function closeDetail() {
+    detailPanel.style.display = 'none';
+    engine.close();
+    setTimeout(() => { hint.style.display = 'block'; }, 500);
+  }
+  document.getElementById('panelClose').addEventListener('click', closeDetail);
+  document.getElementById('panelBackdrop').addEventListener('click', closeDetail);
+  document.getElementById('panelBackBtn').addEventListener('click', closeDetail);
+
+  // ---- Auto-hide hint ----
+  setTimeout(() => { hint.style.display = 'none'; }, 11000);
+
+  // ---- Hide cursor when not interacting ----
+  let lastMove = performance.now();
+  document.addEventListener('mousemove', () => { lastMove = performance.now(); });
+  setInterval(() => {
+    const idle = performance.now() - lastMove > 3000;
+    cursor.style.opacity = idle ? '0' : '1';
+    cursorRing.style.opacity = idle ? '0' : '1';
+  }, 100);
 }
-document.getElementById('muteBtn').addEventListener('click', toggleMute);
 
-// ---- Help ----
-document.getElementById('helpBtn').addEventListener('click', () => { helpModal.style.display = 'flex'; });
-document.getElementById('helpClose').addEventListener('click', () => { helpModal.style.display = 'none'; });
-helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.style.display = 'none'; });
-
-// ---- Detail panel ----
-function showDetail(idx) {
-  const p = projects[idx];
-  if (!p) return;
-  hint.style.display = 'none';
-  detailPanel.style.display = 'flex';
-  document.getElementById('panelAccent').style.background = `linear-gradient(90deg, ${p.accent}, transparent 70%)`;
-  document.getElementById('panelNum').textContent = `PROJECT 0${idx + 1}`;
-  document.getElementById('panelNum').style.color = p.accent;
-  document.getElementById('panelTitle').textContent = p.title;
-  document.getElementById('panelTag').textContent = p.tagline.toUpperCase();
-  document.getElementById('panelCover').src = p.image;
-  document.getElementById('panelCover').alt = p.title;
-  document.getElementById('panelYear').textContent = p.year;
-  document.getElementById('panelPlatform').textContent = p.platform;
-  document.getElementById('panelEngine').textContent = p.engine;
-  document.getElementById('panelRole').textContent = p.role;
-  document.getElementById('panelDesc').textContent = p.description;
-  document.getElementById('panelStats').innerHTML = p.stats.map(s => `<div class="stat-card"><div class="stat-val" style="color:${p.accent}">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('');
-  document.getElementById('panelTech').innerHTML = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
-  document.getElementById('panelFeatures').innerHTML = p.features.map(f => `<li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="${p.accent}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><span>${f}</span></li>`).join('');
-}
-function closeDetail() {
-  detailPanel.style.display = 'none';
-  engine.close();
-  setTimeout(() => { hint.style.display = 'block'; }, 500);
-}
-document.getElementById('panelClose').addEventListener('click', closeDetail);
-document.getElementById('panelBackdrop').addEventListener('click', closeDetail);
-document.getElementById('panelBackBtn').addEventListener('click', closeDetail);
-
-// ---- Auto-hide hint ----
-setTimeout(() => { hint.style.display = 'none'; }, 11000);
-
-// ---- Hide cursor when not interacting ----
-let lastMove = performance.now();
-document.addEventListener('mousemove', () => { lastMove = performance.now(); });
-setInterval(() => {
-  const idle = performance.now() - lastMove > 3000;
-  cursor.style.opacity = idle ? '0' : '1';
-  cursorRing.style.opacity = idle ? '0' : '1';
-}, 100);
+loadConfig();
 </script>
 </body>
 </html>
