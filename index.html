@@ -2140,6 +2140,25 @@ if(canvas){
       }
     }
     if(des.font_size_base) document.documentElement.style.setProperty('--font-size-base', des.font_size_base+'px');
+    // Global visual system controlled from Admin > Diseño.
+    const uiVars={
+      '--ui-radius':des.ui_radius||'12px','--ui-button-radius':des.ui_button_radius||'8px','--ui-section-gap':des.ui_section_gap||'64px',
+      '--ui-content-width':des.ui_content_width||'1280px','--ui-border-width':des.ui_border_width||'1px','--ui-surface-opacity':des.ui_surface_opacity||'1',
+      '--ui-surface-blur':des.ui_surface_blur||'0px','--ui-card-shadow':des.ui_card_shadow||'none'
+    };
+    Object.entries(uiVars).forEach(([key,value])=>document.documentElement.style.setProperty(key,value));
+    let uiStyle=document.getElementById('__global_visual_system__');
+    if(!uiStyle){uiStyle=document.createElement('style');uiStyle.id='__global_visual_system__';document.head.appendChild(uiStyle)}
+    const buttonRule=des.ui_button_style==='outline'?'background:transparent !important;border:var(--ui-border-width) solid var(--accent-blue) !important;color:var(--text-primary) !important;':des.ui_button_style==='soft'?'background:color-mix(in srgb, var(--accent-blue) 18%, transparent) !important;border:var(--ui-border-width) solid color-mix(in srgb, var(--accent-blue) 35%, transparent) !important;color:var(--text-primary) !important;':'';
+    const motionRule=des.ui_motion==='off'?'*,*::before,*::after{animation:none !important;transition:none !important}':des.ui_motion==='reduced'?'*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}':'';
+    uiStyle.textContent=`
+      :root{--content-max-width:var(--ui-content-width)}
+      section{padding-block:var(--ui-section-gap) !important}
+      .container,.section-container,.content-wrap{max-width:var(--ui-content-width) !important}
+      .card,.service-card,.portfolio-card,.project-card,.experience-card,.stat-card,.contact-card,.modal,.panel{border-radius:var(--ui-radius) !important;border-width:var(--ui-border-width) !important;box-shadow:var(--ui-card-shadow) !important;opacity:var(--ui-surface-opacity)}
+      button,.btn,.cta,.filter-btn,.nav-link{border-radius:var(--ui-button-radius) !important;${buttonRule}}
+      .modal,.dropdown,.tooltip,.glass{backdrop-filter:blur(var(--ui-surface-blur)) !important;-webkit-backdrop-filter:blur(var(--ui-surface-blur)) !important}
+      ${motionRule}`;
     // Parallax & Fondo — actual DOM
     const parallaxEl = document.getElementById('parallaxBg');
     const fondoEl = document.getElementById('fondoBg');
