@@ -216,29 +216,48 @@ function buildShip(accent, tex) {
 
 // ---- Gallery class --------------------------------------------------------
 export class Gallery {
-  constructor(canvas, callbacks = {}) {
+  constructor(canvas, callbacks = {}, config = {}) {
     this.canvas = canvas;
     this.onSelect = callbacks.onSelect || (() => {});
     this.onClose = callbacks.onClose || (() => {});
+    this.config = config;
+
+    const c = this.config;
+    const rendererConfig = c.shadow || {};
+    const cameraConfig = c.camera || {};
+    const colorsConfig = c.colors || {};
 
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, rendererConfig.pixelRatio || 2));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    this.renderer.shadowMap.type = THREE[rendererConfig.type] || THREE.PCFSoftShadowMap;
+    this.renderer.toneMapping = THREE[rendererConfig.toneMapping] || THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = rendererConfig.exposure || 1.15;
 
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x0b1230, 22, 62);
-    this.camera = new THREE.PerspectiveCamera(55, 1, 0.1, 220);
-    this.camera.position.copy(OVERVIEW.clone());
+    const fogColor = parseInt(colorsConfig.fogColor?.replace('#', '0x') || '0x0b1230');
+    const fogNear = colorsConfig.fogNear || 22;
+    const fogFar = colorsConfig.fogFar || 62;
+    this.scene.fog = new THREE.Fog(fogColor, fogNear, fogFar);
+
+    const fov = cameraConfig.fov || 55;
+    const near = cameraConfig.near || 0.1;
+    const far = cameraConfig.far || 220;
+    this.camera = new THREE.PerspectiveCamera(fov, 1, near, far);
+
+    const camPos = cameraConfig.position || {x:0, y:3.6, z:12.8};
+    this.camera.position.set(camPos.x, camPos.y, camPos.z);
 
     this.controls = new OrbitControls(this.camera, canvas);
-    this.controls.target.copy(OVERVIEW_TARGET);
-    this.controls.enableDamping = true; this.controls.dampingFactor = 0.08;
-    this.controls.enablePan = false; this.controls.minDistance = 2.2;
-    this.controls.maxDistance = 20; this.controls.minPolarAngle = 0.15;
-    this.controls.maxPolarAngle = 1.52; this.controls.autoRotateSpeed = 0.55;
+    const target = cameraConfig.target || {x:0, y:0, z:0};
+    this.controls.target.set(target.x, target.y, target.z);
+    this.controls.enableDamping = true; this.controls.dampingFactor = cameraConfig.damping || 0.08;
+    this.controls.enablePan = cameraConfig.enablePan || false; 
+    this.controls.minDistance = cameraConfig.minDist || 2.2;
+    this.controls.maxDistance = cameraConfig.maxDist || 20; 
+    this.controls.minPolarAngle = cameraConfig.minPolar || 0.15;
+    this.controls.maxPolarAngle = cameraConfig.maxPolar || 1.52; 
+    this.controls.autoRotateSpeed = cameraConfig.autoRotSpeed || 0.55;
 
     this.controls.addEventListener("start", () => this.canvas.style.cursor = "grabbing");
     this.controls.addEventListener("end", () => { this.canvas.style.cursor = "grab"; });
@@ -259,7 +278,9 @@ export class Gallery {
     this.clock = new THREE.Clock();
     this.raf = 0; this.running = false; this.time = 0;
     this.textures = []; this.firstResize = true;
-    this.overview = OVERVIEW.clone();
+    
+    const overviewPos = cameraConfig.position || {x:0, y:3.6, z:12.8};
+    this.overview = new THREE.Vector3(overviewPos.x, overviewPos.y, overviewPos.z);
     this.hubSpinners = []; this.envTex = null;
     this._onKeyDown = this._onKeyDown.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
@@ -277,58 +298,130 @@ export class Gallery {
   }
 
   buildEnvironment() {
-    const env = new THREE.Scene(); env.background = new THREE.Color(0x0a1128);
-    env.add(new THREE.Mesh(new THREE.SphereGeometry(20, 16, 8), new THREE.MeshBasicMaterial({ color: 0x0a1128, side: THREE.BackSide })));
+    const c = this.config.colors || {};
+    const sceneBg = parseInt((c.sceneBg || '#0a1128').replace('#', '0x'));
+    const env = new THREE.Scene(); env.background = new THREE.Color(sceneBg);
+    env.add(new THREE.Mesh(new THREE.SphereGeometry(20, 16, 8), new THREE.MeshBasicMaterial({ color: sceneBg, side: THREE.BackSide })));
     const addPanel = (color, x, y, z, w, h) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
-    addPanel(0x22d3ee, -8, 3, -6, 6, 4); addPanel(0xf0f, 8, 3, 6, 6, 4); addPanel(0x12224a, 0, 10, 0, 12, 6); addPanel(0x1a1030, 4, -2, -8, 6, 3);
+    const panelColor1 = parseInt((c.sceneBg || '#22d3ee').replace('#', '0x'));
+    const panelColor2 = parseInt((c.hudAccent || '#f0f').replace('#', '0x'));
+    const panelColor3 = parseInt((c.fogColor || '#12224a').replace('#', '0x'));
+    const panelColor4 = parseInt((c.sceneBg || '#1a1030').replace('#', '0x'));
+    addPanel(panelColor1, -8, 3, -6, 6, 4); addPanel(panelColor2, 8, 3, 6, 6, 4); addPanel(panelColor3, 0, 10, 0, 12, 6); addPanel(panelColor4, 4, -2, -8, 6, 3);
     const pmrem = new THREE.PMREMGenerator(this.renderer); this.envTex = pmrem.fromScene(env, 0.12).texture;
     this.scene.environment = this.envTex; pmrem.dispose();
   }
 
   buildLights() {
-    this.scene.add(new THREE.AmbientLight(0x8fa3d0, 0.55));
-    const dir = new THREE.DirectionalLight(0xcfe4ff, 1.5); dir.position.set(9, 16, 7); dir.castShadow = true;
-    dir.shadow.mapSize.set(1024, 1024); dir.shadow.camera.left = -24; dir.shadow.camera.right = 24; dir.shadow.camera.top = 24; dir.shadow.camera.bottom = -24; dir.shadow.camera.far = 60; dir.shadow.bias = -0.0006;
-    this.scene.add(dir);
-    const cyan = new THREE.PointLight(0x22d3ee, 90, 55, 2); cyan.position.set(-10, 4.5, -10); this.scene.add(cyan);
-    const mag = new THREE.PointLight(0xf0f, 90, 55, 2); mag.position.set(10, 4.5, 10); this.scene.add(mag);
+    const c = this.config.lighting || [];
+    const ambient = c.find(l => l.type === 'Hemisphere');
+    if (ambient) {
+      const sky = parseInt((ambient.sky || '#cfe0ff').replace('#', '0x'));
+      const ground = parseInt((ambient.ground || '#0a1128').replace('#', '0x'));
+      const intensity = ambient.intensity || 0.4;
+      this.scene.add(new THREE.HemisphereLight(sky, ground, intensity));
+    } else {
+      this.scene.add(new THREE.HemisphereLight(0xcfe0ff, 0x0a1128, 0.4));
+    }
+
+    const directional = c.find(l => l.type === 'Directional');
+    if (directional && directional.enabled !== false) {
+      const color = parseInt((directional.color || '#ffffff').replace('#', '0x'));
+      const intensity = directional.intensity || 1.5;
+      const dir = new THREE.DirectionalLight(color, intensity);
+      const pos = directional.pos || {x:9, y:16, z:7};
+      dir.position.set(pos.x, pos.y, pos.z);
+      dir.castShadow = directional.castShadow || true;
+      dir.shadow.mapSize.set(1024, 1024);
+      dir.shadow.camera.left = -24; dir.shadow.camera.right = 24; 
+      dir.shadow.camera.top = 24; dir.shadow.camera.bottom = -24; 
+      dir.shadow.camera.far = 60; dir.shadow.bias = -0.0006;
+      this.scene.add(dir);
+    } else {
+      const dir = new THREE.DirectionalLight(0xcfe4ff, 1.5); 
+      dir.position.set(9, 16, 7); 
+      dir.castShadow = true;
+      dir.shadow.mapSize.set(1024, 1024); 
+      dir.shadow.camera.left = -24; dir.shadow.camera.right = 24; 
+      dir.shadow.camera.top = 24; dir.shadow.camera.bottom = -24; 
+      dir.shadow.camera.far = 60; dir.shadow.bias = -0.0006;
+      this.scene.add(dir);
+    }
+
+    const points = c.filter(l => l.type === 'Point' && l.enabled !== false);
+    if (points.length > 0) {
+      points.forEach(p => {
+        const color = parseInt((p.color || '#22d3ee').replace('#', '0x'));
+        const intensity = p.intensity || 1.5;
+        const distance = p.distance || 55;
+        const decay = p.decay || 2;
+        const point = new THREE.PointLight(color, intensity, distance, decay);
+        const pos = p.pos || {x:0, y:5, z:0};
+        point.position.set(pos.x, pos.y, pos.z);
+        this.scene.add(point);
+      });
+    } else {
+      const cyan = new THREE.PointLight(0x22d3ee, 90, 55, 2); cyan.position.set(-10, 4.5, -10); this.scene.add(cyan);
+      const mag = new THREE.PointLight(0xf0f, 90, 55, 2); mag.position.set(10, 4.5, 10); this.scene.add(mag);
+    }
   }
 
   buildSky() {
-    const sky = new THREE.Mesh(new THREE.SphereGeometry(90, 32, 18), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false, uniforms: { top: { value: new THREE.Color("#0a1030") }, mid: { value: new THREE.Color("#101a3e") }, bottom: { value: new THREE.Color("#05080f") } }, vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`, fragmentShader: `varying vec3 vP; uniform vec3 top; uniform vec3 mid; uniform vec3 bottom; void main(){ float h = normalize(vP).y; vec3 col = h > 0.0 ? mix(mid, top, pow(h, 0.55)) : mix(mid, bottom, pow(-h, 0.45)); gl_FragColor = vec4(col, 1.0); }` }));
+    const c = this.config.colors || {};
+    const top = new THREE.Color(c.sceneBg || '#0a1030');
+    const mid = new THREE.Color(c.fogColor || '#101a3e');
+    const bottom = new THREE.Color(c.sceneBg || '#05080f');
+    const sky = new THREE.Mesh(new THREE.SphereGeometry(90, 32, 18), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false, uniforms: { top: { value: top }, mid: { value: mid }, bottom: { value: bottom } }, vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`, fragmentShader: `varying vec3 vP; uniform vec3 top; uniform vec3 mid; uniform vec3 bottom; void main(){ float h = normalize(vP).y; vec3 col = h > 0.0 ? mix(mid, top, pow(h, 0.55)) : mix(mid, bottom, pow(-h, 0.45)); gl_FragColor = vec4(col, 1.0); }` }));
     this.scene.add(sky);
-    const n = 420; const pos = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, b = Math.acos(Math.random() * 0.95), r = 82; pos[i * 3] = Math.sin(b) * Math.cos(a) * r; pos[i * 3 + 1] = Math.cos(b) * r * 0.9; pos[i * 3 + 2] = Math.sin(b) * Math.sin(a) * r; }
+    const pc = this.config.particles || {};
+    const n = pc.count || 420; const pos = new Float32Array(n * 3);
+    const radius = pc.radius || 82;
+    for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, b = Math.acos(Math.random() * 0.95), r = radius; pos[i * 3] = Math.sin(b) * Math.cos(a) * r; pos[i * 3 + 1] = Math.cos(b) * r * 0.9; pos[i * 3 + 2] = Math.sin(b) * Math.sin(a) * r; }
     const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    const stars = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xcfe0ff, size: 0.22, sizeAttenuation: true, transparent: true, opacity: 0.85, fog: false }));
+    const stars = new THREE.Points(geo, new THREE.PointsMaterial({ color: parseInt((pc.color || '#cfe0ff').replace('#', '0x')), size: pc.size || 0.22, sizeAttenuation: true, transparent: true, opacity: pc.opacity || 0.85, fog: false }));
     this.scene.add(stars);
   }
 
   buildFloor() {
+    const c = this.config.floor || {};
     const gridC = document.createElement("canvas"); gridC.width = gridC.height = 256;
-    const g = gridC.getContext("2d"); g.fillStyle = "#0a1128"; g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = "rgba(34,211,238,0.28)"; g.lineWidth = 2; g.strokeRect(1, 1, 254, 254); g.fillStyle = "rgba(34,211,238,0.5)"; g.fillRect(126, 126, 4, 4);
+    const g = gridC.getContext("2d"); 
+    const bgColor = c.color || '#0a1128';
+    g.fillStyle = bgColor; g.fillRect(0, 0, 256, 256);
+    const gridColor = c.gridColor || '#22d3ee';
+    const gridOpacity = c.gridOpacity || 0.28;
+    g.strokeStyle = `rgba(${parseInt(gridColor.slice(1,3),16)},${parseInt(gridColor.slice(3,5),16)},${parseInt(gridColor.slice(5,7),16)},${gridOpacity})`; 
+    g.lineWidth = 2; g.strokeRect(1, 1, 254, 254); 
+    const centerDot = c.centerDot || '#22d3ee';
+    g.fillStyle = centerDot; g.fillRect(126, 126, 4, 4);
     const gridTex = new THREE.CanvasTexture(gridC); gridTex.wrapS = gridTex.wrapT = THREE.RepeatWrapping; gridTex.repeat.set(15, 15); gridTex.colorSpace = THREE.SRGBColorSpace;
-    const floor = new THREE.Mesh(new THREE.CircleGeometry(34, 72), new THREE.MeshStandardMaterial({ map: gridTex, color: 0x93a7d8, roughness: 0.4, metalness: 0.3 }));
+    const floorColor = parseInt((c.color || '#93a7d8').replace('#', '0x'));
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(c.radius || 34, c.segments || 72), new THREE.MeshStandardMaterial({ map: gridTex, color: floorColor, roughness: c.roughness || 0.4, metalness: c.metalness || 0.3 }));
     floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; this.scene.add(floor);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(34, 0.09, 10, 120), glow("#22d3ee", 1.6)); rim.rotation.x = Math.PI / 2; rim.position.y = 0.02; this.scene.add(rim);
+    const rimColor = parseInt((c.rimColor || '#22d3ee').replace('#', '0x'));
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(c.radius || 34, 0.09, 10, 120), glow(c.rimColor || "#22d3ee", c.rimIntensity || 1.6)); rim.rotation.x = Math.PI / 2; rim.position.y = 0.02; this.scene.add(rim);
   }
 
   buildHub() {
+    const c = this.config.hub || {};
     const hub = new THREE.Group();
-    const wire = new THREE.Mesh(new THREE.IcosahedronGeometry(1.05, 1), new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: 0.75 }));
-    wire.position.y = 2.7; wire.userData.spinY = 0.35; hub.add(wire); this.hubSpinners.push(wire);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.7, 0.03, 8, 80), glow("#f0f", 1.4)); ring.position.y = 2.7; ring.rotation.x = Math.PI / 2.4; ring.userData.spinZ = 0.5; hub.add(ring); this.hubSpinners.push(ring);
-    for (let i = 0; i < 4; i++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 8), glow(i % 2 ? "#f0f" : "#22d3ee", 2)); s.userData.orbit = { r: 1.9, speed: 0.7, y: 2.7, phase: i * 1.57 }; hub.add(s); this.hubSpinners.push(s); }
-    const label = makeLabel("DEVQUEST", "#22d3ee", true); const sprite = label.sprite; sprite.position.y = 4.7; hub.add(sprite); this.labels.push(label);
-    const subLabel = makeLabel("CLICK A PROJECT", "#f0f", false); const subSprite = subLabel.sprite; subSprite.position.y = 4.0; subSprite.scale.set(2.6, 0.65, 1); hub.add(subSprite); this.labels.push(subLabel);
+    const hubAccent = this.config.colors?.hudAccent || '#22d3ee';
+    const pink = this.config.colors?.cursorHover || '#f0f';
+    const wire = new THREE.Mesh(new THREE.IcosahedronGeometry(1.05, 1), new THREE.MeshBasicMaterial({ color: parseInt(hubAccent.replace('#', '0x')), wireframe: true, transparent: true, opacity: 0.75 }));
+    wire.position.y = c.radius || 2.7; wire.userData.spinY = 0.35; hub.add(wire); this.hubSpinners.push(wire);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.7, 0.03, 8, 80), glow(pink, 1.4)); ring.position.y = c.radius || 2.7; ring.rotation.x = Math.PI / 2.4; ring.userData.spinZ = 0.5; hub.add(ring); this.hubSpinners.push(ring);
+    for (let i = 0; i < 4; i++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 8), glow(i % 2 ? pink : hubAccent, 2)); s.userData.orbit = { r: 1.9, speed: 0.7, y: c.radius || 2.7, phase: i * 1.57 }; hub.add(s); this.hubSpinners.push(s); }
+    const label = makeLabel(this.config.start?.title || "DEVQUEST", hubAccent, true); const sprite = label.sprite; sprite.position.y = 4.7; hub.add(sprite); this.labels.push(label);
+    const subLabel = makeLabel("CLICK A PROJECT", pink, false); const subSprite = subLabel.sprite; subSprite.position.y = 4.0; subSprite.scale.set(2.6, 0.65, 1); hub.add(subSprite); this.labels.push(subLabel);
     this.scene.add(hub);
   }
 
   buildExhibits() {
-    const texLoader = new THREE.TextureLoader(); const n = 6;
+    const texLoader = new THREE.TextureLoader(); 
+    const projectList = this.config.projects || [];
+    const n = projectList.length || 6;
     for (let i = 0; i < n; i++) {
-      const p = projects[i];
+      const p = projectList[i] || {kind:'cabinet', accent:'#22d3ee', image:'images/p1.jpg'};
       const theta = (i / n) * Math.PI * 2 + Math.PI / 6;
       const pos = new THREE.Vector3(Math.cos(theta) * BOOTH_RADIUS, 0, Math.sin(theta) * BOOTH_RADIUS);
       const group = new THREE.Group(); group.position.copy(pos); group.rotation.y = Math.PI / 2 - theta; group.userData.exhibitIndex = i;
