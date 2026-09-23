@@ -1193,9 +1193,7 @@
       Senior Full-Stack Engineer<br>
       <span class="gradient-text">Real-Time 3D & AI Data Platforms</span>
     </h1>
-    <p class="hero-subtitle">
-      React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship <strong>Digital Twins</strong>, <strong>RAG platforms</strong> and <strong>IoT telemetry</strong> that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS.
-    </p>
+    <p class="hero-subtitle"></p>
     <div class="mono" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.2rem">
       <span class="skill-tag">React 18 · Next.js</span><span class="skill-tag">Django · DRF</span><span class="skill-tag">Three.js · WebGL</span><span class="skill-tag">LangChain · pgvector</span><span class="skill-tag">FastAPI · WebSockets/MQTT</span><span class="skill-tag">Docker · PostgreSQL</span>
     </div>
@@ -1996,7 +1994,7 @@ if(canvas){
       const h1=document.querySelector('.hero h1');
       if(h1) h1.innerHTML=`${hero.h1a||''}<br><span class="gradient-text">${hero.h1b||''}</span>`;
     }
-    if(hero.subtitle) document.querySelector('.hero-subtitle').textContent=hero.subtitle;
+    if(hero.subtitle) document.querySelector('.hero-subtitle').innerHTML=hero.subtitle;
     if(hero.stats && hero.stats.length){
       document.querySelector('.hero-stats').innerHTML=hero.stats.map(s=>`<div class="stat"><div class="stat-number">${s.number}</div><div class="stat-label">${s.label}</div></div>`).join('');
     }
