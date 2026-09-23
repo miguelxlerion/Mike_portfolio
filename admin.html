@@ -475,6 +475,7 @@
             <div class="field"><label>Párrafo 1</label><textarea id="ren_aboutPara1" rows="2"></textarea></div>
             <div class="field"><label>Párrafo 2</label><textarea id="ren_aboutPara2" rows="2"></textarea></div>
             <div class="field"><label>Párrafo 3</label><textarea id="ren_aboutPara3" rows="2"></textarea></div>
+            <div class="field"><label>Subtítulo hero — tech stack</label><textarea id="ren_aboutHeroSub" rows="1" placeholder="React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship Digital Twins, RAG platforms and IoT telemetry that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS."></textarea></div>
             <div class="grid2">
               <div class="field"><label>Meta 1 k</label><input id="ren_aboutMeta1k"></div><div class="field"><label>Meta 1 v</label><input id="ren_aboutMeta1v"></div>
               <div class="field"><label>Meta 2 k</label><input id="ren_aboutMeta2k"></div><div class="field"><label>Meta 2 v</label><input id="ren_aboutMeta2v"></div>
@@ -1513,7 +1514,7 @@ function renderAll(){
 function collectFromDOM(){
   try{ if(window.collectRendersSettings) window.collectRendersSettings(); }catch(e){}
   // Hero
-  state.hero.badge=$('#h_badge').value; state.hero.h1a=$('#h_h1a').value; state.hero.h1b=$('#h_h1b').value; state.hero.subtitle=$('#h_sub').value;
+  state.hero.badge=$('#h_badge').value; state.hero.h1a=$('#h_h1a').value; state.hero.h1b=$('#h_h1b').value; state.hero.subtitle=$('#h_sub').value||$('#ren_aboutHeroSub').val();
   // About
   state.about.label=$('#a_label').value; state.about.title=$('#a_title').value; state.about.subtitle=$('#a_sub').value; state.about.paragraphs=$('#a_paras').value.split('\n---\n').map(s=>s.trim()).filter(Boolean);
   // Portfolio
