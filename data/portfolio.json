@@ -1970,7 +1970,7 @@
     }
   },
   "renders": {
-    "visits": 12898,
+    "visits": 12900,
     "pins": [
       {
         "id": 1,
@@ -1982,8 +1982,8 @@
         "category": "Concepto",
         "year": "2024",
         "accent": "#00f1f5",
-        "x": 21.08843537414966,
-        "y": 15.481448763250881,
+        "x": 19.27437641723356,
+        "y": 18.20734477536598,
         "imageUrl": "images/1789273900534-50se.jpg",
         "body": "Four storeys of raw concrete turned into a portrait of the women who arrived here in the seventies. The painter grew up two streets away.",
         "quote": "We did not want a decoration. We wanted the building to look back at us.",
@@ -2393,7 +2393,8 @@
       "cmsMsgPh": "Tu mensaje…",
       "cmsSubmit": "enviar mensaje",
       "cmsSending": "enviando…",
-      "cmsSent": "¡Gracias! Se abrió tu correo con el mensaje listo para enviar."
+      "cmsSent": "¡Gracias! Se abrió tu correo con el mensaje listo para enviar.",
+      "aboutHeroSub": "React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship Digital Twins, RAG platforms and IoT telemetry that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS."
     }
   }
 }
