@@ -1,517 +1,2400 @@
 {
   "site": {
-    "nombre": "Miguel Rodríguez Martínez",
-    "claim": "Portafolio creativo",
-    "heroLinea1": "Diseñando Ideas y Destinos",
-    "heroLinea2": "forma, color y código.",
-    "heroTags": "3D · Diseño · Código · Videojuegos",
-    "descripcion": "\"Desarrollo interactivo, arte técnico y diseño visual: diseño ecosistemas digitales donde la lógica robusta y el impacto estético van de la mano.\"",
-    "email": "merm.198427@gmail.com",
-    "redes": [
+    "brand": "M.R. — Full-Stack 3D+AI",
+    "nav": [
       {
-        "nombre": "GitHub",
-        "url": "https://github.com/MikeHell84"
-      },
-      {
-        "nombre": "LinkedIn",
-        "url": "https://linkedin.com/in/mikerodriguez84"
-      }
-    ],
-    "eyebrowContacto": "Contacto",
-    "contactoLinea1": "¿Tienes una visión",
-    "contactoLinea2": "en mente?",
-    "contactoLinea3": "Hagámosla Realidad.",
-    "textoPie": "MIGUEL RODRÍGUEZ MARTÍNEZ © - 2026",
-    "telefono": "+57 3208605600",
-    "ubicacion": "Colombia",
-    "formato": "masonry",
-    "buttonStyle": "",
-    "brand": "Miguel Rodríguez Martínez",
-    "logoUrl": "images/1787080952220-nyu4.jpg",
-    "faviconUrl": "images/1787080952225-ier3.jpg",
-    "manifesto": "Innovación que se ve, se siente y se usa.",
-    "heroBg": "#0e0e0c",
-    "heroColor": "#f2efe6",
-    "secciones": {
-      "workEye": "",
-      "workTitle": "Estos son trabajos que han inspirado mi carrera...",
-      "aboutEye": "",
-      "aboutTitle": "Aprender algo nuevo, siempre alentará mi vida...",
-      "servEye": "",
-      "servTitle": "Mis Disciplinas...",
-      "recEye": "04 / Trayectoria",
-      "recTitle": "Algo de mi trayectoria...",
-      "heroTitle": "",
-      "servicesEye": "",
-      "servicesTitle": "El Arte y la Música alimentan mi creatividad...",
-      "recognitionEye": "",
-      "recognitionTitle": "",
-      "contactTitle": ""
-    },
-    "navItems": [
-      {
-        "label": "Trabajos",
-        "href": "#work"
-      },
-      {
-        "label": "Estudio",
+        "label": "About",
         "href": "#about"
       },
       {
-        "label": "Servicios",
+        "label": "Services",
         "href": "#services"
       },
       {
-        "label": "Reconocimientos",
-        "href": "#recognition"
+        "label": "Experience",
+        "href": "#experience"
       },
       {
-        "label": "Contacto",
+        "label": "Projects",
+        "href": "#projects"
+      },
+      {
+        "label": "3D & Videojuegos",
+        "href": "3d-portfolio.html"
+      },
+      {
+        "label": "3D Gallery",
+        "href": "gallery.html"
+      },
+      {
+        "label": "Contact",
         "href": "#contact"
+      },
+      {
+        "label": "Renders",
+        "href": "renders.html"
       }
     ],
-    "numeros": []
+    "email": "miguelxlerion@gmail.com",
+    "linkedin": "https://linkedin.com/in/mikerodriguez84",
+    "github": "https://github.com/miguelxlerion",
+    "portfolio": "https://miguelxlerion.github.io/Mike_portfolio",
+    "telefono": "+57 313 226 3265",
+    "footer": "© 2026 Miguel E. Rodríguez Martínez"
   },
-  "areas": [
+  "hero": {
+    "badge": "Available for remote — GMT-5 · EU/US overlap",
+    "h1a": "Senior Full-Stack Engineer",
+    "h1b": "Real-Time 3D & AI Data Platforms",
+    "subtitle": "React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship <strong>Digital Twins</strong>, <strong>RAG platforms</strong> and <strong>IoT telemetry</strong> that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS.",
+    "stats": [
+      {
+        "number": "7+",
+        "label": "Years experience"
+      },
+      {
+        "number": "99%",
+        "label": "Uptime (buffered ingestion)"
+      },
+      {
+        "number": "60%",
+        "label": "Faster decision time"
+      },
+      {
+        "number": "4",
+        "label": "Prod. platforms featured"
+      }
+    ],
+    "actions": [
+      {
+        "label": "View Projects",
+        "href": "#projects",
+        "variant": "primary"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/miguelxlerion",
+        "variant": "secondary"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact",
+        "variant": "secondary"
+      }
+    ],
+    "visible": true
+  },
+  "about": {
+    "label": "ABOUT ME",
+    "title": "Bridging visual design<br>and robust engineering",
+    "subtitle": "I close the gap between high-impact 3D and scalable software — from asset pipeline to resilient APIs.",
+    "paragraphs": [
+      "Started in <strong>3D & digital art</strong>, I pivoted to build the tools creatives use. That path led me to master <strong>Full-Stack Engineering</strong> for data-intensive products.",
+      "Today I'm <strong>bilingual in two worlds</strong>: design language (UX, visual hierarchy, 3D asset optimization) and engineering language (scalable architectures, secure APIs, RAG/LLM pipelines).",
+      "I specialize in turning complex business requirements into <strong>high-performance web platforms</strong> — real-time 3D dashboards, RAG assistants and IoT telemetry — with a focus on <strong>code quality, mentorship and tech debt reduction</strong>.",
+      "<strong>Superpower:</strong> End-to-end ownership from 3D asset pipeline (Blender/Substance) to data architecture (Postgres/pgvector, WebSockets/MQTT) — optimizing performance and UX across the stack."
+    ],
+    "skills": [
+      {
+        "title": "Frontend & Visualización 3D",
+        "tags": [
+          "React.js",
+          "Next.js",
+          "TypeScript",
+          "Three.js",
+          "WebGL",
+          "Tailwind CSS",
+          "Unity WebGL"
+        ]
+      },
+      {
+        "title": "Backend & IA/RAG",
+        "tags": [
+          "Python",
+          "Django",
+          "DRF",
+          "Node.js",
+          "LangChain",
+          "pgvector",
+          "OpenAI API"
+        ]
+      },
+      {
+        "title": "IoT & Tiempo Real",
+        "tags": [
+          "WebSockets",
+          "MQTT",
+          "Asyncio",
+          "TimescaleDB",
+          "Docker",
+          "Linux"
+        ]
+      },
+      {
+        "title": "3D & Creative Tech",
+        "tags": [
+          "Unity 3D",
+          "Unreal Engine 5",
+          "ZBrush",
+          "Blender",
+          "Substance Painter"
+        ]
+      }
+    ]
+  },
+  "services": [
     {
-      "id": "3d",
-      "nombre": "3D",
-      "corto": "3D",
-      "descripcion": "Modelado, iluminación y render para producto, arquitectura y creatividad digital.",
-      "color": "#00ddff"
+      "visible": true,
+      "title": "Digital Twins & IoT",
+      "desc": "Real-time 3D platforms that connect IoT sensors to interactive WebGL dashboards for industrial monitoring.",
+      "image": "images/Oficina0013.jpg",
+      "icon": "chart",
+      "color": "#ffffff",
+      "features": [
+        "3D dashboards with live telemetry",
+        "WebSockets / MQTT ingestion",
+        "Factory floor visualization",
+        "Alerts & predictive signals"
+      ],
+      "tech": [
+        "Three.js",
+        "WebSockets",
+        "MQTT",
+        "FastAPI",
+        "React"
+      ]
     },
     {
-      "id": "diseno",
-      "nombre": "Diseño Gráfico",
-      "corto": "Diseño",
-      "descripcion": "Identidad, editorial y piezas visuales con foco en jerarquía y emoción.",
-      "color": "#ffffff"
+      "visible": true,
+      "title": "AI / RAG Systems",
+      "desc": "LLM assistants that ground corporate knowledge bases with Retrieval-Augmented Generation.",
+      "image": "images/documentacion-parallax.jpg",
+      "icon": "cpu",
+      "color": "#fafafa",
+      "features": [
+        "Complex PDF processing & semantic chunking",
+        "Hybrid vector + lexical search",
+        "LLM re-ranking anti-hallucination",
+        "Secure APIs with concurrency control"
+      ],
+      "tech": [
+        "Python",
+        "Django",
+        "LangChain",
+        "pgvector",
+        "Celery"
+      ]
     },
     {
-      "id": "dev",
-      "nombre": "Programación de Software y Web",
-      "corto": "Software & Web",
-      "descripcion": "Apps, sitios web y software a medida: interfaces cuidadas y código sólido.",
-      "color": "#ffffff"
+      "visible": true,
+      "title": "Web 3D Visualization",
+      "desc": "Interactive browser experiences that turn complex data into navigable, gamified 3D environments.",
+      "image": "images/proyectos-parallax.jpg",
+      "icon": "cube",
+      "color": "#ffffff",
+      "features": [
+        "Three.js / WebGL",
+        "Asset optimization for web",
+        "Stable 60 FPS",
+        "Responsive & accessible UI"
+      ],
+      "tech": [
+        "Three.js",
+        "WebGL",
+        "React",
+        "TypeScript",
+        "GLTF"
+      ]
     },
     {
-      "id": "area_1786650100016",
-      "nombre": "Música & Composición",
-      "corto": "Música & Composición",
-      "descripcion": "Música creada para ambientes de videojuegos, videoclips y proyectos multimedia.",
-      "color": "#ffffff"
+      "visible": true,
+      "title": "Full-Stack Architecture",
+      "desc": "Complete platforms from scratch with scalable, fault-tolerant architectures.",
+      "image": "images/servicios-productos-parallax.jpg",
+      "icon": "dashboard",
+      "color": "#00ffb3",
+      "features": [
+        "React / Next.js / Django / FastAPI",
+        "PostgreSQL / pgvector / Redis",
+        "Docker / Linux / Nginx",
+        "99% uptime by design (buffering)"
+      ],
+      "tech": [
+        "Django",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker",
+        "Redis"
+      ]
+    },
+    {
+      "visible": true,
+      "title": "KPI Dashboards",
+      "desc": "Real-time control panels that turn complex data into actionable insights.",
+      "image": "images/cronograma-progreso-parallax.jpg",
+      "icon": "shield",
+      "color": "#f43f5e",
+      "features": [
+        "Complex data visualization",
+        "Real-time updates",
+        "UX focused on usability",
+        "60% reduction in analysis time"
+      ],
+      "tech": [
+        "React",
+        "Three.js",
+        "WebSockets",
+        "TimescaleDB",
+        "Docker"
+      ]
+    },
+    {
+      "visible": true,
+      "title": "Tech Leadership",
+      "desc": "Team mentorship, pipeline standardization and tech debt reduction on high-impact projects.",
+      "image": "images/fundador-parallax.jpg",
+      "icon": "users",
+      "color": "#06b6d4",
+      "features": [
+        "Junior mentorship",
+        "Pipeline standardization",
+        "Code review & best practices",
+        "Performance optimization"
+      ],
+      "tech": [
+        "Leadership",
+        "Mentoring",
+        "Architecture",
+        "Code Review"
+      ]
     }
   ],
-  "diseno": {
-    "bg": "#0E0E0C",
-    "panel": "#141420",
-    "texto": "#F2EFE6",
-    "muted": "#9AA0B5",
-    "line": "rgba(242,239,230,.12)",
-    "accent": "#D4FF3D",
-    "accent2": "#FF4A1C",
-    "accent3": "#A78BFA",
-    "gradfrom": "#22D3EE",
-    "gradmid": "#A78BFA",
-    "gradto": "#F472B6",
-    "lead": null,
-    "fuenteTitulos": "Anton",
-    "fuenteTexto": "Inter",
-    "fuenteMono": "JetBrains Mono",
-    "formas": {
-      "activo": true,
-      "tipo": "orbes",
-      "cantidad": 3,
-      "blur": 90,
-      "opacidad": 45,
-      "velocidad": 14
-    },
-    "parallax": {
-      "activo": true,
-      "imagen": "images/1786740556319-2a3u.jpg",
-      "posicion": "centro",
-      "velocidad": 0.4,
-      "opacidad": 40,
-      "desenfoque": 6
-    },
-    "fondo": {
-      "activo": false,
-      "imagen": "",
-      "posicion": "centro",
-      "opacidad": 40,
-      "desenfoque": 0,
-      "oscurecer": 0
-    },
-    "presentacion": {
-      "gap": 26,
-      "mincol": 300,
-      "radius": 18,
-      "tilt": 1.2,
-      "shadow": 8,
-      "colores": {}
-    },
-    "three": {
-      "enabled": true,
-      "colors": {
-        "a1": "#3DFCFF",
-        "a2": "#1AFFC6",
-        "a3": "#89DEFB",
-        "bg": "#0E0E0C"
-      },
-      "shapes": {
-        "hero": "galaxy",
-        "work": "cube",
-        "manifesto": "core",
-        "services": "image",
-        "about": "icosa",
-        "recognition": "icosa",
-        "contact": "wave"
-      },
-      "image": "images/1787285518452-g3vc.png",
-      "imageMode": "particles",
-      "particleCount": 2600,
-      "particleSize": 0.18,
-      "gridOpacity": 0.25,
-      "wireframe": true
-    },
-    "nav": {
-      "color": "#F2EFE6",
-      "accent": "#D4FF3D",
-      "blend": "difference"
-    },
-    "cursor": {
-      "color": "#D4FF3D",
-      "fuente": "JetBrains Mono",
-      "font": "JetBrains Mono",
-      "size": 14,
-      "big": 90
-    },
-    "ticker": {
-      "bg": "#D4FF3D",
-      "color": "#0E0E0C",
-      "fuente": "Anton",
-      "font": "Anton",
-      "speed": 40
-    },
-    "sidebar": {
-      "bg": "#161613",
-      "color": "#F2EFE6",
-      "border": "#2A2A28",
-      "active": "#D4FF3D"
-    },
-    "em": {
-      "color": "#D4FF3D",
-      "fondo": "#D4FF3D",
-      "fuente": "Instrument Serif",
-      "font": "Instrument Serif"
-    },
-    "enfasis": {
-      "color": "#D4FF3D",
-      "fondo": "#D4FF3D",
-      "fuente": "Instrument Serif",
-      "font": "Instrument Serif"
-    },
-    "loader": {
-      "enabled": true,
-      "bg": "#0B0B12",
-      "text": "#9AA0B5",
-      "accent": "#D4FF3D",
-      "fontBig": "Anton",
-      "fontSmall": "JetBrains Mono",
-      "template": "counter",
-      "pos": "center",
-      "duration": 1200
-    },
-    "footer": {
-      "footBig": {
-        "color": "#F2EFE6",
-        "em": "#D4FF3D",
-        "font": "Anton",
-        "size": 320,
-        "spacing": "-0.02em",
-        "transform": "uppercase"
-      }
-    },
-    "typography": {
-      "hero": 200,
-      "claim": 20,
-      "eyebrow": 11,
-      "h2": 48,
-      "body": 15,
-      "work": 20,
-      "svc": 44,
-      "footer": 280
-    },
-    "layout": {
-      "radius": 14,
-      "padSec": 100,
-      "navH": 64,
-      "workGap": 12,
-      "maxW": 1280,
-      "lh": "1.55"
-    },
-    "works": {
-      "bg": "#161613",
-      "border": "#2A2A28",
-      "accent": "#D4FF3D"
-    },
-    "modal": {
-      "bg": "#161613",
-      "overlay": "rgba(0,0,0,.75)",
-      "radius": 21
-    },
-    "services": {
-      "bg": "#161613",
-      "border": "#2A2A28"
-    },
-    "buttonStyles": {},
-    "buttonUsage": {},
-    "defaultButtonStyle": "",
-    "fullCss": "",
-    "cssCompleto": "",
-    "css": "",
-    "secciones": {
-      "hero": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "work": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "manifesto": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "services": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "about": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "recognition": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "contact": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "footer": {
-        "bg": "#0E0E0C",
-        "color": "#F2EFE6",
-        "font": "Anton"
-      },
-      "ticker": {
-        "bg": "#D4FF3D",
-        "color": "#0E0E0C",
-        "font": "Anton"
-      }
-    },
-    "trayectoria": {
-      "accent": "#A78BFA",
-      "accent2": "#22D3EE",
-      "accent3": "#F472B6",
-      "cardBg": "#141420",
-      "cardBorder": "#2A2A3A",
-      "radius": 18,
-      "fontTitle": "Anton"
-    },
-    "bg2": "#161613",
-    "texto2": "#B8B3A3"
-  },
-  "trabajos": [
+  "experience": [
     {
-      "id": "job-1786850614912",
-      "titulo": "Dead Hope",
-      "area": "area_1786650100016",
-      "anio": 2025,
-      "cliente": "Redemthor",
-      "descripcion": "Creación, Composición y grabación de la canción Dead Hope para el videojuego llamado Total Darkness de la Banda Redemthor.",
-      "herramientas": [
-        "Software de Captura y extracción de sonidos diseñada por mi",
-        "Cakewalk Sonar",
-        "Addictive Drums 2."
+      "visible": true,
+      "title": "Desarrollador Full-Stack Senior",
+      "company": "Alcaldía de Caucasia (FOVIS)",
+      "date": "2024 – 2025",
+      "image": "images/Oficina0013.jpg",
+      "achievements": [
+        "Arquitecté y desarrollé desde cero la plataforma gubernamental de gestión habitacional, administrando más de <strong>1,200+ unidades</strong>.",
+        "Diseñé e implementé dashboards de KPIs en tiempo real, <strong>reduciendo el tiempo de toma de decisiones en un 60%</strong>.",
+        "Lideré la creación de una biblioteca de componentes UI reutilizables, <strong>reduciendo los tiempos de carga en un 35%</strong>."
       ],
-      "destacado": true,
-      "imagenes": [
-        "images/1786850614951-vfei.jpg"
-      ],
-      "video": {
-        "tipo": "youtube",
-        "url": "https://youtu.be/_FKCl1oPJbg"
-      },
-      "enlaces": [],
-      "beforeAfter": {},
-      "pagina": "",
-      "botonTexto": "Ver proyecto",
-      "destacadoHome": false
-    },
-    {
-      "id": "tmspms7sw",
-      "titulo": "Assets Renders",
-      "area": "3d",
-      "anio": 2019,
-      "cliente": "Xlerion Studios",
-      "descripcion": "Serie de Assets creados en 3D Max y con el motor de Renderizado Vray.",
-      "herramientas": [
-        "3D max",
-        "Vray."
-      ],
-      "destacado": true,
-      "imagenes": [
-        "images/1786511427864-nxpg.jpg",
-        "images/1786511428047-oxbh.jpg",
-        "images/1786511428149-6ygz.jpg",
-        "images/1786511428246-k8vm.jpg",
-        "images/1786511428353-cio0.jpg",
-        "images/1786511428427-ywcc.jpg",
-        "images/1786511428545-gng6.jpg",
-        "images/1786511428661-hhzx.jpg",
-        "images/1786511428749-xgak.jpg",
-        "images/1786511428837-l2p8.jpg",
-        "images/1786511428950-g2y1.jpg",
-        "images/1786511428999-h9ci.jpg",
-        "images/1786511429043-kqym.jpg",
-        "images/1786511429070-ar42.jpg"
-      ],
-      "video": {
-        "tipo": "ninguno",
-        "url": ""
-      },
-      "enlaces": [],
-      "beforeAfter": {
-        "before": "images/1786739228674-u0ow.jpg",
-        "after": "images/1786739228684-m29u.jpg",
-        "activo": true
-      },
-      "pagina": "",
-      "botonTexto": "Ver proyecto",
-      "destacadoHome": false
-    },
-    {
-      "id": "t-geometria",
-      "titulo": "Dummu Ul",
-      "area": "3d",
-      "anio": 2023,
-      "cliente": "Xlerion Studios",
-      "descripcion": "Serie de renders de uno de los personajes para el videojuego llamado TOTAL DARKNESS en Colombia para Xlerion Studios. trabajado en Zbrush para el modelado, 3D max para el mapping de las texturas, y Substance 3d painter para las texturas.",
-      "herramientas": [
-        "Zbrush",
-        "3D Max",
-        "Substance 3D Painter."
-      ],
-      "destacado": true,
-      "imagenes": [
-        "images/1786736406321-abj9.jpg",
-        "images/1786736406327-lps0.jpg",
-        "images/1786736406333-w2qd.jpg",
-        "images/1786736406347-dun8.jpg",
-        "images/1786736406354-29i5.jpg",
-        "images/1786736406365-ai0j.jpg"
-      ],
-      "video": {
-        "tipo": "ninguno",
-        "url": ""
-      },
-      "enlaces": [],
-      "beforeAfter": {},
-      "pagina": "",
-      "botonTexto": "Ver proyecto",
-      "destacadoHome": false
-    },
-    {
-      "id": "t-identidad",
-      "titulo": "USAID",
-      "area": "diseno",
-      "anio": 2015,
-      "cliente": "USAID",
-      "descripcion": "Identidad visual completa para una USAID: logotipo, papelería, editorial, backings, brieffers y redes sociales.",
-      "herramientas": [
-        "Illustrator",
-        "InDesign",
-        "Figma"
-      ],
-      "destacado": true,
-      "imagenes": [
-        "images/1786513633083-7yxd.jpg",
-        "images/1786513633102-5qia.jpg",
-        "images/1786513633118-gf0s.jpg",
-        "images/1786513633144-e8hh.jpg",
-        "images/1786513633159-dwyf.jpg",
-        "images/1786513633179-e48m.jpg",
-        "images/1786513633192-zv5m.jpg"
-      ],
-      "video": {
-        "tipo": "ninguno",
-        "url": ""
-      },
-      "enlaces": [],
-      "beforeAfter": {},
-      "pagina": "",
-      "botonTexto": "Ver proyecto",
-      "destacadoHome": false
-    },
-    {
-      "id": "t-tienda",
-      "titulo": "ICOE",
-      "area": "dev",
-      "anio": 2016,
-      "cliente": "USAID & ACDIVOCA",
-      "descripcion": "Sistema basado en Excel y Visual Basic para la visualización de datos en bruto a gráficos entendibles y temáticos para la comunidad del Choco.",
-      "herramientas": [
+      "stack": [
         "React",
-        "Node.js",
+        "Tailwind CSS",
+        "Django REST",
+        "PostgreSQL",
+        "WebSockets"
+      ]
+    },
+    {
+      "visible": true,
+      "title": "Technical Lead 3D & Creative Developer",
+      "company": "Xlerion Studio",
+      "date": "2023 – 2024",
+      "image": "images/servicios-productos-parallax.jpg",
+      "achievements": [
+        "Lideré el desarrollo de arquitecturas frontend que conectan <strong>flujos de datos en tiempo real (WebSockets)</strong> con interfaces visuales 3D dinámicas.",
+        "Optimicé recursos gráficos y pipelines de assets para entornos web interactivos, garantizando <strong>FPS estables en navegadores</strong>.",
+        "Dirigí la integración de herramientas de IA en flujos de producción creativa, <strong>mejorando la eficiencia del equipo en 40%</strong>."
+      ],
+      "stack": [
+        "Three.js",
+        "Unity WebGL",
+        "React",
+        "Python",
+        "Docker"
+      ]
+    },
+    {
+      "visible": true,
+      "title": "Director de Diseño 3D & Data Visualization",
+      "company": "AONC Neuroscientific Strategies",
+      "date": "2018 – 2019",
+      "image": "images/filosofia-parallax.jpg",
+      "achievements": [
+        "Transformé conjuntos de datos masivos y complejos en <strong>entornos 3D gamificados</strong> y navegables para análisis visual.",
+        "<strong>Reduje el tiempo de análisis de datos en un 40%</strong> para usuarios no técnicos, aplicando principios de UX/UI centrados en la usabilidad."
+      ],
+      "stack": [
+        "Unity 3D",
+        "Python",
+        "Django",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "visible": true,
+      "title": "Desarrollador Frontend & UI Designer",
+      "company": "USAID - ACDI/VOCA",
+      "date": "2015 – 2017",
+      "image": "images/convocatorias-alianzas-parallax.jpg",
+      "achievements": [
+        "Arquitecté el software \"ICOE\", traduciendo bases de datos complejas en representaciones digitales claras y paneles interactivos accesibles para tomadores de decisiones a nivel nacional."
+      ],
+      "stack": [
+        "JavaScript",
+        "HTML5/CSS3",
+        "UI/UX",
+        "Data Viz"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "number": "01 / REAL-TIME 3D · DIGITAL TWIN",
+      "title": "SmartFactory 3D — Industrial Digital Twin",
+      "desc": "<strong>Problem:</strong> Factory floor opacity. <strong>Solution:</strong> React 18 + Three.js r150 + FastAPI + WebSockets live telemetry with buffered ingestion and LOD for stable 60 FPS.",
+      "metric": "Dockerized full-stack (JS 83k + Python 34k) · Real factory visualization with interactive orbit, instancing & telemetry overlays. <strong>Updated 2026-08-31</strong>.",
+      "image": "images/Oficina0010.jpg",
+      "tech": [
+        "React 18",
+        "Three.js r150",
+        "FastAPI",
+        "WebSockets/MQTT",
+        "Python 3.11",
+        "Docker Compose",
         "PostgreSQL"
       ],
-      "destacado": true,
-      "imagenes": [
-        "images/1786513806719-e4dj.jpg",
-        "images/1786513806746-dcav.jpg",
-        "images/1786513806799-yeri.png",
-        "images/1786513806837-xscb.png",
-        "images/1786736406383-j9wk.jpg"
+      "links": [
+        {
+          "label": "View Code",
+          "href": "https://github.com/miguelxlerion/smartfactory-3d",
+          "icon": "github"
+        },
+        {
+          "label": "Docs →",
+          "href": "https://github.com/miguelxlerion/smartfactory-3d#readme"
+        }
       ],
-      "video": {
-        "tipo": "ninguno",
-        "url": ""
-      },
-      "enlaces": [],
-      "beforeAfter": {},
-      "pagina": "",
-      "botonTexto": "Ver proyecto",
-      "destacadoHome": false
-    }
-  ],
-  "trayectoria": [
-    {
-      "inicio": "2024-01",
-      "fin": "",
-      "tipo": "experiencia",
-      "titulo": "Unity Technical Artist / XR Specialist",
-      "org": "Estudio Colaborativo / Equipo Interno",
-      "descripcion": "Liderazgo técnico en pipeline XR: arquitectura de scenes, addressables, DOTS/ECS, profiling, Git/Perforce, CI/CD, tools IA para asset integration.",
-      "imagen": "images/1787084894779-f1dx.jpg",
-      "_id": "tray_1787956280939_0"
+      "metric_text": "Dockerized full-stack (JS 83k + Python 34k) · Real factory visualization with interactive orbit, instancing & telemetry overlays."
     },
     {
-      "inicio": "2022-01",
-      "fin": "2023-12",
-      "tipo": "experiencia",
-      "titulo": "Senior 3D Artist / Technical Artist",
-      "org": "Xlerion Studios",
-      "descripcion": "Creación de assets 3D para videojuegos (Total Darkness), pipeline ZBrush→Maya→Substance→Unity, optimización mobile/PC, rigging técnico.",
-      "imagen": "images/1786736406321-abj9.jpg",
-      "_id": "tray_1787956280939_1"
+      "number": "02 / AI & RAG · DATA PLATFORM",
+      "title": "Rag_X — Enterprise RAG Assistant",
+      "desc": "<strong>Problem:</strong> Corporate knowledge trapped in messy PDFs. <strong>Solution:</strong> Django/DRF + LangChain + pgvector + Celery/Redis with semantic chunking, hybrid search & LLM re-ranking.",
+      "metric": "Async PDF pipeline, anti-hallucination re-ranking, secure concurrent API. <strong>Python 190k + TS 57k · Docker</strong>.",
+      "image": "images/documentacion-recursos-parallax.jpg",
+      "tech": [
+        "Python 3.10+",
+        "Django/DRF",
+        "LangChain",
+        "pgvector",
+        "Celery + Redis",
+        "Docker",
+        "OpenAI/Claude"
+      ],
+      "links": [
+        {
+          "label": "View Code",
+          "href": "https://github.com/miguelxlerion/Rag_X",
+          "icon": "github"
+        },
+        {
+          "label": "Architecture →",
+          "href": "https://github.com/miguelxlerion/Rag_X#readme"
+        }
+      ],
+      "metric_text": "Async PDF pipeline, anti-hallucination re-ranking, secure concurrent API."
+    },
+    {
+      "number": "03 / DATA PLATFORM · ETL + IA",
+      "title": "Ingest Pipeline — Enterprise ETL + AI Enrichment",
+      "desc": "<strong>Problem:</strong> Multiformat raw docs (PDF/CSV/JSON/TXT) unfit for AI. <strong>Solution:</strong> Resilient pipeline (buffering, retries) that cleans, traces & semantically enriches data for RAG.",
+      "metric": "Production-grade data engineering pattern · <strong>99% uptime with local buffering</strong> under concurrent load (Locust-tested).",
+      "image": "images/soluciones-parallax.jpg",
+      "tech": [
+        "Python Asyncio",
+        "MQTT / WebSockets",
+        "PostgreSQL",
+        "Docker",
+        "Locust",
+        "Linux"
+      ],
+      "links": [
+        {
+          "label": "View Code",
+          "href": "https://github.com/miguelxlerion/Ingest_Pipeline",
+          "icon": "github"
+        },
+        {
+          "label": "Diagram →",
+          "href": "https://github.com/miguelxlerion/Ingest_Pipeline/blob/main/docs/architecture-diagram.svg"
+        }
+      ],
+      "metric_text": "Production-grade data engineering pattern · 99% uptime with local buffering under concurrent load."
+    },
+    {
+      "number": "04 / AI · CIVIC TECH",
+      "title": "GobIA Auditor — Public Contracts Risk Agent",
+      "desc": "<strong>Problem:</strong> Opaque public procurement (SECOP II). <strong>Solution:</strong> Python agent that normalizes contracts, scores risk locally + optional GPT, and generates HTML + email reports.",
+      "metric": "MinTIC Hackathon 2026 · Automated audit signals for Colombian SECOP II. <strong>HTML 148k + Python 84k</strong>.",
+      "image": "images/inversionistas-alianzas-parallax.jpg",
+      "tech": [
+        "Python 3.10+",
+        "OpenAI / GPT",
+        "SECOP II API",
+        "Risk Scorer",
+        "HTML Reports",
+        "Docker"
+      ],
+      "links": [
+        {
+          "label": "View Code",
+          "href": "https://github.com/miguelxlerion/GobIA",
+          "icon": "github"
+        },
+        {
+          "label": "Case Study →",
+          "href": "https://github.com/miguelxlerion/GobIA#readme"
+        }
+      ],
+      "metric_text": "MinTIC Hackathon 2026 · Automated audit signals for Colombian SECOP II."
     }
-  ]
+  ],
+  "portfolio": {
+    "label": "PORTFOLIO",
+    "title": "Selected works",
+    "subtitle": "A curated selection of shipped platforms, 3D experiences and AI products — from concept to production.",
+    "categories": [
+      "All",
+      "3D",
+      "AI",
+      "IoT",
+      "Web"
+    ],
+    "items": [
+      {
+        "visible": true,
+        "id": "pf-001",
+        "title": "SmartFactory — Digital Twin Ops",
+        "category": "3D",
+        "client": "Industrial Client",
+        "year": "2024",
+        "cover": "images/Oficina0013.jpg",
+        "gallery": [],
+        "desc": "Digital twin for factory floor with real-time WebSocket telemetry and 60 FPS Three.js rendering.",
+        "tools": [
+          "React",
+          "Three.js",
+          "FastAPI"
+        ],
+        "link": "https://github.com/miguelxlerion/smartfactory-3d",
+        "linkLabel": "View Code",
+        "featured": true,
+        "color": "#4f8cff"
+      },
+      {
+        "visible": true,
+        "id": "pf-002",
+        "title": "RAG Knowledge Platform",
+        "category": "AI",
+        "client": "Enterprise",
+        "year": "2024",
+        "cover": "images/documentacion-parallax.jpg",
+        "gallery": [
+          "images/documentacion-parallax.jpg",
+          "images/documentacion-recursos-parallax.jpg"
+        ],
+        "desc": "Corporate RAG with semantic chunking and hybrid search to eliminate hallucinations.",
+        "tools": [
+          "Django",
+          "LangChain",
+          "pgvector"
+        ],
+        "link": "https://github.com/miguelxlerion/Rag_X",
+        "linkLabel": "View Code",
+        "featured": true,
+        "color": "#a855f7"
+      },
+      {
+        "visible": true,
+        "id": "pf-003",
+        "title": "IoT Telemetry Fleet",
+        "category": "IoT",
+        "client": "Logistics",
+        "year": "2023",
+        "cover": "images/proyectos-parallax.jpg",
+        "gallery": [
+          "images/proyectos-parallax.jpg"
+        ],
+        "desc": "Buffered ingestion pipeline with MQTT and TimescaleDB — 99% uptime.",
+        "tools": [
+          "Python",
+          "MQTT",
+          "PostgreSQL"
+        ],
+        "link": "https://github.com/miguelxlerion/Ingest_Pipeline",
+        "linkLabel": "View Code",
+        "featured": false,
+        "color": "#10b981"
+      }
+    ]
+  },
+  "contact": {
+    "label": "CONTACT",
+    "title": "Let's build<br>your next vision.",
+    "subtitle": "Available for remote Senior Full-Stack / Tech Lead roles — Real-Time 3D & AI Data Platforms. GMT-5 with EU/US overlap. Let's talk architecture, not just features.",
+    "links": [
+      {
+        "icon": "mail",
+        "label": "Email",
+        "value": "miguelxlerion@gmail.com",
+        "href": "mailto:miguelxlerion@gmail.com",
+        "color": "#4f8cff"
+      },
+      {
+        "icon": "linkedin",
+        "label": "LinkedIn",
+        "value": "mikerodriguez84",
+        "href": "https://linkedin.com/in/mikerodriguez84",
+        "color": "#0077b5"
+      },
+      {
+        "icon": "github",
+        "label": "GitHub",
+        "value": "miguelxlerion",
+        "href": "https://github.com/miguelxlerion",
+        "color": "#24292e"
+      },
+      {
+        "icon": "globe",
+        "label": "Portfolio",
+        "value": "miguelxlerion.github.io",
+        "href": "https://miguelxlerion.github.io/Mike_portfolio/",
+        "color": "#4f8cff"
+      },
+      {
+        "icon": "phone",
+        "label": "Teléfono",
+        "value": "+57 313 226 3265",
+        "href": "tel:+573132263265",
+        "color": "#f59e0b"
+      }
+    ],
+    "email": "miguelxlerion@gmail.com",
+    "footer": "© 2026 Miguel E. Rodríguez Martínez",
+    "coords": [
+      "4.7110° N, 74.0721° W, BOGOTÁ, CO"
+    ]
+  },
+  "design": {
+    "bg": "#0a0a0f",
+    "bg2": "#000000",
+    "bg3": "#1a1a25",
+    "bg_card": "#16161f",
+    "texto": "#00ffee",
+    "text2": "#a0a0b5",
+    "muted": "#6a6a80",
+    "border": "#2a2a3a",
+    "border_hover": "#3a3a4f",
+    "accent": "#4f8cff",
+    "accent2": "#a855f7",
+    "accent_emerald": "#10b981",
+    "accent_amber": "#0af5c6",
+    "accent_rose": "#f43f5e",
+    "accent_cyan": "#06b6d4",
+    "grad_from": "#4f8cff",
+    "grad_mid": "#a855f7",
+    "grad_to": "#a855f7",
+    "grad2_from": "#10b981",
+    "grad2_mid": "#06b6d4",
+    "grad2_to": "#06b6d4",
+    "grad3_from": "#f59e0b",
+    "grad3_mid": "#f43f5e",
+    "grad3_to": "#f43f5e",
+    "font_heading": "Inter",
+    "font_heading_custom": "",
+    "font_body": "Inter",
+    "font_body_custom": "",
+    "font_mono": "JetBrains Mono",
+    "font_mono_custom": "",
+    "font_size_base": "16",
+    "favicon_url": "",
+    "logo_url": "",
+    "parallax_enabled": false,
+    "parallax_img": "",
+    "parallax_speed": "0.4",
+    "parallax_pos": "center",
+    "parallax_opacity": "40",
+    "fondo_enabled": false,
+    "fondo_img": "",
+    "fondo_pos": "center",
+    "fundo_opacity": "40",
+    "fundo_blur": "0",
+    "loader_enabled": true,
+    "loader_bg": "#05070d",
+    "loader_text": "#cfe0ff",
+    "loader_accent": "#00d4ff",
+    "loader_font_big": "Anton",
+    "loader_font_small": "JetBrains Mono",
+    "loader_template": "counter",
+    "loader_pos": "center",
+    "loader_duration": "1200",
+    "cursor_color": "#00d4ff",
+    "cursor_size": "14",
+    "cursor_big": "80",
+    "cursor_font": "JetBrains Mono",
+    "ticker_bg": "#05070d",
+    "ticker_color": "#cfe0ff",
+    "ticker_font": "Anton",
+    "ticker_speed": "40",
+    "sidebar_bg": "#12121a",
+    "sidebar_color": "#f0f0f5",
+    "sidebar_border": "#2a2a3a",
+    "sidebar_active": "#00d4ff",
+    "parallax_static": false,
+    "fondo_opacity": "40",
+    "fondo_blur": "0",
+    "ui_radius": "20px",
+    "ui_button_radius": "999px",
+    "ui_section_gap": "64px",
+    "ui_content_width": "1280px",
+    "ui_border_width": "1px",
+    "ui_surface_opacity": "1",
+    "ui_surface_blur": "0px",
+    "ui_card_shadow": "0 16px 40px rgba(0,0,0,.28)",
+    "ui_button_style": "solid",
+    "ui_motion": "reduced"
+  },
+  "seo": {
+    "title": "Miguel E. Rodriguez — Senior Full-Stack Engineer · Real-Time 3D & AI Data Platforms",
+    "description": "Senior Full-Stack Engineer (7+ y) — Real-Time 3D & AI Data Platforms. React / Next.js · Django / DRF · Three.js / WebGL · LangChain / pgvector · FastAPI · WebSockets / MQTT. Digital Twins, RAG & IoT telemetry at scale.",
+    "keywords": [],
+    "author": "",
+    "canonical": "",
+    "robots": "index, follow",
+    "ogImage": ""
+  },
+  "settings": {
+    "lang": "es",
+    "maintenance": false,
+    "maintenanceMsg": "",
+    "analyticsId": "",
+    "customCss": "",
+    "customJs": "",
+    "showSections": {
+      "hero": true,
+      "about": true,
+      "services": true,
+      "experience": true,
+      "portfolio": true,
+      "projects": true,
+      "contact": true
+    }
+  },
+  "threeDPage": {
+    "hero": {
+      "tag": "CREATIVE TECHNOLOGIST — v2.6",
+      "titleLines": [
+        {
+          "text": "CODE.",
+          "class": "",
+          "dataText": ""
+        },
+        {
+          "text": "RENDER.",
+          "class": "glitch",
+          "dataText": "RENDER."
+        },
+        {
+          "text": "INTELLIGENCE.",
+          "class": "",
+          "dataText": ""
+        }
+      ],
+      "sub": "Ingeniero de Software & Tecnólogo Creativo con <b>10+ años</b> unificando desarrollo Full-Stack con <b>visualización 3D en tiempo real</b> e <b>Inteligencia Artificial</b>. Cierro la brecha entre diseño visual de alto impacto e ingeniería robusta.",
+      "cta": [
+        {
+          "text": "Ver Proyectos",
+          "href": "#work",
+          "variant": "primary"
+        },
+        {
+          "text": "Contactar →",
+          "href": "#contact",
+          "variant": "ghost"
+        }
+      ],
+      "visual": {
+        "hexInner": "MR",
+        "dataPoints": [
+          "THREE.JS // ACTIVE",
+          "WEBSOCKETS // 99% UPTIME",
+          "RAG // VECTOR SEARCH",
+          "UNREAL // 60FPS"
+        ]
+      },
+      "stats": [
+        {
+          "num": "10",
+          "label": "Años de Experiencia",
+          "suffix": ""
+        },
+        {
+          "num": "40",
+          "label": "% Reducción Análisis",
+          "suffix": ""
+        },
+        {
+          "num": "80",
+          "label": "% Optimización Assets",
+          "suffix": ""
+        },
+        {
+          "num": "1200",
+          "label": "Unidades Gestionadas",
+          "suffix": ""
+        }
+      ]
+    },
+    "about": {
+      "num": "01 // ABOUT",
+      "title": "HYBRID <span class=\"accent\">MINDSET</span>",
+      "desc": "Un perfil que trasciende disciplinas. Código, arte, diseño y datos convergen en una sola visión creativa.",
+      "manifesto": {
+        "label": "// MANIFIESTO",
+        "paragraphs": [
+          "No soy solo desarrollador, ni solo artista, ni solo diseñador. Soy un <b>arquitecto de experiencias</b> que entiende cómo cada disciplina se conecta para crear algo mayor que la suma de sus partes.",
+          "Desde <b>modelar personajes en ZBrush</b> hasta <b>orquestar pipelines RAG con LangChain</b>, desde <b>diseñar interfaces gamificadas</b> hasta <b>optimizar shaders en Unreal Engine 5</b> — mi trabajo vive en las intersecciones.",
+          "Transformo datos complejos en experiencias visuales que reducen tiempos de análisis en un <b>40%</b>. Convierto ideas en productos que funcionan a <b>60 FPS estables</b>."
+        ]
+      },
+      "terminal": {
+        "lines": [
+          {
+            "prompt": "miguel@xlerion:~$",
+            "cmd": "whoami",
+            "out": "→ Creative Technologist — Full-Stack Engineer — 3D Artist"
+          },
+          {
+            "prompt": "miguel@xlerion:~$",
+            "cmd": "cat stack.json",
+            "out": "{"
+          },
+          {
+            "prompt": "",
+            "cmd": "",
+            "out": "  \"frontend\": [\"React\", \"Next.js\", \"Three.js\", \"TypeScript\"],"
+          },
+          {
+            "prompt": "",
+            "cmd": "",
+            "out": "  \"backend\": [\"Python\", \"Django\", \"Node.js\", \"WebSockets\"],"
+          },
+          {
+            "prompt": "",
+            "cmd": "",
+            "out": "  \"3d_realtime\": [\"Unreal 5\", \"Unity\", \"ZBrush\", \"Substance\"],"
+          },
+          {
+            "prompt": "",
+            "cmd": "",
+            "out": "  \"ai_data\": [\"RAG\", \"LangChain\", \"pgvector\", \"OpenAI\"]"
+          },
+          {
+            "prompt": "",
+            "cmd": "",
+            "out": "}"
+          },
+          {
+            "prompt": "miguel@xlerion:~$",
+            "cmd": "./current_mission.sh",
+            "out": "→ Building immersive data experiences & AAA-ready assets"
+          }
+        ]
+      }
+    },
+    "skills": {
+      "num": "02 // CAPABILITIES",
+      "title": "TECH <span class=\"accent\">MATRIX</span>",
+      "desc": "Un stack técnico que cubre todo el pipeline creativo: desde el píxel hasta el dato, desde el modelo 3D hasta la IA.",
+      "clusters": [
+        {
+          "title": "01 — 3D & REAL-TIME",
+          "icon": "3D",
+          "items": [
+            {
+              "name": "Unreal Engine 5",
+              "lvl": "EXPERTO",
+              "w": 95
+            },
+            {
+              "name": "Unity 3D",
+              "lvl": "EXPERTO",
+              "w": 90
+            },
+            {
+              "name": "Three.js / WebGL",
+              "lvl": "EXPERTO",
+              "w": 92
+            },
+            {
+              "name": "ZBrush",
+              "lvl": "EXPERTO",
+              "w": 88
+            },
+            {
+              "name": "Substance 3D Painter",
+              "lvl": "EXPERTO",
+              "w": 85
+            },
+            {
+              "name": "3ds Max / Blender",
+              "lvl": "AVANZADO",
+              "w": 80
+            }
+          ]
+        },
+        {
+          "title": "02 — AI & DATA",
+          "icon": "AI",
+          "items": [
+            {
+              "name": "RAG / LLM Integration",
+              "lvl": "EXPERTO",
+              "w": 93
+            },
+            {
+              "name": "LangChain / LlamaIndex",
+              "lvl": "AVANZADO",
+              "w": 85
+            },
+            {
+              "name": "pgvector / Vector DB",
+              "lvl": "AVANZADO",
+              "w": 82
+            },
+            {
+              "name": "Python (Asyncio)",
+              "lvl": "EXPERTO",
+              "w": 90
+            },
+            {
+              "name": "WebSockets / MQTT",
+              "lvl": "EXPERTO",
+              "w": 88
+            },
+            {
+              "name": "PostgreSQL / Redis",
+              "lvl": "AVANZADO",
+              "w": 80
+            }
+          ]
+        },
+        {
+          "title": "03 — FRONTEND",
+          "icon": "UI",
+          "items": [
+            {
+              "name": "React.js / Next.js",
+              "lvl": "EXPERTO",
+              "w": 92
+            },
+            {
+              "name": "TypeScript",
+              "lvl": "EXPERTO",
+              "w": 88
+            },
+            {
+              "name": "HTML5 / CSS3",
+              "lvl": "AVANZADO",
+              "w": 90
+            },
+            {
+              "name": "Tailwind CSS",
+              "lvl": "AVANZADO",
+              "w": 85
+            },
+            {
+              "name": "UI/UX Design",
+              "lvl": "AVANZADO",
+              "w": 87
+            },
+            {
+              "name": "Responsive / RWD",
+              "lvl": "AVANZADO",
+              "w": 85
+            }
+          ]
+        },
+        {
+          "title": "04 — DESIGN & INFRA",
+          "icon": "DS",
+          "items": [
+            {
+              "name": "Adobe Suite (Ps, Ai, Ae, Id)",
+              "lvl": "AVANZADO",
+              "w": 88
+            },
+            {
+              "name": "Branding / Identity",
+              "lvl": "AVANZADO",
+              "w": 82
+            },
+            {
+              "name": "Docker / Linux SysAdmin",
+              "lvl": "AVANZADO",
+              "w": 80
+            },
+            {
+              "name": "Node.js / Django",
+              "lvl": "EXPERTO",
+              "w": 88
+            },
+            {
+              "name": "Scrum / Agile",
+              "lvl": "AVANZADO",
+              "w": 85
+            },
+            {
+              "name": "PMP® Certified",
+              "lvl": "CERTIFICADO",
+              "w": 78
+            }
+          ]
+        }
+      ]
+    },
+    "work": {
+      "num": "03 // SELECTED WORK",
+      "title": "CASE <span class=\"accent\">STUDIES</span>",
+      "desc": "Proyectos que demuestran pensamiento multidisciplinario: desde IA empresarial hasta visualización 3D gamificada.",
+      "projects": [
+        {
+          "num": "PROJECT_01",
+          "tag": "AI — RAG",
+          "title": "Enterprise RAG Assistant",
+          "desc": "Sistema modular que conecta bases de conocimiento corporativas con LLMs mediante RAG. Procesamiento asíncrono de PDFs, chunking semántico y búsqueda híbrida con re-ranking anti-alucinaciones.",
+          "stack": [
+            "Python",
+            "Django",
+            "LangChain",
+            "pgvector",
+            "Docker",
+            "OpenAI"
+          ],
+          "link": "#",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "rag",
+          "caseStudySlug": "enterprise-rag-assistant",
+          "cover": "images/1788626418988-9ncd.jpg",
+          "image": "images/1788626418988-9ncd.jpg"
+        },
+        {
+          "num": "PROJECT_02",
+          "tag": "IoT — REAL-TIME",
+          "title": "IoT Telemetry Resilient Backend",
+          "desc": "Plataforma de alto rendimiento para flujos masivos de datos de sensores IoT. Diseño tolerante a fallos con persistencia local, garantizando 99% de uptime bajo tráfico concurrente simulado.",
+          "stack": [
+            "Python Asyncio",
+            "WebSockets",
+            "MQTT",
+            "PostgreSQL",
+            "Docker",
+            "Linux"
+          ],
+          "link": "#",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "iot",
+          "caseStudySlug": "iot-telemetry-resilient-backend",
+          "cover": "images/1788626287159-5t0u.jpg",
+          "image": "images/1788626287159-5t0u.jpg"
+        },
+        {
+          "num": "PROJECT_03",
+          "tag": "3D — WEBGL",
+          "title": "Interactive 3D Analytics Dashboard",
+          "desc": "Transforma bases de datos tabulares masivas en entornos visuales gamificados en tiempo real. Reducción drástica de tiempos de análisis manteniendo framerate estable en el navegador.",
+          "stack": [
+            "React",
+            "Three.js",
+            "WebSockets",
+            "Tailwind",
+            "Django REST"
+          ],
+          "link": "#",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "3d",
+          "caseStudySlug": "interactive-3d-analytics-dashboard",
+          "cover": "images/1788626301009-89v6.jpg",
+          "image": "images/1788626301009-89v6.jpg"
+        },
+        {
+          "num": "PROJECT_04",
+          "tag": "GAME — UNITY",
+          "title": "Total Darkness — Videojuego Musical",
+          "desc": "Desarrollo conceptual y técnico de un videojuego musical basado en la discografía de Redemthor. Unificación de diseño de sonido, narrativa escrita y desarrollo en Unity.",
+          "stack": [
+            "Unity",
+            "C#",
+            "Audio Design",
+            "Narrative",
+            "Level Design"
+          ],
+          "link": "#",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "game",
+          "caseStudySlug": "",
+          "cover": "images/1788626433226-g033.jpg",
+          "image": "images/1788626433226-g033.jpg"
+        },
+        {
+          "num": "PROJECT_05",
+          "tag": "AR — CRM",
+          "title": "Gualiví CRM — Avistour AR",
+          "desc": "Plataforma de turismo inteligente con experiencia de realidad aumentada para avistamiento de aves. Integración de gestión de datos con gamificación móvil.",
+          "stack": [
+            "AR",
+            "Mobile",
+            "CRM",
+            "Gamification",
+            "Data Viz"
+          ],
+          "link": "#",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "ar",
+          "caseStudySlug": "",
+          "cover": "images/1788626340011-602b.jpg",
+          "image": "images/1788626340011-602b.jpg"
+        },
+        {
+          "num": "PROJECT_06",
+          "tag": "GOV — DASHBOARD",
+          "title": "FOVIS — Plataforma Gubernamental",
+          "desc": "Arquitectura y desarrollo desde cero de plataforma de gestión habitacional con 1,200+ unidades. Dashboards de KPIs en tiempo real que redujeron tiempo de decisiones en 60%.",
+          "stack": [
+            "React",
+            "Tailwind",
+            "Node.js",
+            "KPIs",
+            "UX/UI"
+          ],
+          "link": "",
+          "linkLabel": "Ver caso de estudio",
+          "visual": "gov",
+          "caseStudySlug": "",
+          "cover": "images/1788626351762-uwta.jpg",
+          "image": "images/1788626351762-uwta.jpg"
+        }
+      ]
+    },
+    "experience": {
+      "num": "04 // TRAJECTORY",
+      "title": "EXPERIENCE <span class=\"accent\">LOG</span>",
+      "desc": "Una década construyendo en la intersección entre tecnología, arte y datos.",
+      "items": [
+        {
+          "date": "2023 — PRESENTE",
+          "role": "Lead Engineer & Founder",
+          "company": "Xlerion Studio",
+          "desc": [
+            "Arquitecturas frontend complejas conectando flujos en tiempo real (WebSockets/MQTT) con interfaces 3D dinámicas",
+            "Automatización de pipelines con MaxScript: reducción del 80% en tiempo de exportación de assets 3D",
+            "Desarrollo conceptual y técnico de videojuegos y plataformas de turismo inteligente con AR"
+          ],
+          "stack": [
+            "Three.js",
+            "Unity",
+            "React",
+            "Python",
+            "MaxScript"
+          ]
+        },
+        {
+          "date": "2024 — 2025",
+          "role": "Desarrollador Full-Stack Senior",
+          "company": "Alcaldía de Caucasia (FOVIS)",
+          "desc": [
+            "Arquitectura desde cero de plataforma de gestión habitacional con 1,200+ unidades",
+            "Dashboards de KPIs en tiempo real: reducción del 60% en tiempo de toma de decisiones",
+            "Biblioteca de componentes UI reutilizables: mejora del 35% en tiempos de carga"
+          ],
+          "stack": [
+            "React",
+            "Tailwind",
+            "Node.js",
+            "UX/UI"
+          ]
+        },
+        {
+          "date": "2022 — 2023",
+          "role": "Desarrollador Web & Integración 3D",
+          "company": "2INK",
+          "desc": [
+            "Diseño, modelado e integración de recursos gráficos 3D avanzados para campañas institucionales",
+            "Producción de medios digitales y optimización de infraestructuras visuales con Blender y 3ds Max"
+          ],
+          "stack": [
+            "Blender",
+            "3ds Max",
+            "Adobe Suite",
+            "Figma"
+          ]
+        },
+        {
+          "date": "2018 — 2019",
+          "role": "Director de Diseño 3D & Data Visualization",
+          "company": "AONC Neuroscientific Strategies",
+          "desc": [
+            "Transformación de datos masivos en entornos 3D gamificados para análisis visual en tiempo real",
+            "Reducción del 40% en tiempo de análisis para usuarios no técnicos mediante UX centrado en usabilidad"
+          ],
+          "stack": [
+            "3D Viz",
+            "Gamification",
+            "UX",
+            "Python"
+          ]
+        },
+        {
+          "date": "2015 — 2017",
+          "role": "Desarrollador Frontend & UI Designer",
+          "company": "USAID — ACDI/VOCA",
+          "desc": [
+            "Arquitectura del software ICOE: traducción de bases de datos complejas en paneles interactivos accesibles",
+            "Dirección creativa y producción multimedia para campañas institucionales de alcance nacional"
+          ],
+          "stack": [
+            "Frontend",
+            "UI Design",
+            "Multimedia",
+            "3D"
+          ]
+        }
+      ]
+    },
+    "contact": {
+      "num": "// LET'S BUILD",
+      "title": "READY TO <span class=\"accent\">RENDER</span><br>THE IMPOSSIBLE?",
+      "sub": "Disponible para proyectos remotos en visualización 3D en tiempo real, plataformas de IA, desarrollo de videojuegos y experiencias interactivas de alto impacto.",
+      "links": [
+        {
+          "text": "Email",
+          "href": "mailto:miguelxlerion@gmail.com"
+        },
+        {
+          "text": "LinkedIn",
+          "href": "https://www.linkedin.com/in/miguelrodriguez-dataviz"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/miguelxlerion"
+        },
+        {
+          "text": "CV / PDF",
+          "href": "#"
+        }
+      ],
+      "email": "miguelxlerion@gmail.com",
+      "footer": "© 2026 MIGUEL E. RODRIGUEZ // ALL SYSTEMS OPERATIONAL",
+      "coords": [
+        "4.7110° N",
+        "74.0721° W",
+        "BOGOTÁ, CO"
+      ]
+    },
+    "fonts": {
+      "mono": "JetBrains Mono",
+      "sans": "Space Grotesk"
+    },
+    "colors": {
+      "bg": "#05070d",
+      "bg2": "#0a0e18",
+      "grid": "#0d1424",
+      "line": "#1a2340",
+      "text": "#c7d2e8",
+      "muted": "#6b7a99",
+      "laser": "#00d4ff",
+      "laser2": "#0099ff",
+      "accent": "#7df9ff"
+    },
+    "background": {
+      "color": "#05070d",
+      "color2": "#0a0e18",
+      "particleColor": "#00d4ff",
+      "particleCount": 1500,
+      "particleSize": 0.03,
+      "particleOpacity": 0.8,
+      "lineColor": "#00d4ff",
+      "lineOpacity": 0.15,
+      "wireColor": "#00d4ff",
+      "behavior": "neural",
+      "speed": 0.2,
+      "density": 1,
+      "models": [
+        {
+          "url": "images/1788564603673-vig8.glb",
+          "name": "turbina.glb",
+          "scale": 1,
+          "autoRotate": true,
+          "animations": true,
+          "position": {
+            "x": 0,
+            "y": -2,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "maxModelSize": "10MB",
+      "supportedTypes": [
+        "glb",
+        "gltf",
+        "fbx",
+        "obj"
+      ],
+      "materialMode": "original",
+      "showParticles": true,
+      "showLines": true,
+      "showTorus": true,
+      "showIco": true,
+      "lights": [
+        {
+          "type": "Hemisphere",
+          "sky": "#cfe0ff",
+          "ground": "#0a1128",
+          "intensity": 0.6,
+          "enabled": true
+        },
+        {
+          "type": "Directional",
+          "color": "#ffffff",
+          "intensity": 1.2,
+          "position": [
+            10,
+            20,
+            10
+          ],
+          "enabled": true,
+          "castShadow": true
+        },
+        {
+          "type": "Point",
+          "color": "#22d3ee",
+          "intensity": 2,
+          "position": [
+            0,
+            8,
+            0
+          ],
+          "distance": 50,
+          "decay": 2,
+          "enabled": true
+        }
+      ]
+    },
+    "caseStudies": [
+      {
+        "slug": "enterprise-rag-assistant",
+        "title": "Enterprise RAG Assistant",
+        "tag": "AI — RAG",
+        "heroImage": "images/1788577877121-jdxy.jpg",
+        "meta": [
+          "Python",
+          "Django",
+          "LangChain",
+          "pgvector",
+          "Docker"
+        ],
+        "overview": "A modular system connecting corporate knowledge bases with LLMs via RAG. Features asynchronous PDF processing, semantic chunking, and hybrid search with re-ranking to eliminate hallucinations.",
+        "challenge": "Enterprise knowledge is scattered across PDFs, Confluence, SharePoint, and legacy databases. Teams waste hours searching for answers. Traditional keyword search fails on technical jargon and context-dependent queries.",
+        "solution": "Built a RAG pipeline with LangChain: document ingestion → semantic chunking (512 tokens, 10% overlap) → embedding with OpenAI text-embedding-3-small → vector storage in pgvector → hybrid search (BM25 + cosine) → cross-encoder re-ranking → LLM synthesis with citations.",
+        "approach": [
+          "Async document processing with Celery + Redis for 99% uptime under load",
+          "Semantic chunking preserves context boundaries better than fixed-size splits",
+          "Hybrid search (BM25 + vector) catches both exact matches and semantic similarity",
+          "Cross-encoder re-ranking (ms-marco-MiniLM) improves precision@5 by 34%",
+          "Streaming responses with source citations for auditability"
+        ],
+        "stack": [
+          "Python 3.11",
+          "Django 5",
+          "LangChain",
+          "pgvector",
+          "PostgreSQL 16",
+          "Redis",
+          "Celery",
+          "OpenAI API",
+          "Docker"
+        ],
+        "metrics": [
+          {
+            "label": "Query Latency (p95)",
+            "value": "< 800ms"
+          },
+          {
+            "label": "Index Size",
+            "value": "2.4M vectors"
+          },
+          {
+            "label": "Hallucination Rate",
+            "value": "< 2%"
+          },
+          {
+            "label": "Uptime",
+            "value": "99.9%"
+          }
+        ],
+        "results": "Deployed to 500+ users across 3 departments. Reduced knowledge lookup time from 15 min to 30 sec. Integrated with Slack and Teams via webhooks.",
+        "gallery": [],
+        "links": [
+          {
+            "label": "GitHub Repository",
+            "href": "https://github.com/miguelxlerion/Rag_X"
+          },
+          {
+            "label": "Live Demo",
+            "href": "#"
+          }
+        ]
+      },
+      {
+        "slug": "iot-telemetry-resilient-backend",
+        "title": "IoT Telemetry Resilient Backend",
+        "tag": "IoT — REAL-TIME",
+        "heroImage": "images/proyectos-parallax.jpg",
+        "meta": [
+          "Python Asyncio",
+          "WebSockets",
+          "MQTT",
+          "PostgreSQL",
+          "TimescaleDB",
+          "Docker"
+        ],
+        "overview": "High-performance platform for massive IoT sensor data streams. Fault-tolerant design with local persistence guaranteeing 99% uptime under concurrent traffic.",
+        "challenge": "10,000+ sensors sending telemetry every 5 seconds. Network partitions, broker failures, and traffic spikes cause data loss. Need exactly-once processing with sub-second latency.",
+        "solution": "Edge buffering with SQLite WAL → MQTT with QoS 1 + persistent sessions → Async ingest (asyncio + aio-pika) → TimescaleDB hypertable with compression → WebSocket push to dashboards.",
+        "approach": [
+          "Local-first architecture: sensors write to edge SQLite, sync when online",
+          "MQTT persistent sessions with clean_start=false survive broker restarts",
+          "TimescaleDB continuous aggregates for real-time downsampling (1s → 1m → 1h)",
+          "Backpressure handling with asyncio.Queue(maxsize=10000) + circuit breaker",
+          "Health checks: /ready (DB connected), /live (process alive) for K8s probes"
+        ],
+        "stack": [
+          "Python 3.11",
+          "asyncio",
+          "aio-pika",
+          "MQTT 5",
+          "TimescaleDB",
+          "PostgreSQL",
+          "WebSockets",
+          "Docker",
+          "Kubernetes"
+        ],
+        "metrics": [
+          {
+            "label": "Ingest Throughput",
+            "value": "50k msg/s"
+          },
+          {
+            "label": "End-to-end Latency",
+            "value": "< 200ms"
+          },
+          {
+            "label": "Data Loss",
+            "value": "0 (exactly-once)"
+          },
+          {
+            "label": "Uptime",
+            "value": "99.97%"
+          }
+        ],
+        "results": "Processing 4.3B messages/month across 3 regions. Zero data loss incidents in 18 months. Dashboard latency <100ms for 50 concurrent users.",
+        "gallery": [],
+        "links": [
+          {
+            "label": "GitHub Repository",
+            "href": "https://github.com/miguelxlerion/Ingest_Pipeline"
+          },
+          {
+            "label": "Architecture Diagram",
+            "href": "#"
+          }
+        ]
+      },
+      {
+        "slug": "interactive-3d-analytics-dashboard",
+        "title": "Interactive 3D Analytics Dashboard",
+        "tag": "3D — WEBGL",
+        "heroImage": "images/documentacion-parallax.jpg",
+        "meta": [
+          "React",
+          "Three.js",
+          "WebSockets",
+          "Tailwind",
+          "Django REST",
+          "PostgreSQL"
+        ],
+        "overview": "Transforms massive tabular datasets into navigable, gamified 3D environments. Drastically reduces analysis time while maintaining stable framerate in the browser.",
+        "challenge": "Analysts struggle with 100k+ row datasets in 2D tables. Patterns in spatial/temporal data are invisible. Existing BI tools can't render 3D at 60fps with interactivity.",
+        "solution": "Three.js scene with instanced meshes (100k+ objects at 60fps) → WebGL shaders for color-by-value → WebSocket live updates → React UI with Tailwind → Django REST + PostgreSQL backend.",
+        "approach": [
+          "InstancedMesh for 100k+ objects with single draw call",
+          "GPU-driven filtering via shader uniforms (no JS iteration)",
+          "Level-of-detail: high-res near camera, low-res far",
+          "WebSocket binary protocol (protobuf) for 10x bandwidth reduction",
+          "Web Workers for data parsing off main thread"
+        ],
+        "stack": [
+          "React 18",
+          "Three.js r160",
+          "TypeScript",
+          "Tailwind CSS",
+          "Django REST",
+          "PostgreSQL",
+          "WebSockets",
+          "protobuf.js",
+          "Vite"
+        ],
+        "metrics": [
+          {
+            "label": "Objects Rendered",
+            "value": "150k @ 60fps"
+          },
+          {
+            "label": "Data Points",
+            "value": "2.1M"
+          },
+          {
+            "label": "Load Time",
+            "value": "< 3s"
+          },
+          {
+            "label": "Bundle Size",
+            "value": "280KB gzipped"
+          }
+        ],
+        "results": "40% reduction in analysis time for non-technical users. Adopted by 3 Fortune 500 clients. Runs on 5-year-old laptops.",
+        "gallery": [],
+        "links": [
+          {
+            "label": "GitHub Repository",
+            "href": "https://github.com/miguelxlerion/smartfactory-3d"
+          },
+          {
+            "label": "Live Demo",
+            "href": "#"
+          }
+        ]
+      }
+    ]
+  },
+  "gamedev": {
+    "label": "",
+    "title": "",
+    "subtitle": "",
+    "categories": [
+      "All",
+      "3D",
+      "Videojuegos",
+      "Demo"
+    ],
+    "items": [
+      {
+        "visible": true,
+        "id": "gd-001",
+        "title": "Demo — Escena 3D Interactiva",
+        "category": "3D",
+        "client": "Demo",
+        "year": "2026",
+        "cover": "images/proyectos-parallax.jpg",
+        "gallery": [
+          "images/proyectos-parallax.jpg"
+        ],
+        "desc": "Demo de escena 3D con Three.js — cámara orbital, iluminación y materiales PBR. Reemplaza cover, galería y texto desde el admin.",
+        "tools": [
+          "Three.js",
+          "Blender"
+        ],
+        "link": "#gamedev",
+        "linkLabel": "Ver Demo",
+        "featured": true
+      },
+      {
+        "visible": true,
+        "id": "gd-002",
+        "title": "Demo — Videojuego Prototype",
+        "category": "Videojuegos",
+        "client": "Demo",
+        "year": "2026",
+        "cover": "images/servicios-productos-parallax.jpg",
+        "gallery": [
+          "images/servicios-productos-parallax.jpg"
+        ],
+        "desc": "Prototipo de videojuego — mecánicas básicas, UI y loop jugable. Ideal para mostrar gameplay, trailer o build WebGL.",
+        "tools": [
+          "Unity",
+          "C#"
+        ],
+        "link": "#gamedev",
+        "linkLabel": "Ver Demo",
+        "featured": false
+      },
+      {
+        "visible": true,
+        "id": "gd-003",
+        "title": "Demo — Entorno Estilizado",
+        "category": "Demo",
+        "client": "Demo",
+        "year": "2026",
+        "cover": "images/fundador-parallax.jpg",
+        "gallery": [
+          "images/fundador-parallax.jpg"
+        ],
+        "desc": "Entorno 3D estilizado — vegetación, props y post-proceso. Cambia categoría, cover y descripción desde el panel.",
+        "tools": [
+          "Unreal",
+          "Substance"
+        ],
+        "link": "#gamedev",
+        "linkLabel": "Ver Demo",
+        "featured": false
+      }
+    ]
+  },
+  "gallery3d": {
+    "start": {
+      "title": "MIKE",
+      "sub": "3D PORTFOLIO GALLERY",
+      "desc": "A floating exhibition hall with six game projects. Walk around, orbit the booths, and click any installation — the camera flies in and the project expands with its full story, data, and credits.",
+      "btnText": "ENTER THE GALLERY",
+      "hint": "PRESS ENTER",
+      "dots": [
+        "#22d3ee",
+        "#fb923c",
+        "#fbbf24",
+        "#4ade80",
+        "#ff00ff",
+        "#38bdf8"
+      ]
+    },
+    "hud": {
+      "title": "MIKE DEV",
+      "sub": "INTERACTIVE 3D PORTFOLIO",
+      "hintText": "DRAG TO LOOK · SCROLL TO ZOOM · WASD TO MOVE · CLICK A PROJECT",
+      "autohide": 11000,
+      "idleHide": 3000
+    },
+    "keys": {
+      "move": [
+        "KeyW",
+        "KeyA",
+        "KeyS",
+        "KeyD",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight"
+      ],
+      "mute": "KeyM",
+      "help": "KeyH"
+    },
+    "camera": {
+      "position": {
+        "x": 0,
+        "y": 3.6,
+        "z": 12.8
+      },
+      "target": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "fov": 55,
+      "near": 0.1,
+      "far": 220,
+      "minDist": 2.2,
+      "maxDist": 20,
+      "autoRotSpeed": 0.55,
+      "damping": 0.08,
+      "minPolar": 0.15,
+      "maxPolar": 1.52,
+      "enablePan": false,
+      "walkSpeed": 7.5,
+      "walkLerp": 9
+    },
+    "colors": {
+      "sceneBg": "#0a1128",
+      "fogColor": "#0b1230",
+      "fogNear": 22,
+      "fogFar": 62,
+      "cursor": "#00d4ff",
+      "cursorRing": "#00d4ff",
+      "cursorHover": "#7df9ff",
+      "hudAccent": "#22d3ee",
+      "scanlines": 0.03,
+      "vignette": 0.7
+    },
+    "lighting": [
+      {
+        "type": "Hemisphere",
+        "color": "#ffffff",
+        "intensity": 0.4,
+        "enabled": true,
+        "pos": [
+          0,
+          0,
+          0
+        ],
+        "ground": "#0a1128"
+      },
+      {
+        "type": "Directional",
+        "color": "#ffffff",
+        "intensity": 0.7,
+        "enabled": true,
+        "pos": [],
+        "ground": "#0a1128"
+      },
+      {
+        "type": "Point",
+        "color": "#22d3ee",
+        "intensity": 1.5,
+        "enabled": true,
+        "pos": [],
+        "ground": "#0a1128"
+      }
+    ],
+    "shadow": {
+      "type": "PCFSoftShadowMap",
+      "toneMapping": "ACESFilmicToneMapping",
+      "exposure": 1.15,
+      "pixelRatio": 2
+    },
+    "projects": [
+      {
+        "id": "neon-racer",
+        "title": "MIKE RACER",
+        "tagline": "Arcade antigravity racing",
+        "year": "2025",
+        "platform": "PC · Switch",
+        "engine": "Unity",
+        "role": "Lead Designer & Developer",
+        "description": "A synthwave arcade racer about pure speed. I designed the handling model, the 12-track campaign, and a dynamic music system that layers instruments as your boost meter fills. Built from a greybox prototype to a 60fps shipped build in 9 months.",
+        "image": "images/p1.jpg",
+        "accent": "#22d3ee",
+        "kind": "cabinet",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "Plays",
+            "value": "120k+"
+          },
+          {
+            "label": "Rating",
+            "value": "4.8/5"
+          },
+          {
+            "label": "Tracks",
+            "value": "12"
+          },
+          {
+            "label": "Dev time",
+            "value": "9 mo"
+          }
+        ],
+        "tech": [
+          "Unity",
+          "C#",
+          "HDRP",
+          "Wwise",
+          "Shader Graph"
+        ],
+        "features": [
+          "Boost-chaining handling model with slipstream drafting",
+          "Dynamic music layering synced to gameplay intensity",
+          "Split-screen 2P and 8-player online time trials"
+        ]
+      },
+      {
+        "id": "skyfall-td",
+        "title": "MIKEFALL",
+        "tagline": "Tower defense on floating islands",
+        "year": "2024",
+        "platform": "Mobile · PC",
+        "engine": "Godot",
+        "role": "Designer & Developer",
+        "description": "A lane-based tower defense set on crumbling sky islands. I built the tower upgrade web, the 40-wave balance sheet, and an editor that lets players design and share islands. Soft-launched in two regions with 40k installs in the first month.",
+        "image": "images/p2.jpg",
+        "accent": "#00fbff",
+        "kind": "tower",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "Installs",
+            "value": "40k+"
+          },
+          {
+            "label": "Waves",
+            "value": "40"
+          },
+          {
+            "label": "Towers",
+            "value": "9"
+          },
+          {
+            "label": "D1 retention",
+            "value": "42%"
+          }
+        ],
+        "tech": [
+          "Godot",
+          "GDScript",
+          "Aseprite",
+          "Firebase"
+        ],
+        "features": [
+          "Player-built islands with online level sharing",
+          "Tower fusion mechanic — merge two towers mid-wave",
+          "Falling island hazards that reshape the battlefield"
+        ]
+      },
+      {
+        "id": "pixel-dungeon",
+        "title": "PIXEL DUNGEON",
+        "tagline": "A roguelike with hand-placed soul",
+        "year": "2023",
+        "platform": "PC",
+        "engine": "Custom (TypeScript)",
+        "role": "Solo Developer",
+        "description": "A bite-sized roguelike dungeon crawler where every room is hand-designed but the dungeon is procedurally assembled. I wrote a custom ECS engine, a roguelike FOV system, and 120+ items with real combos. Featured in two indie showcases.",
+        "image": "images/p3.jpg",
+        "accent": "#fbbf24",
+        "kind": "dungeon",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "Players",
+            "value": "25k+"
+          },
+          {
+            "label": "Items",
+            "value": "120+"
+          },
+          {
+            "label": "Rooms",
+            "value": "300"
+          },
+          {
+            "label": "Showcases",
+            "value": "2"
+          }
+        ],
+        "tech": [
+          "TypeScript",
+          "Canvas 2D",
+          "ECS",
+          "Web Audio"
+        ],
+        "features": [
+          "Hand-crafted rooms, procedurally woven dungeons",
+          "Item combo system with emergent builds",
+          "Daily seeded runs with global leaderboards"
+        ]
+      },
+      {
+        "id": "starfarm-idle",
+        "title": "STARFARM IDLE",
+        "tagline": "The coziest farm off-world",
+        "year": "2024",
+        "platform": "Mobile · Web",
+        "engine": "React + Three.js",
+        "role": "Designer & Developer",
+        "description": "An idle farming game on a space station greenhouse. I tuned the 14-day prestige loop, wrote the crop mutation system, and built a layered idle economy that keeps paying out while you sleep. 8k daily active players at peak.",
+        "image": "images/p4.jpg",
+        "accent": "#4ade80",
+        "kind": "rocket",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "DAU peak",
+            "value": "8k"
+          },
+          {
+            "label": "Crops",
+            "value": "48"
+          },
+          {
+            "label": "Prestiges",
+            "value": "14 days"
+          },
+          {
+            "label": "Avg. rating",
+            "value": "4.7/5"
+          }
+        ],
+        "tech": [
+          "React",
+          "Three.js",
+          "Zustand",
+          "Web Workers"
+        ],
+        "features": [
+          "Offline progression with smart catch-up pacing",
+          "Crop mutation breeding with rare hybrids",
+          "Seasonal events that reskin the station"
+        ]
+      },
+      {
+        "id": "robo-rush",
+        "title": "ROBO RUSH",
+        "tagline": "A 2.5D platformer with punch",
+        "year": "2025",
+        "platform": "PC · Web",
+        "engine": "Custom (WebGL)",
+        "role": "Game Feel Engineer",
+        "description": "A tight, juicy 2.5D platformer about a little robot delivering ideas. I owned the game-feel layer: squash & stretch, particle budgets, screen shake, and an input-buffering system that makes every jump feel forgiving. 30fps-to-60fps feel pass on mobile was my favorite problem.",
+        "image": "images/p5.jpg",
+        "accent": "#ff00ff",
+        "kind": "robot",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "Plays",
+            "value": "60k+"
+          },
+          {
+            "label": "Levels",
+            "value": "24"
+          },
+          {
+            "label": "Frame budget",
+            "value": "3.2 ms"
+          },
+          {
+            "label": "Mobile",
+            "value": "60 fps"
+          }
+        ],
+        "tech": [
+          "WebGL",
+          "TypeScript",
+          "Web Audio",
+          "Vite"
+        ],
+        "features": [
+          "Coyote time + input buffering for butter jumps",
+          "Pooled particle system, zero per-frame allocs",
+          "Touch + keyboard controls with haptic feedback"
+        ]
+      },
+      {
+        "id": "cosmic-defender",
+        "title": "COSMIC DEFENDER",
+        "tagline": "A love letter to arcade shooters",
+        "year": "2023",
+        "platform": "Web · PC",
+        "engine": "Phaser 3",
+        "role": "Developer & Juice Designer",
+        "description": "A wave-based arcade shooter with a 4-weapon combo system. I built the enemy AI director, the 30-wave difficulty ramp, and a 200-particle explosion budget. Shipped in 6 weeks for a game jam and kept alive as a live arcade title.",
+        "image": "images/p6.jpg",
+        "accent": "#38bdf8",
+        "kind": "ship",
+        "media_type": "image",
+        "media_url": "",
+        "stats": [
+          {
+            "label": "Plays",
+            "value": "90k+"
+          },
+          {
+            "label": "Waves",
+            "value": "30"
+          },
+          {
+            "label": "Weapons",
+            "value": "4"
+          },
+          {
+            "label": "Jam result",
+            "value": "1st"
+          }
+        ],
+        "tech": [
+          "Phaser 3",
+          "TypeScript",
+          "Tiled",
+          "Howler"
+        ],
+        "features": [
+          "4-weapon combo system with synergies",
+          "AI director that adapts to your skill",
+          "Local co-op and global wave leaderboards"
+        ]
+      }
+    ],
+    "models": [],
+    "particles": {
+      "count": 420,
+      "radius": 82,
+      "color": "#cfe0ff",
+      "size": 0.22,
+      "opacity": 0.85
+    },
+    "hub": {
+      "radius": 2.7
+    },
+    "floor": {
+      "gridColor": "#22d3ee",
+      "gridOpacity": 0.28,
+      "centerDot": "#22d3ee",
+      "radius": 34,
+      "segments": 72,
+      "color": "#93a7d8",
+      "roughness": 0.4,
+      "metalness": 0.3,
+      "rimColor": "#22d3ee",
+      "rimIntensity": 1.6
+    },
+    "fonts": {
+      "heading": "Space Grotesk",
+      "body": "Space Grotesk",
+      "mono": "JetBrains Mono",
+      "size": 14,
+      "heading_custom": "",
+      "body_custom": "",
+      "mono_custom": ""
+    }
+  },
+  "renders": {
+    "visits": 12900,
+    "pins": [
+      {
+        "id": 1,
+        "slug": "total-darkness",
+        "number": 1,
+        "title": "Total Darkness",
+        "subtitle": "Block C - north facade",
+        "artist": "Miguel Rodriguez",
+        "category": "Concepto",
+        "year": "2024",
+        "accent": "#00f1f5",
+        "x": 19.27437641723356,
+        "y": 18.20734477536598,
+        "imageUrl": "images/1789273900534-50se.jpg",
+        "body": "Four storeys of raw concrete turned into a portrait of the women who arrived here in the seventies. The painter grew up two streets away.",
+        "quote": "We did not want a decoration. We wanted the building to look back at us.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 2,
+        "slug": "x-hunter",
+        "number": 2,
+        "title": "X-Hunter",
+        "subtitle": "Máquina Cazadora del gen Taimatu",
+        "artist": "Matteo Negri",
+        "category": "Diseño de Personajes",
+        "year": "2025",
+        "accent": "#00fff2",
+        "x": 32.19954648526077,
+        "y": 56.849444724886425,
+        "imageUrl": "images/p2.jpg",
+        "body": "Teal, coral and a hard yellow now bend around the handrails.",
+        "quote": "Colour is the cheapest form of street lighting.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 3,
+        "slug": "ninti",
+        "number": 3,
+        "title": "Ninti",
+        "subtitle": "Community court, central square",
+        "artist": "Collective work - 60 residents",
+        "category": "Diseño de Personajes",
+        "year": "2025",
+        "accent": "#00eeff",
+        "x": 26.643990929705215,
+        "y": 83.50265017667844,
+        "imageUrl": "images/p3.jpg",
+        "body": "The concrete court sat empty for the best part of a decade.",
+        "quote": "Ours again, and this time in daylight.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 4,
+        "slug": "dummu-ul",
+        "number": 4,
+        "title": "Dummu Ul",
+        "subtitle": "Block H - west gable",
+        "artist": "Beatrice Vigoni",
+        "category": "Diseño de Personajes",
+        "year": "2024",
+        "accent": "#00ffee",
+        "x": 72.90249433106575,
+        "y": 77.06650681474004,
+        "imageUrl": "images/p4.jpg",
+        "body": "Maize, ceiba leaves and two volcanoes.",
+        "quote": "The wall already had a drawing. We only followed it.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 5,
+        "slug": "adamu",
+        "number": 5,
+        "title": "Adamu",
+        "subtitle": "Rooftop, Block A",
+        "artist": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "category": "Diseño de personajes",
+        "year": "2025",
+        "accent": "#00fbff",
+        "x": 86.62131519274377,
+        "y": 55.46125694093892,
+        "imageUrl": "images/p5.jpg",
+        "body": "A low line of warm lamps installed along the highest roof.",
+        "quote": "From the bus you can finally see where you live.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 6,
+        "slug": "dilum",
+        "number": 6,
+        "title": "Dilum",
+        "subtitle": "Ground floor, Block D",
+        "artist": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "category": "Diseño de Escenarios",
+        "year": "2025",
+        "accent": "#00fbff",
+        "x": 65.64625850340136,
+        "y": 52.81108026249369,
+        "imageUrl": "images/p6.jpg",
+        "body": "A corner shop that closed under extortion and reopened in 2025.",
+        "quote": "Everyone came to see if their grandmother made it onto the door.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 7,
+        "slug": "universo-xlerion",
+        "number": 7,
+        "title": "Universo Xlerion",
+        "subtitle": "Alley between Blocks E and F",
+        "artist": "Satoshi Gallery",
+        "category": "Diseño Narrativo / Guionista de Videojuegos",
+        "year": "2026",
+        "accent": "#00fbff",
+        "x": 80.27210884353741,
+        "y": 33.85600706713781,
+        "imageUrl": "images/documentacion-parallax.jpg",
+        "body": "Painted gutters and blue mosaic run the length of the alley.",
+        "quote": "In October the painting starts to flow.",
+        "quoteAuthor": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      },
+      {
+        "id": 8,
+        "slug": "recursos-elementos",
+        "number": 8,
+        "title": "Recursos / Elementos",
+        "subtitle": "Wall of the old health post",
+        "artist": "Miguel Rodríguez Martínez - Diseñador 3D",
+        "category": "Diseño de Recursos",
+        "year": "2026",
+        "accent": "#00ffe1",
+        "x": 49.54648526077097,
+        "y": 22.523346794548207,
+        "imageUrl": "images/Oficina0013.jpg",
+        "body": "The quietest wall of the colonia.",
+        "quote": "Some walls are for looking at in silence.",
+        "quoteAuthor": "Custodians of the wall",
+        "videoUrl": "https://youtu.be/gNr_6aE-SOY"
+      }
+    ],
+    "voices": [
+      {
+        "id": 1,
+        "name": "Marisol",
+        "place": "Xlerion, Sector 2",
+        "message": "Llevo cuarenta y seis años viviendo debajo de esta escalera. Es la primera vez que alguien la pinta en lugar de escribir en ella."
+      },
+      {
+        "id": 2,
+        "name": "Tobias",
+        "place": "Berlin",
+        "message": "Found this at 2am and flew over the whole map twice. Sound on is the right way."
+      },
+      {
+        "id": 3,
+        "name": "Ana Lucia",
+        "place": "San Salvador",
+        "message": "My mother grew up in Block D. I sent her pin number 6 and she cried."
+      }
+    ],
+    "settings": {
+      "headerTitle": "Miguel Rodríguez Martínez",
+      "headerSubtitle": "Portfolio",
+      "navAbout": "sobre",
+      "navVoices": "voces",
+      "navCms": "contacto",
+      "soundOn": "sonido encendido",
+      "soundOff": "sonido apagado",
+      "loaderFlyTo": "Ir a",
+      "loaderTitle": "Miguel Rodríguez Martínez",
+      "loaderDesc": "Estos son mis trabajos más representativos de mi carrera y profesión en el ámbito de los videojuegos y Render Profesional.",
+      "loaderLoading": "Cargando recursos",
+      "loaderEnter": "Revisa mis trabajos.",
+      "loaderSoundOn": "sound on",
+      "loaderSoundOff": "sound off",
+      "loaderCoords": "13°43′N 89°13′W",
+      "loaderLocation": "Bogotá · Colombia",
+      "loaderPowered": "[ powered by Xlerion ]",
+      "loaderVisitsSuffix": "flights so far",
+      "loaderBg": "images/1789330254493-49cd.jpg",
+      "hints": [
+        "Haz clic y arrastra para explorar",
+        "desplázate para acercar y alejar la imagen",
+        "Haz clic en los marcadores para obtener más información."
+      ],
+      "mapImage": "images/1789368981270-mbic.webp",
+      "indexCountSuffix": "interventions mapped",
+      "indexOpen": "abrir índice +",
+      "indexHide": "ocultar índice −",
+      "marquee": "Xlerion is more than just buildings · 50+ murals · community driven · san salvador, el salvador · ",
+      "aboutLabel": "Acerca del proyecto",
+      "aboutTitle": "Más que simples imágenes renderizadas",
+      "aboutStats": [
+        {
+          "k": "1984",
+          "v": "primeros bloques construidos"
+        },
+        {
+          "k": "50+",
+          "v": "murals painted"
+        },
+        {
+          "k": "8",
+          "v": "mapped pins"
+        },
+        {
+          "k": "∞",
+          "v": "stories left"
+        }
+      ],
+      "aboutParas": [
+        "Xlerion is one of the largest social housing complexes in El Salvador: a grid of concrete blocks raised in the seventies for families arriving from the countryside.",
+        "Since 2024 local and international artists have been repainting its facades, stairwells and courts alongside the people who live in them.",
+        "This site is an interactive flight over that map. Every pin is an intervention, a wall, a story — added from the ground and published live. Drag to move, scroll to zoom, and take your time."
+      ],
+      "aboutMeta": [
+        {
+          "k": "location",
+          "v": "Mejicanos, San Salvador"
+        },
+        {
+          "k": "status",
+          "v": "Ongoing since 2024"
+        },
+        {
+          "k": "built with",
+          "v": "Vanilla JS · portfolio.json · Web Audio"
+        }
+      ],
+      "voicesLabel": "Dime lo que piensas...",
+      "voicesTitle": "Pensamientos",
+      "voicesIntro": "Deja tu pensamiento acerca de lo quieras ver desde tu perspectiva, lo que desearías ver y sentir a través del arte.",
+      "voicesNamePh": "Tu nombre",
+      "voicesPlacePh": "Desde que lugar del mundo aportas con tu pensamiento?",
+      "voicesMsgPh": "Un espacio para tus ideas...",
+      "voicesSubmit": "Plasma tu  idea.",
+      "voicesSaving": "pensando...",
+      "cmsLabel": "contacto directo",
+      "cmsTitle": "Contacto",
+      "cmsIntro": "¿Tienes un muro, una historia o una propuesta? Escríbeme directamente: respondo cada mensaje personalmente.",
+      "cmsDrop": "marcar un punto en el mapa",
+      "cmsDropping": "Haz clic en el mapa...",
+      "cmsNoPos": "Aún no hay puesto disponible",
+      "cmsLockedPrefix": "position locked · x",
+      "cmsFormTitlePh": "Title *",
+      "cmsFormLocationPh": "Location (block, alley...)",
+      "cmsFormArtistPh": "Artist / collective",
+      "cmsFormYearPh": "Year",
+      "cmsFormBodyPh": "The story of this wall...",
+      "cmsFormQuotePh": "Quote",
+      "cmsFormQuoteAuthorPh": "Quote author",
+      "cmsAccentLabel": "",
+      "cmsImageLabel": "",
+      "cmsPublish": "publicar en el mapa",
+      "cmsPublishing": "publicando...",
+      "cmsPublished": "publicado",
+      "cmsNeedPos": "Primero coloca el marcador en el mapa.",
+      "pinClose": "cerrar",
+      "pinPrev": "anterior",
+      "pinNext": "siguiente",
+      "placingHint": "Haz clic en cualquier punto del mapa para colocar tu marcador.",
+      "colors": {
+        "paper": "#c7c7c7",
+        "ink": "#212121",
+        "clay": "#413835"
+      },
+      "styles": {
+        "navGap": "gap-3 sm:gap-5",
+        "navItem": "mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]",
+        "subtitle": "mono mt-1 block text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/45",
+        "pinBtn": "group absolute hover:rotate-3",
+        "indexToggle": "mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-1 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]",
+        "soundBtn": "mono flex items-center gap-2 rounded-full border border-[#f4efe6]/20 px-4 py-2 text-[9px] uppercase tracking-[0.25em] text-[#f4efe6]/70 transition-colors hover:border-[#f4efe6]/60",
+        "hint": "mono rounded-full border border-[#f4efe6]/15 bg-[#0d0c0b]/40 px-5 py-2 text-[9px] uppercase tracking-[0.3em] text-[#f4efe6]/60 backdrop-blur-sm",
+        "pinOpacity": 0.8,
+        "pinColor": "#ffffff",
+        "pinShape": "circle",
+        "btnFill": "absolute inset-0 origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500",
+        "loaderTitle": "display text-[19vw] leading-[0.82] text-[#f4efe6] sm:text-[15vw] lg:text-[13rem]",
+        "btnTextColor": "#121212",
+        "btnBorderColor": "#f4efe6",
+        "btnFillColor": "#00ffff",
+        "btnBg": "paper25",
+        "btnFont": "Orbitron",
+        "btnSize": "11px",
+        "btnIcon": "▶",
+        "btnIconPos": "left",
+        "sndTextColor": "#000000",
+        "sndBorderColor": "#f4efe6",
+        "sndBg": "paper10",
+        "sndFont": "Oswald",
+        "sndSize": "11px",
+        "sndIcon": "▶",
+        "featPin": 5,
+        "featScale": "1.25",
+        "featRing": "#00fffb",
+        "pinBg": "#000000",
+        "pinBgOpacity": 0.6,
+        "topBar": "pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-5 sm:p-7 transition-all duration-1000 translate-y-0 opacity-100",
+        "pinPulseOpacity": 0.5,
+        "pinPulseScale": 1.5,
+        "pinPulseColor": "#00fffb",
+        "logoFont": "Bebas Neue",
+        "logoSize": "2.5rem",
+        "logoColor": "#ffffff",
+        "logoWeight": "400",
+        "subtitleFont": "Orbitron",
+        "subtitleSize": "12px",
+        "subtitleColor": "#ffffff",
+        "navFont": "Bebas Neue",
+        "navSize": "12px",
+        "navColor": "#ffffff",
+        "indexFont": "Orbitron",
+        "indexSize": "10px",
+        "indexColor": "#00ffbf",
+        "zoomBg": "#000000",
+        "zoomColor": "#00ffe1",
+        "zoomBorder": "#00ffe1",
+        "zoomRadius": "999px",
+        "zoomPos": "absolute left-5 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-px overflow-hidden rounded-full border border-[#f4efe6]/20 bg-[#0d0c0b]/60 backdrop-blur",
+        "pinNavFont": "Orbitron",
+        "pinNavSize": "10px",
+        "pinNavColor": "#00e9fa",
+        "indexHover": "#000000",
+        "overlayCloseItem": "mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[9px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]",
+        "pinCloseItem": "mono absolute right-4 top-4 rounded-full border border-[#f4efe6]/30 bg-[#0d0c0b]/60 px-4 py-2 text-[10px] uppercase tracking-[0.25em] text-[#f4efe6] backdrop-blur hover:border-[#f4efe6]",
+        "dropPinItem": "mono rounded-full border border-[#f4efe6]/40 bg-[#0d0c0b]/40 px-6 py-3 text-[10px] uppercase tracking-[0.28em] text-[#f4efe6] backdrop-blur hover:border-[#f4efe6]",
+        "pinNavItem": "mono rounded-full border border-[#f4efe6]/25 bg-[#0d0c0b]/40 px-4 py-2 text-[9px] uppercase tracking-[0.28em] text-[#f4efe6]/70 backdrop-blur transition-colors hover:border-[#f4efe6]/60 hover:text-[#f4efe6]",
+        "overlayCloseHover": "#00fbff",
+        "overlayCloseFont": "Orbitron",
+        "overlayCloseSize": "12px",
+        "overlayCloseColor": "#f4efe6",
+        "indexToggleBg": "#030303",
+        "indexToggleBorder": "#e3e3e3",
+        "indexToggleHover": "#00ffcc",
+        "loaderTitleFont": "Bebas Neue",
+        "loaderTitleColor": "#f4efe6",
+        "loaderMetaFont": "Orbitron",
+        "loaderMetaSize": "10px",
+        "loaderMetaColor": "#f4efe6",
+        "loaderDescFont": "sans",
+        "loaderDescSize": "15px",
+        "loaderDescColor": "#f4efe6",
+        "loaderBarColor": "#00ffe1",
+        "loaderBgOpacity": 0.5,
+        "pinDetailTitleFont": "Bebas Neue",
+        "pinDetailTitleSize": "3rem",
+        "pinDetailTitleColor": "#f4efe6",
+        "pinDetailMetaFont": "Orbitron",
+        "pinDetailMetaSize": "10px",
+        "pinDetailMetaColor": "#f4efe6",
+        "pinDetailBodyFont": "Anton",
+        "pinDetailBodySize": "15px",
+        "pinDetailBodyColor": "#f4efe6",
+        "pinDetailQuoteFont": "Oswald",
+        "pinDetailQuoteSize": "1.25rem",
+        "pinDetailQuoteColor": "#f4efe6",
+        "pinDetailBg": "#131110",
+        "pinDetailBgOpacity": 0.95,
+        "indexCardBg": "#0d0c0b",
+        "indexCardRadius": "0",
+        "indexCardTitleFont": "Orbitron",
+        "indexCardTitleSize": "1.5rem",
+        "indexCardTitleColor": "#f4efe6",
+        "indexCardMetaFont": "Orbitron",
+        "indexCardMetaSize": "9px",
+        "indexCardMetaColor": "#00f0d4",
+        "cmsTitleFont": "Orbitron",
+        "cmsTitleSize": "3.75rem",
+        "cmsTitleColor": "#ffffff",
+        "cmsIntroFont": "Orbitron",
+        "cmsIntroSize": "15px",
+        "cmsIntroColor": "#f4efe6",
+        "cmsEmailFont": "Manrope",
+        "cmsEmailSize": "1.5rem",
+        "cmsEmailColor": "#f4efe6",
+        "cmsFormFont": "Orbitron",
+        "cmsFormSize": "16px",
+        "cmsFormColor": "#f4efe6"
+      },
+      "sectionTitle": "Miguel Rodríguez Martínez",
+      "title": "Xlerion",
+      "subtitle": "open air museum · sv",
+      "loaderImage": "images/1789330254493-49cd.jpg",
+      "overlayClose": "close ✕",
+      "cmsAccents": [
+        "#000000",
+        "#1d7874",
+        "#00eeff",
+        "#5b8c5a",
+        "#00ff91",
+        "#2f6690"
+      ],
+      "cmsImages": [
+        "images/p1.jpg",
+        "images/p2.jpg",
+        "images/p3.jpg",
+        "images/p4.jpg",
+        "images/Oficina0013.jpg",
+        "images/proyectos-parallax.jpg"
+      ],
+      "aboutVideoLabel": "film",
+      "aboutVideoUrl": "https://youtu.be/gNr_6aE-SOY",
+      "voicesVideoLabel": "film",
+      "voicesVideoUrl": "https://youtu.be/gNr_6aE-SOY",
+      "cmsVideoLabel": "film",
+      "cmsVideoUrl": "https://youtu.be/gNr_6aE-SOY",
+      "cmsEmail": "miguelxlerion@gmail.com",
+      "cmsInfoTitle": "información · contacto",
+      "cmsInfoText": "San Salvador · El Salvador — respuesta en 24-48h.",
+      "cmsNamePh": "Tu nombre *",
+      "cmsEmailPh": "Tu correo *",
+      "cmsSubjectPh": "Asunto",
+      "cmsMsgPh": "Tu mensaje…",
+      "cmsSubmit": "enviar mensaje",
+      "cmsSending": "enviando…",
+      "cmsSent": "¡Gracias! Se abrió tu correo con el mensaje listo para enviar.",
+      "aboutHeroSub": "React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship Digital Twins, RAG platforms and IoT telemetry that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS."
+    }
+  }
 }

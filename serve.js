@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const root = __dirname;
 const port = process.argv[2] || 5173;
-const mime = { '.html':'text/html; charset=utf-8', '.json':'application/json; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.mp4':'video/mp4', '.ico':'image/x-icon' };
+const mime = { '.html':'text/html; charset=utf-8', '.json':'application/json; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.mp4':'video/mp4', '.ico':'image/x-icon', '.glb':'model/gltf-binary', '.gltf':'model/gltf+json', '.fbx':'application/octet-stream', '.obj':'text/plain' };
 http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === '/__api/save') {
     let body = '';
@@ -32,7 +32,7 @@ http.createServer((req, res) => {
         fs.mkdirSync(imgDir, { recursive: true });
         let name = String(j.name || 'archivo').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^[^a-z0-9]+/, '').slice(0, 40);
         if (!name) name = 'archivo';
-        if (!/\.(jpe?g|png|gif|webp|svg|avif|mp4|webm|mov)$/.test(name)) name += '.jpg';
+        if (!/\.(jpe?g|png|gif|webp|svg|avif|mp4|webm|mov|glb|gltf|fbx|obj)$/.test(name)) name += '.jpg';
         name = Date.now() + '-' + Math.random().toString(36).slice(2, 6) + path.extname(name);
         const data = j.data || '';
         const b64 = data.indexOf(',') >= 0 ? data.slice(data.indexOf(',') + 1) : data;

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mikehell84.github.io/Mike_portfolio/sitemap.xml

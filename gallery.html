@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEVQUEST — 3D Portfolio Gallery | Miguel E. Rodriguez</title>
+<meta name="description" content="Interactive 2.5D portfolio gallery — Walk through the exhibition hall, click any project to explore.">
+<meta property="og:title" content="DEVQUEST — 3D Portfolio Gallery">
+<meta property="og:description" content="Interactive 2.5D portfolio gallery by Miguel E. Rodriguez">
+<script type="importmap">{"imports":{"three":"./vendor_three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#05080f;color:#c7d2e8;font-family:'Space Grotesk',sans-serif;overflow:hidden;cursor:none}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(transparent 95%,rgba(0,212,255,0.04) 95%) 0 0/100% 3px,radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.6) 100%)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:2;background:linear-gradient(90deg,transparent 49.7%,rgba(0,212,255,0.03) 50%,transparent 50.3%) 0 0/80px 80px,linear-gradient(transparent 49.7%,rgba(0,212,255,0.03) 50%,transparent 50.3%) 0 0/80px 80px}
+canvas{position:fixed;inset:0;z-index:0}
+.scanlines{pointer-events:none;position:absolute;inset:0;z-index:10;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px)}
+.vignette{pointer-events:none;position:absolute;inset:0;z-index:10;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.7) 100%)}
+
+/* Cursor */
+.cursor{position:fixed;width:10px;height:10px;border-radius:50%;background:#00d4ff;pointer-events:none;z-index:9999;mix-blend-mode:screen;transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(0,212,255,0.6),0 0 40px rgba(0,212,255,0.3);transition:width .2s,height .2s,background .2s}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid #00d4ff;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .15s ease-out,width .3s,height .3s,border-color .3s}
+.cursor.hover{width:20px;height:20px}
+.cursor-ring.hover{width:80px;height:80px;border-color:#7df9ff}
+
+/* HUD */
+.hud{position:absolute;inset-x:0;top:0;z-index:20;display:flex;items-center:justify-between;padding:20px 24px;pointer-events:none}
+.hud>*{pointer-events:auto}
+.hud-title{font-family:'JetBrains Mono',monospace;font-size:18px;color:#00d4ff;text-shadow:0 0 14px rgba(34,211,238,0.6);letter-spacing:2px}
+.hud-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.35em;color:#6b7a99;margin-top:4px}
+.hud-btns{display:flex;gap:8px}
+.hud-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid #1a2340;background:rgba(10,14,24,0.8);color:#6b7a99;backdrop-filter:blur(8px);cursor:none;transition:all .2s}
+.hud-btn:hover{border-color:#00d4ff;color:#00d4ff}
+.hud-btn svg{width:18px;height:18px}
+
+/* Hint bar */
+.hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:20;display:flex;justify-content:center;padding:0 20px}
+.hint-box{animation:float-slow 3s ease-in-out infinite;border-radius:999px;border:1px solid #1a2340;background:rgba(10,14,24,0.85);padding:12px 24px;backdrop-filter:blur(8px);text-align:center}
+.hint-text{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#6b7a99}
+@keyframes float-slow{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Start screen */
+.start{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;overflow-auto;background:linear-gradient(to bottom,rgba(5,8,15,0.95),rgba(10,17,40,0.9) 50%,rgba(5,8,15,0.95));animation:fade-in .8s ease-out;padding:40px 20px}
+.start-card{width:100%;max-width:520px;padding:40px 0;text-align:center}
+.start-title{font-family:'JetBrains Mono',monospace;font-size:48px;color:#00d4ff;text-shadow:0 0 28px rgba(34,211,238,0.55),0 5px 0 #0e7490;letter-spacing:4px;line-height:1}
+.start-sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.45em;color:#a855f7;margin-top:12px}
+.start-desc{margin:30px auto;max-width:420px;font-size:14px;line-height:1.8;color:#6b7a99}
+.start-controls{margin:0 auto 40px;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+.control-card{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:8px;border:1px solid #1a2340;background:rgba(10,14,24,0.7)}
+.control-key{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#00d4ff}
+.control-val{font-size:13px;color:#6b7a99;margin-top:4px}
+.start-btn{font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:18px 48px;border:1px solid #00d4ff;background:transparent;color:#00d4ff;cursor:none;transition:all .3s;position:relative;overflow:hidden}
+.start-btn::before{content:'';position:absolute;inset:0;background:#00d4ff;transform:translateY(100%);transition:transform .3s}
+.start-btn:hover{color:#05080f}
+.start-btn:hover::before{transform:translateY(0)}
+.start-hint{animation:blink 2s infinite;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#fbbf24;margin-top:20px}
+@keyframes blink{0%,90%,100%{opacity:1}92%{opacity:0.3}94%{opacity:1}}
+.project-dots{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.3em;color:#6b7a99}
+.project-dot{display:flex;align-items:center;gap:6px}
+.project-dot .dot{width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px currentColor}
+
+/* Detail panel */
+.panel{position:absolute;inset:0;z-index:30;display:flex;align-items-end;justify-content:center;padding:0}
+.panel-backdrop{position:absolute;inset:0;background:rgba(5,7,13,0.6);animation:fade-in .4s ease-out}
+.panel-aside{position:relative;display:flex;flex-direction:column;width:100%;max-width:470px;max-height:80vh;overflow:hidden;border-top:2px solid transparent;background:rgba(10,14,24,0.95);backdrop-filter:blur(12px);animation:slide-in .45s cubic-bezier(0.22,1,0.36,1);overflow-y:auto}
+@keyframes slide-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(min-width:640px){.panel-aside{max-height:none;width:470px;border-top:none;border-left:2px solid #1a2340;animation:panel-in .45s cubic-bezier(0.22,1,0.36,1)}}
+@keyframes panel-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
+
+/* Panel Grid Layout */
+.panel-grid{display:grid;grid-template-columns:1fr;gap:0;width:100%;max-width:100%;height:100%}
+@media(min-width:900px){.panel-grid{grid-template-columns:1fr 1fr}}
+.panel-media{position:relative;min-height:300px;background:#05080f;display:flex;align-items:center;justify-content:center}
+.panel-media img,.panel-media video{width:100%;height:100%;object-fit:cover}
+.media-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#6b7a99;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em}
+.panel-detail{position:relative;display:flex;flex-direction:column;max-height:100%;overflow:hidden}
+@media(min-width:640px){.panel-aside{max-height:none;width:auto;border-top:none;border-left:2px solid #1a2340;animation:panel-in .45s cubic-bezier(0.22,1,0.36,1)}}
+@keyframes panel-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.panel-accent{height:3px;width:100%;shrink:0}
+.panel-close{position:absolute;right:12px;top:12px;z-index:1;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid #1a2340;background:rgba(5,7,13,0.8);color:#6b7a99;cursor:none;transition:all .2s}
+.panel-close:hover{transform:scale(1.05);color:#c7d2e8}
+.panel-close svg{width:16px;height:16px}
+.panel-scroll{padding:20px;space-y-6}
+.panel-cover{position:relative;height:160px;shrink:0;overflow:hidden}
+@media(min-width:640px){.panel-cover{height:200px}}
+.panel-cover img{width:100%;height:100%;object-fit:cover}
+.panel-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,14,24) 0%,rgba(10,14,24,0.3) 50%,transparent 100%)}
+.panel-cover .proj-num{position:absolute;bottom:12px;left:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.35em}
+.panel-cover h2{position:absolute;bottom:12px;left:20px;right:20px;font-family:'JetBrains Mono',monospace;font-size:20px;color:#c7d2e8;margin-top:24px}
+.panel-cover .proj-tag{position:absolute;bottom:12px;left:20px;right:20px;font-size:11px;letter-spacing:0.25em;color:#6b7a99}
+.panel-body{space-y-6}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px}
+.meta-row{display:flex;items-baseline;gap:8px}
+.meta-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(107,122,153,0.7)}
+.meta-val{color:#c7d2e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{border-radius:8px;border:1px solid #1a2340;background:rgba(5,7,13,0.6);padding:12px}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:16px}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.25em;color:#6b7a99;margin-top:4px}
+.tech-stack{display:flex;flex-wrap:wrap;gap:6px}
+.tech-tag{border-radius:999px;border:1px solid #1a2340;background:rgba(5,7,13,0.6);padding:4px 12px;font-size:10px;letter-spacing:0.1em;color:#6b7a99}
+.features-list{space-y:8}
+.feature-item{display:flex;items-start;gap:10px;font-size:13px;color:#6b7a99;line-height:1.5}
+.feature-item svg{width:16px;height:16px;shrink:0;margin-top:2px}
+.panel-btn{width:100%;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a2340;background:transparent;color:#c7d2e8;cursor:none;transition:all .2s;margin-top:10px}
+.panel-btn:hover{border-color:#00d4ff;color:#00d4ff}
+
+/* Panel Grid Layout - Mobile first, desktop split */
+@media(min-width:900px){
+  .panel-grid{grid-template-columns:1fr 1fr}
+  .panel-aside{width:auto;max-width:none;border-top:none;border-left:2px solid #1a2340}
+  .panel-detail{border-left:1px solid #1a2340}
+}
+
+/* Help modal */
+.help{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(5,7,13,0.7);backdrop-filter:blur(4px);animation:fade-in .3s ease-out}
+.help-box{width:100%;max-width:440px;border-radius:12px;border:1px solid #1a2340;background:rgba(10,14,24,0.95);padding:32px;animation:pop-in .3s ease-out}
+@keyframes pop-in{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
+.help-title{font-family:'JetBrains Mono',monospace;font-size:14px;color:#00d4ff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.help-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:8px;border:1px solid #1a2340;background:rgba(5,7,13,0.5);margin-bottom:8px}
+.help-key{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#00d4ff}
+.help-val{font-size:13px;color:#6b7a99}
+.help-desc{margin-top:16px;font-size:13px;line-height:1.6;color:#6b7a99}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes pop-in{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* Section title */
+.section-title{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:#c7d2e8}
+.section-title .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.section-title .line{flex:1;height:1px;background:#1a2340}
+
+/* Scrollbar */
+.scroll-thin::-webkit-scrollbar{width:4px}
+.scroll-thin::-webkit-scrollbar-track{background:transparent}
+.scroll-thin::-webkit-scrollbar-thumb{background:#1a2340;border-radius:2px}
+.scroll-thin::-webkit-scrollbar-thumb:hover{background:#2a3550}
+
+/* Nav link to gallery */
+.gallery-link{position:fixed;bottom:20px;right:20px;z-index:25}
+.gallery-nav{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#00d4ff;text-decoration:none;padding:8px 16px;border:1px solid #1a2340;background:rgba(10,14,24,0.8);border-radius:6px;backdrop-filter:blur(8px);transition:all .2s;cursor:none}
+.gallery-nav:hover{border-color:#00d4ff;color:#00d4ff}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Canvas container -->
+<div id="canvasContainer" style="position:fixed;inset:0;z-index:0"></div>
+
+<!-- CRT effects -->
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<!-- HUD -->
+<header class="hud" id="hud" style="display:none">
+  <div>
+    <div class="hud-title">DEVQUEST</div>
+    <div class="hud-sub">INTERACTIVE 3D PORTFOLIO</div>
+  </div>
+  <div class="hud-btns">
+    <button class="hud-btn" id="muteBtn" aria-label="Toggle sound" title="Mute">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <button class="hud-btn" id="helpBtn" aria-label="Help" title="Help">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.5.8c0 1.8-2.7 2.2-2.7 3.7"/><circle cx="12" cy="17" r="0.4" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Hint bar -->
+<div class="hint" id="hint" style="display:none">
+  <div class="hint-box"><span class="hint-text">DRAG TO LOOK · SCROLL TO ZOOM · WASD TO MOVE · CLICK A PROJECT</span></div>
+</div>
+
+<!-- Start screen -->
+<div class="start" id="startScreen">
+  <div class="start-card">
+    <div class="start-title">DEVQUEST</div>
+    <div class="start-sub">3D PORTFOLIO GALLERY</div>
+    <p class="start-desc">A floating exhibition hall with six game projects. Walk around, orbit the booths, and click any installation — the camera flies in and the project expands with its full story, data, and credits.</p>
+    <div class="start-controls">
+      <div class="control-card"><div class="control-key">DRAG</div><div class="control-val">Look around</div></div>
+      <div class="control-card"><div class="control-key">SCROLL</div><div class="control-val">Zoom</div></div>
+      <div class="control-card"><div class="control-key">WASD</div><div class="control-val">Walk the hall</div></div>
+      <div class="control-card"><div class="control-key">CLICK</div><div class="control-val">Open a project</div></div>
+    </div>
+    <button class="start-btn" id="enterBtn">ENTER THE GALLERY</button>
+    <div class="start-hint">PRESS ENTER</div>
+    <div class="project-dots" id="projectDots"></div>
+  </div>
+</div>
+
+<!-- Help modal -->
+<div class="help" id="helpModal" style="display:none">
+  <div class="help-box">
+    <div class="help-title">CONTROLS <button id="helpClose" style="background:none;border:none;color:#6b7a99;cursor:none;padding:4px" aria-label="Close help"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="help-row"><span class="help-key">DRAG / ONE FINGER</span><span class="help-val">Look around the hall</span></div>
+    <div class="help-row"><span class="help-key">SCROLL / PINCH</span><span class="help-val">Zoom in and out</span></div>
+    <div class="help-row"><span class="help-key">W A S D / ARROWS</span><span class="help-val">Walk around the gallery</span></div>
+    <div class="help-row"><span class="help-key">CLICK / TAP BOOTH</span><span class="help-val">Open the project details</span></div>
+    <div class="help-row"><span class="help-key">ESC / CLOSE</span><span class="help-val">Close a panel</span></div>
+    <div class="help-row"><span class="help-key">M</span><span class="help-val">Toggle sound</span></div>
+    <p class="help-desc">Six shipped projects live in this hall — each booth is a real project with data, tech, and takeaways. When you open one, the camera flies in for a close-up.</p>
+  </div>
+</div>
+
+<!-- Detail panel -->
+<div class="panel" id="detailPanel" style="display:none">
+  <div class="panel-backdrop" id="panelBackdrop"></div>
+  <aside class="panel-aside scroll-thin">
+    <div class="panel-accent" id="panelAccent"></div>
+    <div class="panel-grid">
+      <div class="panel-media" id="panelMedia">
+        <div class="media-placeholder" id="mediaPlaceholder"></div>
+      </div>
+      <div class="panel-detail scroll-thin">
+        <div class="panel-accent" id="panelAccent"></div>
+        <button class="panel-close" id="panelClose" aria-label="Close details">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="panel-scroll">
+          <div class="panel-cover">
+            <img id="panelCover" src="" alt="">
+            <div class="proj-num" id="panelNum" style="color:#00d4ff"></div>
+            <h2 id="panelTitle"></h2>
+            <div class="proj-tag" id="panelTag"></div>
+          </div>
+          <div class="panel-body">
+        <div class="meta-grid">
+          <div class="meta-row"><span class="meta-label">YEAR</span><span class="meta-val" id="panelYear"></span></div>
+          <div class="meta-row"><span class="meta-label">PLATFORM</span><span class="meta-val" id="panelPlatform"></span></div>
+          <div class="meta-row"><span class="meta-label">ENGINE</span><span class="meta-val" id="panelEngine"></span></div>
+          <div class="meta-row"><span class="meta-label">ROLE</span><span class="meta-val" id="panelRole"></span></div>
+        </div>
+        <p id="panelDesc" style="font-size:13px;line-height:1.8;color:#6b7a99"></p>
+        <div class="section-title"><span class="dot" id="panelStatDot" style="background:#00d4ff"></span><span>STATS</span><span class="line"></span></div>
+        <div class="stats-grid" id="panelStats"></div>
+        <div class="section-title"><span class="dot" id="panelTechDot" style="background:#00d4ff"></span><span>TECH STACK</span><span class="line"></span></div>
+        <div class="tech-stack" id="panelTech"></div>
+        <div class="section-title"><span class="dot" id="panelFeatDot" style="background:#00d4ff"></span><span>KEY WORK</span><span class="line"></span></div>
+        <div class="features-list" id="panelFeatures"></div>
+        <button class="panel-btn" id="panelBackBtn">← BACK TO GALLERY</button>
+      </div>
+    </div>
+  </div>
+  </aside>
+</div>
+
+<script type="module">
+import { Gallery } from './gallery.js?v=3';
+
+// ---- Load config from portfolio.json ----
+let projects = [];
+let galleryConfig = {};
+
+async function loadConfig() {
+  try {
+    const r = await fetch('data/portfolio.json', {cache:'no-store'});
+    if (r.ok) {
+      const d = await r.json();
+      projects = d.gallery3d?.projects || [];
+      galleryConfig = d.gallery3d || {};
+    }
+  } catch (e) {
+    console.warn('Could not load portfolio.json, using defaults');
+  }
+  initGallery();
+}
+
+// ---- Custom cursor ----
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+document.addEventListener('mousemove', (e) => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  cursorRing.style.left = e.clientX + 'px';
+  cursorRing.style.top = e.clientY + 'px';
+});
+
+function initGallery() {
+  // ---- Apply config from portfolio.json ----
+  if (galleryConfig.start) {
+    document.querySelector('.start-title').textContent = galleryConfig.start.title || 'DEVQUEST';
+    document.querySelector('.start-sub').textContent = galleryConfig.start.sub || '3D PORTFOLIO GALLERY';
+    document.querySelector('.start-desc').textContent = galleryConfig.start.desc || '';
+    document.getElementById('enterBtn').textContent = galleryConfig.start.btnText || 'ENTER THE GALLERY';
+    document.querySelector('.start-hint').textContent = galleryConfig.start.hint || 'PRESS ENTER';
+    if (galleryConfig.start.dots) {
+      const dotsContainer = document.getElementById('projectDots');
+      dotsContainer.innerHTML = '';
+      galleryConfig.start.dots.forEach((color, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'project-dot';
+        dot.innerHTML = `<span class="dot" style="background:${color};box-shadow:0 0 8px ${color}"></span><span>${projects[i]?.title || `Project ${i+1}`}</span>`;
+        dotsContainer.appendChild(dot);
+      });
+    }
+  }
+
+  // ---- Canvas ----
+  const container = document.getElementById('canvasContainer');
+  const canvas = document.createElement('canvas');
+  container.appendChild(canvas);
+
+  // ---- Gallery engine ----
+  const engine = new Gallery(canvas, {
+    onSelect: (idx) => showDetail(idx),
+    onClose: () => closeDetail(),
+  }, galleryConfig);
+  engine.start();
+
+  // ---- Resize ----
+  function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    engine.resize(w, h);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---- Project dots on start screen ----
+  const dotsContainer = document.getElementById('projectDots');
+  projects.forEach((p, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'project-dot';
+    dot.innerHTML = `<span class="dot" style="background:${p.accent};box-shadow:0 0 8px ${p.accent}"></span><span>${p.title}</span>`;
+    dotsContainer.appendChild(dot);
+  });
+
+  // ---- Start screen ----
+  const startScreen = document.getElementById('startScreen');
+  const hud = document.getElementById('hud');
+  const hint = document.getElementById('hint');
+  const enterBtn = document.getElementById('enterBtn');
+  const helpModal = document.getElementById('helpModal');
+  const detailPanel = document.getElementById('detailPanel');
+
+  function enterGallery() {
+    engine.unlock();
+    startScreen.style.display = 'none';
+    hud.style.display = 'flex';
+    hint.style.display = 'block';
+    setTimeout(() => { hint.style.display = 'none'; }, 11000);
+  }
+  enterBtn.addEventListener('click', enterGallery);
+  window.addEventListener('keydown', (e) => {
+    if ((e.code === 'Enter' || e.code === 'Space') && startScreen.style.display !== 'none') { e.preventDefault(); enterGallery(); }
+    if (e.code === 'Escape') {
+      if (detailPanel.style.display !== 'none') closeDetail();
+      else if (helpModal.style.display !== 'none') helpModal.style.display = 'none';
+    }
+    if (e.code === 'KeyM') toggleMute();
+  });
+
+  // ---- Mute ----
+  let muted = false;
+  function toggleMute() {
+    muted = !muted;
+    engine.setMuted(muted);
+    const btn = document.getElementById('muteBtn');
+    btn.innerHTML = muted
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+  }
+  document.getElementById('muteBtn').addEventListener('click', toggleMute);
+
+  // ---- Help ----
+  document.getElementById('helpBtn').addEventListener('click', () => { helpModal.style.display = 'flex'; });
+  document.getElementById('helpClose').addEventListener('click', () => { helpModal.style.display = 'none'; });
+  helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.style.display = 'none'; });
+
+  // ---- Detail panel ----
+  function showDetail(idx) {
+    const p = projects[idx];
+    if (!p) return;
+    hint.style.display = 'none';
+    detailPanel.style.display = 'flex';
+    document.getElementById('panelAccent').style.background = `linear-gradient(90deg, ${p.accent}, transparent 70%)`;
+    document.getElementById('panelNum').textContent = `PROJECT 0${idx + 1}`;
+    document.getElementById('panelNum').style.color = p.accent;
+    document.getElementById('panelTitle').textContent = p.title;
+    document.getElementById('panelTag').textContent = p.tagline.toUpperCase();
+    document.getElementById('panelCover').src = p.image;
+    document.getElementById('panelCover').alt = p.title;
+    document.getElementById('panelYear').textContent = p.year;
+    document.getElementById('panelPlatform').textContent = p.platform;
+    document.getElementById('panelEngine').textContent = p.engine;
+    document.getElementById('panelRole').textContent = p.role;
+    document.getElementById('panelDesc').textContent = p.description;
+    document.getElementById('panelStats').innerHTML = p.stats.map(s => `<div class="stat-card"><div class="stat-val" style="color:${p.accent}">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('');
+    document.getElementById('panelTech').innerHTML = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+    document.getElementById('panelFeatures').innerHTML = p.features.map(f => `<li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="${p.accent}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><span>${f}</span></li>`).join('');
+    // ---- Panel Media ----
+    const mediaContainer = document.getElementById('panelMedia');
+    if (mediaContainer) {
+      const mediaType = p.media_type || 'image';
+      const mediaUrl = p.media_url || p.image || '';
+      let mediaHtml = '';
+      if (mediaType === 'video') {
+        mediaHtml = `<video src="${mediaUrl}" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover"></video>`;
+      } else if (mediaType === 'gif') {
+        mediaHtml = `<img src="${mediaUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover">`;
+      } else {
+        mediaHtml = `<img src="${mediaUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover">`;
+      }
+      mediaContainer.innerHTML = mediaHtml;
+    }
+  }
+  function closeDetail() {
+    detailPanel.style.display = 'none';
+    engine.close();
+    setTimeout(() => { hint.style.display = 'block'; }, 500);
+  }
+  document.getElementById('panelClose').addEventListener('click', closeDetail);
+  document.getElementById('panelBackdrop').addEventListener('click', closeDetail);
+  document.getElementById('panelBackBtn').addEventListener('click', closeDetail);
+
+  // ---- Auto-hide hint ----
+  setTimeout(() => { hint.style.display = 'none'; }, 11000);
+
+  // ---- Hide cursor when not interacting ----
+  let lastMove = performance.now();
+  document.addEventListener('mousemove', () => { lastMove = performance.now(); });
+  setInterval(() => {
+    const idle = performance.now() - lastMove > 3000;
+    cursor.style.opacity = idle ? '0' : '1';
+    cursorRing.style.opacity = idle ? '0' : '1';
+  }, 100);
+}
+
+loadConfig();
+</script>
+</body>
+</html>

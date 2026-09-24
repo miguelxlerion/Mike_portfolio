@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg0: #070b16;
+  --color-bg1: #0d1424;
+  --color-panel: #0e1830;
+  --color-line: #1f2b47;
+  --color-text: #e8eefb;
+  --color-dim: #8fa1c4;
+  --color-cyan: #22d3ee;
+  --color-magenta: #f0f;
+  --color-gold: #fbbf24;
+  --color-green: #4ade80;
+  --color-orange: #fb923c;
+  --color-red: #f87171;
+}
+
+:root {
+  --bg0: #070b16;
+  --bg1: #0d1424;
+  --panel: #0e1830;
+  --line: #1f2b47;
+  --text: #e8eefb;
+  --dim: #8fa1c4;
+  --cyan: #22d3ee;
+  --magenta: #f0f;
+  --gold: #fbbf24;
+  --green: #4ade80;
+  --orange: #fb923c;
+  --red: #f87171;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--cyan);
+  color: #04121a;
+}
+
+.font-arcade {
+  font-family: "Press Start 2P", monospace;
+}
+
+/* ---------- overlays ---------- */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+.vignette {
+  background-image: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(2, 6, 17, 0.55) 100%
+  );
+}
+
+/* ---------- animations ---------- */
+@keyframes blink {
+  0%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0; }
+}
+.animate-blink {
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes banner-in {
+  0% { transform: translateY(-140%); opacity: 0; }
+  12% { transform: translateY(0); opacity: 1; }
+  82% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-140%); opacity: 0; }
+}
+.animate-banner {
+  animation: banner-in 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop-in {
+  animation: pop-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float-slow {
+  animation: float-slow 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.btn-shine {
+  background-image: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine 2.8s linear infinite;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3
+    text-xs tracking-wide transition-all duration-150 select-none
+    cursor-pointer border;
+  font-family: "Press Start 2P", monospace;
+}
+.btn:active {
+  transform: scale(0.94);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #0891b2, #0e7490);
+  border-color: #22d3ee;
+  color: #ecfeff;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.btn-primary:hover {
+  box-shadow: 0 0 36px rgba(34, 211, 238, 0.55), inset 0 1px 0 rgba(255,255,255,0.3);
+  filter: brightness(1.1);
+}
+.btn-ghost {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: var(--line);
+  color: var(--dim);
+}
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--cyan);
+}
+
+.btn-touch {
+  @apply rounded-full border-2 select-none touch-none;
+  width: 84px;
+  height: 84px;
+  font-size: 10px;
+  font-family: "Press Start 2P", monospace;
+  background: rgba(14, 24, 48, 0.55);
+  backdrop-filter: blur(4px);
+}
+.btn-touch:active {
+  transform: scale(0.9);
+  background: rgba(34, 211, 238, 0.25);
+}
+
+/* ---------- inputs ---------- */
+.arcade-input {
+  @apply text-center uppercase rounded-lg border-2 bg-[#0a1226]
+    text-gold tracking-[0.5em] px-4 py-3 text-lg;
+  font-family: "Press Start 2P", monospace;
+  border-color: var(--line);
+}
+.arcade-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+}
+
+/* ---------- table ---------- */
+.hs-row:nth-child(odd) {
+  background: rgba(31, 43, 71, 0.25);
+}
+.hs-row.hs-new {
+  background: rgba(34, 211, 238, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.4);
+}
+
+.joystick {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  border-radius: 999px;
+  border: 2px solid rgba(34, 211, 238, 0.55);
+  background: rgba(14, 24, 48, 0.5);
+  backdrop-filter: blur(6px);
+  touch-action: none;
+}
+.joystick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 30% 30%, #67e8f9, #0e7490);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.55);
+  pointer-events: none;
+}
+
+.inspect-panel {
+  max-height: min(92vh, 760px);
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
