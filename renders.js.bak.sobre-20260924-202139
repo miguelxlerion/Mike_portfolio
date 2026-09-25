@@ -20,7 +20,6 @@ function fontFor(value,fallback){ const aliases={mono:componentFonts.mono,sans:c
 
 let pins=[], voices=[], visits=12840, activeId=null, overlay=null, indexOpen=false, placing=false, coords=null, hint=0, entered=false;
 let RS=null;
-let MAIN_ABOUT=null;
 let view={scale:1.25,x:0,y:0}, animate=true, size={w:0,h:0,s:0};
 let audioEnabled=false, audioCtx=null, audioNodes=null;
 const stage = { focusPin:()=>{}, reset:()=>{} };
@@ -87,8 +86,6 @@ async function loadData(){
     const ls=localStorage.getItem('portfolio')||localStorage.getItem('portfolio.json')||localStorage.getItem('pa_portfolio')||localStorage.getItem('pa_state_v1');
     if(ls){
       const d=JSON.parse(ls);
-      if(d.about) MAIN_ABOUT=d.about;
-      else if(d.threeDPage?.about) MAIN_ABOUT=d.threeDPage.about;
       if(d.renders){
         d.renders=renameBrand(d.renders);
         if(Array.isArray(d.renders.pins)&&d.renders.pins.length) pins=d.renders.pins;
@@ -109,8 +106,6 @@ async function loadData(){
       else if(!pins.length) pins=seedPins;
       if(Array.isArray(rv)) voices=rv; else if(!voices.length) voices=seedVoices;
       if(typeof rc==='number') visits=rc;
-      if(d.about) MAIN_ABOUT=d.about;
-      else if(d.threeDPage?.about) MAIN_ABOUT=d.threeDPage.about;
       if(d.renders?.settings && !localSettings) RS=renameBrand(d.renders.settings);
       // also allow gallery3d fallback
       if(!d.renders && d.gallery3d?.projects?.length && !pins.length){
@@ -154,62 +149,16 @@ function applyRendersSettings(remote){
   window.__indexOpen=s.indexOpen||'open index +'; window.__indexHide=s.indexHide||'hide index −';
   if($indexToggle && !indexOpen) $indexToggle.textContent=window.__indexOpen;
   renderMarquee();
-  // about overlay — profile (MAIN_ABOUT) has priority, renders about is fallback
-  const abProfile = (MAIN_ABOUT && Array.isArray(MAIN_ABOUT.paragraphs) && MAIN_ABOUT.paragraphs.length) ? MAIN_ABOUT : null;
-  if(abProfile){
-    const labEl=document.getElementById('aboutLabel');
-    if(labEl) labEl.textContent=abProfile.label||'ABOUT ME';
-    const titleEl=document.getElementById('aboutTitle');
-    if(titleEl) titleEl.innerHTML=abProfile.title||'';
-    const statsEl=document.getElementById('aboutStats');
-    if(statsEl) statsEl.style.display='none';
-    const paras=abProfile.paragraphs||[];
-    const p1=document.getElementById('aboutPara1');
-    const p2=document.getElementById('aboutPara2');
-    const p3=document.getElementById('aboutPara3');
-    if(p1) p1.innerHTML=paras[0]||'';
-    if(p2) p2.innerHTML=paras[1]||'';
-    if(p3){
-      let html=paras[2]||'';
-      if(paras[3]) html+='<br><br>'+paras[3];
-      // if more than 4 paras, append
-      if(paras.length>4) html+='<br><br>'+paras.slice(4).join('<br><br>');
-      p3.innerHTML=html;
-    }
-    const skillsEl=document.getElementById('aboutSkills');
-    if(skillsEl){
-      if(abProfile.skills && abProfile.skills.length){
-        skillsEl.style.display='grid';
-        skillsEl.innerHTML=abProfile.skills.map(sk=>`<div class="rounded-xl border border-[#f4efe6]/10 bg-[#0d0c0b]/50 p-4"><div class="mono text-[10px] tracking-[0.2em] text-[#E4572E] mb-3">${(sk.title||'').replace(/</g,'&lt;')}</div><div class="flex flex-wrap gap-2">${(sk.tags||[]).map(t=>`<span class="px-3 py-1 rounded-full bg-[#f4efe6]/5 border border-[#f4efe6]/10 text-[11px] text-[#f4efe6]/70">${String(t).replace(/</g,'&lt;')}</span>`).join('')}</div></div>`).join('');
-      } else {
-        skillsEl.style.display='none';
-        skillsEl.innerHTML='';
-      }
-    }
-    const metaEl=document.getElementById('aboutMeta');
-    if(metaEl){
-      if(abProfile.subtitle){
-        metaEl.innerHTML=`<div class="col-span-3 text-[13px] leading-relaxed text-[#f4efe6]/60">${abProfile.subtitle}</div>`;
-        metaEl.style.display='grid';
-      } else {
-        metaEl.style.display='none';
-      }
-    }
-  } else {
-    text(document.getElementById('aboutLabel'), s.aboutLabel);
-    text(document.getElementById('aboutTitle'), s.aboutTitle);
-    const statsEl=document.getElementById('aboutStats');
-    if(statsEl) statsEl.style.display='grid';
-    const skillsEl=document.getElementById('aboutSkills');
-    if(skillsEl){ skillsEl.style.display='none'; skillsEl.innerHTML=''; }
-    if(s.aboutStats){ const stats=document.querySelectorAll('#aboutStats > div'); s.aboutStats.forEach((st,i)=>{ if(stats[i]){ const k=stats[i].querySelector('.display'); const v=stats[i].querySelector('.mono'); if(k) k.textContent=st.k; if(v) v.textContent=st.v; } }); }
-    if(s.aboutParas){
-      text(document.getElementById('aboutPara1'), s.aboutParas[0]);
-      text(document.getElementById('aboutPara2'), s.aboutParas[1]);
-      text(document.getElementById('aboutPara3'), s.aboutParas[2]);
-    }
-    if(s.aboutMeta){ const metas=document.querySelectorAll('#aboutMeta > div'); s.aboutMeta.forEach((m,i)=>{ if(metas[i]){ metas[i].innerHTML=m.k+'<br><span> '+m.v+'</span>'; } }); const metaEl=document.getElementById('aboutMeta'); if(metaEl) metaEl.style.display='grid'; }
+  // about overlay
+  text(document.getElementById('aboutLabel'), s.aboutLabel);
+  text(document.getElementById('aboutTitle'), s.aboutTitle);
+  if(s.aboutStats){ const stats=document.querySelectorAll('#aboutStats > div'); s.aboutStats.forEach((st,i)=>{ if(stats[i]){ const k=stats[i].querySelector('.display'); const v=stats[i].querySelector('.mono'); if(k) k.textContent=st.k; if(v) v.textContent=st.v; } }); }
+  if(s.aboutParas){
+    text(document.getElementById('aboutPara1'), s.aboutParas[0]);
+    text(document.getElementById('aboutPara2'), s.aboutParas[1]);
+    text(document.getElementById('aboutPara3'), s.aboutParas[2]);
   }
+  if(s.aboutMeta){ const metas=document.querySelectorAll('#aboutMeta > div'); s.aboutMeta.forEach((m,i)=>{ if(metas[i]){ metas[i].innerHTML=m.k+'<br><span> '+m.v+'</span>'; } }); }
   { const wv=document.getElementById('aboutVideoWrap'); const url=ytEmbed(s.aboutVideoUrl);
     if(wv){ if(url){ wv.classList.remove('hidden'); text(document.getElementById('aboutVideoLabel'), s.aboutVideoLabel||'film'); const fr=document.getElementById('aboutVideoFrame'); if(fr && fr.dataset.src!==url){ fr.dataset.src=url; fr.src=url; } }
       else { wv.classList.add('hidden'); const fr=document.getElementById('aboutVideoFrame'); if(fr){ fr.removeAttribute('src'); delete fr.dataset.src; } } } }

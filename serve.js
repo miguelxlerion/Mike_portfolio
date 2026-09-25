@@ -46,9 +46,47 @@ http.createServer((req, res) => {
     });
     return;
   }
+  if (req.method === 'POST' && req.url === '/__api/vite-build') {
+    const { spawn } = require('child_process');
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    // Run vite build and copy to /vite for GH Pages subfolder
+    const viteRoot = path.join(root, 'next-portfolio');
+    const child = spawn(process.platform==='win32'?'npm.cmd':'npm', ['run','build'], { cwd: viteRoot, shell: false });
+    let out='', err='';
+    child.stdout.on('data',d=>out+=d);
+    child.stderr.on('data',d=>err+=d);
+    child.on('close',code=>{
+      if(code!==0){
+        res.end(JSON.stringify({ ok:false, error: 'build failed: '+(err||out).slice(0,800) }));
+        return;
+      }
+      try{
+        const src = path.join(viteRoot,'dist');
+        const dst = path.join(root,'vite');
+        // copyRecursive
+        const copyRec=(s,d)=>{
+          fs.mkdirSync(d,{recursive:true});
+          for(const e of fs.readdirSync(s,{withFileTypes:true})){
+            const sp=path.join(s,e.name), dp=path.join(d,e.name);
+            if(e.isDirectory()) copyRec(sp,dp);
+            else fs.copyFileSync(sp,dp);
+          }
+        };
+        // clean old vite
+        if(fs.existsSync(dst)) fs.rmSync(dst,{recursive:true,force:true});
+        copyRec(src,dst);
+        res.end(JSON.stringify({ ok:true }));
+      }catch(e){
+        res.end(JSON.stringify({ ok:false, error: String(e.message||e).slice(0,800) }));
+      }
+    });
+    return;
+  }
   const urlPath = decodeURIComponent(req.url.split('?')[0]);
   let p = path.join(root, urlPath === '/' ? 'index.html' : urlPath);
   if (!p.startsWith(root)) { res.writeHead(403); res.end(); return; }
+  // If directory, serve index.html
+  try{ if(fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html'); }catch{}
   fs.readFile(p, (err, data) => {
     if (err) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }); res.end('404 - no encontrado: ' + urlPath); return; }
     res.writeHead(200, { 'Content-Type': mime[path.extname(p)] || 'application/octet-stream', 'Cache-Control': 'no-store' });

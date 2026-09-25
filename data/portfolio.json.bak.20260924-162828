@@ -27,10 +27,6 @@
         "href": "gallery.html"
       },
       {
-        "label": "VITE Staff",
-        "href": "vite/"
-      },
-      {
         "label": "Contact",
         "href": "#contact"
       },
@@ -618,8 +614,8 @@
     "font_size_base": "16",
     "favicon_url": "",
     "logo_url": "",
-    "parallax_enabled": true,
-    "parallax_img": "images/proyectos-parallax.jpg",
+    "parallax_enabled": false,
+    "parallax_img": "",
     "parallax_speed": "0.4",
     "parallax_pos": "center",
     "parallax_opacity": "40",
@@ -673,7 +669,7 @@
     "ogImage": ""
   },
   "settings": {
-    "lang": "en",
+    "lang": "es",
     "maintenance": false,
     "maintenanceMsg": "",
     "analyticsId": "",
@@ -1492,7 +1488,7 @@
     ]
   },
   "gamedev": {
-    "label": "3D & VIDEOJUEGOS",
+    "label": "",
     "title": "",
     "subtitle": "",
     "categories": [
@@ -1974,7 +1970,7 @@
     }
   },
   "renders": {
-    "visits": 12905,
+    "visits": 12900,
     "pins": [
       {
         "id": 1,
@@ -2400,17 +2396,5 @@
       "cmsSent": "¡Gracias! Se abrió tu correo con el mensaje listo para enviar.",
       "aboutHeroSub": "React · Next.js · Django · Three.js · LangChain · pgvector · FastAPI. I ship Digital Twins, RAG platforms and IoT telemetry that turn massive tabular/sensor data into interactive 3D experiences — with resilient ingestion, hybrid search and stable FPS."
     }
-  },
-  "testimonials": [
-    {
-      "quote": "Miguel transformed our management data into actionable insights, reducing our decision-making time by 60%. His reusable UI component library was a game-changer for our municipal platform.",
-      "author": "[Nombre]",
-      "role": "Director de Tecnología, Alcaldía de Caucasia (FOVIS)"
-    },
-    {
-      "quote": "His ability to translate massive, complex neuroscientific datasets into gamified, navigable 3D environments reduced our analysis time by 40% for non-technical users.",
-      "author": "[Nombre]",
-      "role": "Lead Researcher, AONC Neuroscientific Strategies"
-    }
-  ]
+  }
 }

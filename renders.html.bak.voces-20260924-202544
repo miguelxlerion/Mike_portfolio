@@ -53,6 +53,7 @@ body{font-family:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif;overs
     <nav class="pointer-events-auto flex items-center gap-5 sm:gap-7">
       <a href="index.html" class="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">← Inicio</a>
       <button data-overlay="about" class="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">about</button>
+      <button data-overlay="voices" class="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">voices</button>
       <button data-overlay="cms" class="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">[cms]</button>
       <button id="soundBtn" class="mono flex items-center gap-2 rounded-full border border-[#f4efe6]/20 px-4 py-2 text-[9px] uppercase tracking-[0.25em] text-[#f4efe6]/70 hover:border-[#f4efe6]/60">
         <span class="flex h-3 items-end gap-[2px] eqbars"><span class="w-[2px] bg-current h-[2px] bar"></span><span class="w-[2px] bg-current h-[2px] bar"></span><span class="w-[2px] bg-current h-[2px] bar"></span><span class="w-[2px] bg-current h-[2px] bar"></span></span><span id="soundLabel">sound off</span>
@@ -127,6 +128,22 @@ body{font-family:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif;overs
             <div class="overflow-hidden rounded-xl border border-[#f4efe6]/10 bg-[#0d0c0b]">
               <div class="aspect-video w-full"><iframe id="aboutVideoFrame" class="h-full w-full" src="" title="video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="overlayVoices" class="fixed inset-0 z-[60] opacity-0 pointer-events-none transition-opacity duration-500">
+    <div class="absolute inset-0 bg-[#0d0c0b]/70 backdrop-blur-sm overlay-bg"></div>
+    <div class="grain absolute inset-x-0 bottom-0 top-0 mx-auto flex max-w-4xl flex-col overflow-hidden border-x border-[#f4efe6]/10 bg-[#131110] translate-y-full transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] sm:top-10 overlay-panel">
+      <div class="flex shrink-0 items-center justify-between border-b border-[#f4efe6]/10 px-6 py-5 sm:px-10"><span id="voicesLabel" class="mono text-[10px] uppercase tracking-[0.35em] text-[#E4572E]">the open wall</span><button data-close-overlay class="mono text-[10px] uppercase tracking-[0.28em] text-[#f4efe6]/60 hover:text-[#f4efe6]">close ✕</button></div>
+      <div class="no-scrollbar flex-1 overflow-y-auto px-6 py-10 sm:px-10">
+        <h2 id="voicesTitle" class="display mb-8 text-5xl sm:text-7xl text-[#f4efe6]">Voices.</h2>
+        <div id="voicesRoot"></div>
+        <div id="voicesVideoWrap" class="hidden mt-10">
+          <p id="voicesVideoLabel" class="mono mb-4 text-[10px] uppercase tracking-[0.35em] text-[#E4572E]">film</p>
+          <div class="overflow-hidden rounded-xl border border-[#f4efe6]/10 bg-[#0d0c0b]">
+            <div class="aspect-video w-full"><iframe id="voicesVideoFrame" class="h-full w-full" src="" title="video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
           </div>
         </div>
       </div>
