@@ -7,6 +7,10 @@
         "href": "#about"
       },
       {
+        "label": "Stack",
+        "href": "#skills"
+      },
+      {
         "label": "Services",
         "href": "#services"
       },
@@ -89,14 +93,13 @@
     "visible": true
   },
   "about": {
-    "label": "ABOUT ME",
-    "title": "Bridging visual design<br>and robust engineering",
-    "subtitle": "I close the gap between high-impact 3D and scalable software — from asset pipeline to resilient APIs.",
+    "label": "MÁS ALLÁ DEL CÓDIGO",
+    "title": "Dos mundos.<br>Una misma<br>forma de <span>crear.</span>",
+    "subtitle": "",
     "paragraphs": [
-      "Started in <strong>3D & digital art</strong>, I pivoted to build the tools creatives use. That path led me to master <strong>Full-Stack Engineering</strong> for data-intensive products.",
-      "Today I'm <strong>bilingual in two worlds</strong>: design language (UX, visual hierarchy, 3D asset optimization) and engineering language (scalable architectures, secure APIs, RAG/LLM pipelines).",
-      "I specialize in turning complex business requirements into <strong>high-performance web platforms</strong> — real-time 3D dashboards, RAG assistants and IoT telemetry — with a focus on <strong>code quality, mentorship and tech debt reduction</strong>.",
-      "<strong>Superpower:</strong> End-to-end ownership from 3D asset pipeline (Blender/Substance) to data architecture (Postgres/pgvector, WebSockets/MQTT) — optimizing performance and UX across the stack."
+      "Empecé creando mundos en 3D.<br>Hoy construyo la tecnología<br class=\"desktop-break\"> que los hace posibles.",
+      "Soy Miguel, ingeniero de software y creativo por naturaleza. Mi recorrido une el arte digital con más de 7 años de experiencia en desarrollo: del detalle de una interfaz a la arquitectura que sostiene todo.",
+      "Hablo el idioma del diseño y el de la ingeniería. Mi punto fuerte está justo en ese cruce: hacer que lo complejo funcione, y que usarlo se sienta natural."
     ],
     "skills": [
       {
@@ -373,7 +376,14 @@
           "href": "https://github.com/miguelxlerion/smartfactory-3d#readme"
         }
       ],
-      "metric_text": "Dockerized full-stack (JS 83k + Python 34k) · Real factory visualization with interactive orbit, instancing & telemetry overlays."
+      "metric_text": "Dockerized full-stack (JS 83k + Python 34k) · Real factory visualization with interactive orbit, instancing & telemetry overlays.",
+      "subtitle": "La industria, conectada en tiempo real.",
+      "category": "3d",
+      "categoryLabel": "DIGITAL TWIN / IoT",
+      "color": "#b9e991",
+      "problem": "Lo que sucede en una planta industrial no siempre es visible en sus datos. Los paneles tradicionales separan la telemetría del espacio físico que representa.",
+      "solution": "Un gemelo digital que conecta sensores IoT con una escena 3D navegable. La arquitectura desacopla la telemetría por WebSockets del ciclo de renderizado y optimiza los modelos GLTF, con detección de anomalías y acceso por roles.",
+      "impact": "Visualización industrial en tiempo real, con navegación orbital y renderizado optimizado para 60 FPS."
     },
     {
       "number": "02 / AI & RAG · DATA PLATFORM",
@@ -401,7 +411,14 @@
           "href": "https://github.com/miguelxlerion/Rag_X#readme"
         }
       ],
-      "metric_text": "Async PDF pipeline, anti-hallucination re-ranking, secure concurrent API."
+      "metric_text": "Async PDF pipeline, anti-hallucination re-ranking, secure concurrent API.",
+      "subtitle": "Del conocimiento disperso a respuestas precisas.",
+      "category": "ai",
+      "categoryLabel": "INTELIGENCIA ARTIFICIAL / RAG",
+      "color": "#c8b5f0",
+      "problem": "El conocimiento de una empresa puede quedar atrapado en cientos de PDFs. Encontrar una respuesta fiable exige algo más que una búsqueda por palabras clave.",
+      "solution": "Una plataforma RAG con procesamiento asíncrono de documentos, segmentación semántica y búsqueda híbrida. El re-ranking con LLM ayuda a fundamentar las respuestas en las fuentes originales.",
+      "impact": "Un pipeline documental asíncrono y una API segura, diseñados para reducir alucinaciones y gestionar consultas concurrentes."
     },
     {
       "number": "03 / DATA PLATFORM · ETL + IA",
@@ -428,7 +445,14 @@
           "href": "https://github.com/miguelxlerion/Ingest_Pipeline/blob/main/docs/architecture-diagram.svg"
         }
       ],
-      "metric_text": "Production-grade data engineering pattern · 99% uptime with local buffering under concurrent load."
+      "metric_text": "Production-grade data engineering pattern · 99% uptime with local buffering under concurrent load.",
+      "subtitle": "Datos complejos. Un flujo que no se detiene.",
+      "category": "ai",
+      "categoryLabel": "DATA ENGINEERING / ETL",
+      "color": "#a5d6eb",
+      "problem": "Los documentos PDF, CSV, JSON y TXT llegan en formatos inconsistentes. Antes de alimentar una IA, deben convertirse en información limpia, trazable y utilizable.",
+      "solution": "Un pipeline resiliente con normalización, deduplicación y enriquecimiento semántico. Prefect y Airflow orquestan tareas con reintentos, mientras los datos quedan listos para alimentar un sistema RAG.",
+      "impact": "Ingesta trazable, reintentos automáticos y funcionamiento offline: un documento corrupto no detiene el resto del lote."
     },
     {
       "number": "04 / AI · CIVIC TECH",
@@ -455,7 +479,14 @@
           "href": "https://github.com/miguelxlerion/GobIA#readme"
         }
       ],
-      "metric_text": "MinTIC Hackathon 2026 · Automated audit signals for Colombian SECOP II."
+      "metric_text": "MinTIC Hackathon 2026 · Automated audit signals for Colombian SECOP II.",
+      "subtitle": "Inteligencia artificial al servicio de la transparencia.",
+      "category": "ai",
+      "categoryLabel": "CIVIC TECH / AI AGENT",
+      "color": "#e5bd89",
+      "problem": "La contratación pública produce grandes volúmenes de datos difíciles de revisar manualmente. Identificar señales de riesgo requiere hacerlos comparables y comprensibles.",
+      "solution": "Un agente que normaliza contratos de SECOP II, calcula indicadores de riesgo localmente y puede enriquecer el análisis con GPT. Genera reportes HTML y por correo para facilitar la revisión humana.",
+      "impact": "Señales automatizadas de auditoría para la contratación colombiana. Proyecto del Hackathon MinTIC 2026."
     }
   ],
   "portfolio": {
@@ -538,9 +569,9 @@
     ]
   },
   "contact": {
-    "label": "CONTACT",
-    "title": "Let's build<br>your next vision.",
-    "subtitle": "Available for remote Senior Full-Stack / Tech Lead roles — Real-Time 3D & AI Data Platforms. GMT-5 with EU/US overlap. Let's talk architecture, not just features.",
+    "label": "EL SIGUIENTE CAPÍTULO",
+    "title": "Hagamos algo<br>que importe.",
+    "subtitle": "¿Un reto técnico, una idea diferente o un equipo al que sumar?<br>Las mejores cosas empiezan con una conversación.",
     "links": [
       {
         "icon": "mail",
@@ -585,19 +616,19 @@
     ]
   },
   "design": {
-    "bg": "#0a0a0f",
-    "bg2": "#000000",
-    "bg3": "#1a1a25",
-    "bg_card": "#16161f",
-    "texto": "#00ffee",
-    "text2": "#a0a0b5",
-    "muted": "#6a6a80",
-    "border": "#2a2a3a",
+    "bg": "#111310",
+    "bg2": "#161a15",
+    "bg3": "#1c211a",
+    "bg_card": "#171c13",
+    "texto": "#f0f1eb",
+    "text2": "#a2a89c",
+    "muted": "#92968d",
+    "border": "#2a2d26",
     "border_hover": "#3a3a4f",
-    "accent": "#4f8cff",
+    "accent": "#c2f383",
     "accent2": "#a855f7",
     "accent_emerald": "#10b981",
-    "accent_amber": "#0af5c6",
+    "accent_amber": "#f59e0b",
     "accent_rose": "#f43f5e",
     "accent_cyan": "#06b6d4",
     "grad_from": "#4f8cff",
@@ -609,11 +640,11 @@
     "grad3_from": "#f59e0b",
     "grad3_mid": "#f43f5e",
     "grad3_to": "#f43f5e",
-    "font_heading": "Inter",
+    "font_heading": "Manrope",
     "font_heading_custom": "",
-    "font_body": "Inter",
+    "font_body": "Manrope",
     "font_body_custom": "",
-    "font_mono": "JetBrains Mono",
+    "font_mono": "IBM Plex Mono",
     "font_mono_custom": "",
     "font_size_base": "16",
     "favicon_url": "",
@@ -622,7 +653,7 @@
     "parallax_img": "images/proyectos-parallax.jpg",
     "parallax_speed": "0.4",
     "parallax_pos": "center",
-    "parallax_opacity": "40",
+    "parallax_opacity": "15",
     "fondo_enabled": false,
     "fondo_img": "",
     "fondo_pos": "center",
@@ -1974,7 +2005,7 @@
     }
   },
   "renders": {
-    "visits": 12905,
+    "visits": 12907,
     "pins": [
       {
         "id": 1,
@@ -2412,5 +2443,79 @@
       "author": "[Nombre]",
       "role": "Lead Researcher, AONC Neuroscientific Strategies"
     }
-  ]
+  ],
+  "showcase": [
+    {
+      "title": "3D & Videojuegos",
+      "label": "PÁGINA / 3D & VIDEOJUEGOS",
+      "desc": "Dirección creativa y engineering: videojuegos, gemelos digitales y tiempo real.",
+      "image": "./images/servicios-productos-parallax.jpg",
+      "href": "3d-portfolio.html"
+    },
+    {
+      "title": "Galería 3D",
+      "label": "PÁGINA / GALERÍA 3D",
+      "desc": "Una sala de exposición flotante: recorre, orbita y abre cada proyecto.",
+      "image": "./images/proyectos-parallax.jpg",
+      "href": "gallery.html"
+    },
+    {
+      "title": "Renders",
+      "label": "PÁGINA / RENDERS",
+      "desc": "Museo al aire libre: mapa interactivo con mis renders y trabajos visuales.",
+      "image": "./images/documentacion-parallax.jpg",
+      "href": "renders.html"
+    },
+    {
+      "title": "VITE Staff",
+      "label": "APP / VITE STAFF",
+      "desc": "La aplicación del equipo con el stack moderno: React, 3D y datos.",
+      "image": "./images/inversionistas-alianzas-parallax.jpg",
+      "href": "vite/"
+    }
+  ],
+  "sections": {
+    "hero": {
+      "kicker": "FULL-STACK ENGINEER & CREATIVE TECHNOLOGIST",
+      "statement": "La lógica del código.<br><span>La libertad de crear.</span>",
+      "description": "Conecto ingeniería, inteligencia artificial y mundos 3D<br class=\"desktop-break\"> para transformar ideas complejas en experiencias reales."
+    },
+    "projects": {
+      "eyebrow": "PROYECTOS SELECCIONADOS",
+      "title": "Ideas complejas.<br><span class=\"muted-heading\">Soluciones que se sienten simples.</span>",
+      "note": "No solo se trata de que funcione.<br>Se trata de lo que hace posible.",
+      "githubLabel": "Más en GitHub"
+    },
+    "visual": {
+      "eyebrow": "TRABAJO VISUAL & 3D",
+      "title": "Explora el trabajo<br><span class=\"muted-heading\">más allá de esta página.</span>",
+      "note": "Videojuegos, galerías interactivas<br>y renders en sus propias experiencias."
+    },
+    "expertise": {
+      "eyebrow": "LO QUE HAGO",
+      "title": "Una idea.<br><span class=\"muted-heading\">Todo el stack.</span>",
+      "note": "Del primer boceto al último deploy.<br>La visión completa, sin perder el detalle.",
+      "cta": "Pongámoslo en práctica"
+    },
+    "experience": {
+      "eyebrow": "EL RECORRIDO",
+      "title": "La experiencia<br><span class=\"muted-heading\">también se construye.</span>",
+      "linkedin": "Mi perfil en LinkedIn"
+    },
+    "filters": [
+      {
+        "id": "all",
+        "label": "Todos"
+      },
+      {
+        "id": "3d",
+        "label": "3D & tiempo real"
+      },
+      {
+        "id": "ai",
+        "label": "IA & datos"
+      }
+    ],
+    "footerNote": "Diseñado con intención. Construido con código."
+  }
 }
