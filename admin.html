@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — M.R. CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{color-scheme:dark;--bg:#0a0a0f;--panel:#12121a;--panel2:#1a1a25;--border:#2a2a3a;--text:#f0f0f5;--muted:#a0a0b5;--accent:#4f8cff;--accent2:#a855f7;--ok:#10b981;--danger:#ef4444;--r:12px}
   *{box-sizing:border-box;margin:0;padding:0} body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -41,22 +44,84 @@
   .stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center} .stat strong{font-size:1.4rem;display:block}
   .hidden{display:none !important}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--border)}nav.tabs{flex-direction:row;overflow:auto}}
+  /* ===== M.R. CMS Pro (aditivo) ===== */
+  body{font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(79,140,255,.35)}
+  ::-webkit-scrollbar{width:10px;height:10px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:#2e2e42;border-radius:8px;border:2px solid var(--bg)} ::-webkit-scrollbar-thumb:hover{background:#3d3d55}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .brand-sub{font-size:.62rem;font-weight:500;letter-spacing:.28em;color:var(--muted);margin-left:8px;-webkit-text-fill-color:var(--muted)}
+  .topbar{box-shadow:0 8px 32px rgba(0,0,0,.35)}
+  .dirty{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:600;letter-spacing:.06em;color:#fbbf24;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);padding:6px 12px;border-radius:999px}
+  .dirty i{width:7px;height:7px;border-radius:50%;background:#fbbf24;animation:dirty-pulse 1.4s infinite}
+  @keyframes dirty-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .btn{transition:transform .15s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,140,255,.25)}
+  .btn:active{transform:scale(.97)}
+  .btn.ghost:hover{border-color:var(--accent);box-shadow:none}
+  nav.tabs button{transition:background .15s,color .15s,transform .15s;position:relative}
+  nav.tabs button:hover{background:var(--panel2);color:var(--text);transform:translateX(2px)}
+  nav.tabs button.active{box-shadow:inset 3px 0 0 var(--accent)}
+  .panel{animation:panel-in .3s ease;box-shadow:0 1px 0 rgba(255,255,255,.03) inset,0 12px 32px rgba(0,0,0,.18)}
+  @keyframes panel-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .field input,.field textarea,.field select{transition:border-color .15s,box-shadow .15s}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.15);outline:none}
+  .field input[type="color"]{width:72px;height:44px}
+  .field input[type="range"]{accent-color:var(--accent);padding:0;background:transparent;border:0}
+  .item{transition:border-color .15s}
+  .item:hover{border-color:var(--accent)}
+  .mono{font-family:'JetBrains Mono',monospace}
+  /* toasts */
+  #toasts{position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:min(360px,calc(100vw - 40px))}
+  .toast{display:flex;align-items:flex-start;gap:10px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:.85rem;box-shadow:0 16px 48px rgba(0,0,0,.5);animation:toast-in .25s cubic-bezier(.2,.9,.3,1.2)}
+  .toast.ok{border-color:rgba(16,185,129,.5)} .toast.ok::before{content:'✔';color:var(--ok);font-weight:700}
+  .toast.err{border-color:rgba(239,68,68,.5)} .toast.err::before{content:'✘';color:var(--danger);font-weight:700}
+  .toast.info::before{content:'●';color:var(--accent);font-weight:700}
+  @keyframes toast-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  .toast.out{opacity:0;transform:translateX(24px);transition:all .3s}
+  /* vista previa */
+  .pv-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+  .pv-status{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:7px 14px;background:var(--panel2)}
+  .pv-status i{width:8px;height:8px;border-radius:50%;background:#6b7280}
+  .pv-status.live{color:var(--ok);border-color:rgba(16,185,129,.4)}
+  .pv-status.live i{background:var(--ok);box-shadow:0 0 10px var(--ok);animation:dirty-pulse 1.6s infinite}
+  .pv-status em{font-style:normal}
+  .pv-seg{display:inline-flex;background:var(--panel2);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px}
+  .pv-seg button{background:transparent;border:0;color:var(--muted);font-size:.75rem;font-weight:600;padding:7px 14px;border-radius:999px;transition:all .15s}
+  .pv-seg button:hover{color:var(--text)}
+  .pv-seg button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+  .pv-jump{display:inline-flex;flex-wrap:wrap;gap:6px}
+  .pv-jump button{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:.72rem;font-weight:500;padding:7px 12px;border-radius:999px;transition:all .15s}
+  .pv-jump button:hover{color:var(--text);border-color:var(--accent)}
+  .pv-sync{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;color:var(--muted);cursor:pointer}
+  .pv-sync input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
+  .pv-frame{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .pv-frame iframe{display:block;border:0;width:100%;height:560px;margin-inline:auto;transition:width .3s ease;background:#111310}
+  /* presets */
+  .preset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .preset{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--text);font-size:.78rem;font-weight:600;transition:all .15s;text-align:left}
+  .preset:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .preset.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.15)}
+  .preset i{width:30px;height:30px;border-radius:9px;flex:none;border:1px solid rgba(255,255,255,.15)}
+  @media(max-width:700px){.pv-frame iframe{height:480px}}
 </style>
 </head>
 <body>
 <div id="app" class="app" style="display:block;">
   <div class="topbar">
-    <div class="brand">M.R. CMS</div>
+    <div class="brand">M.R. CMS<span class="brand-sub">studio</span></div>
     <div style="display:flex;gap:8px;align-items:center">
+      <span class="dirty" id="dirtyDot" hidden><i></i>Sin guardar</span>
       <a class="btn ghost small" href="index.html" target="_blank">Ver sitio</a>
       <button class="btn small" id="saveAllBtn">Guardar todo</button>
       <button class="btn ghost small" id="logoutBtn">Salir</button>
     </div>
   </div>
+  <div id="toasts" aria-live="polite"></div>
   <div class="layout">
     <aside class="sidebar">
       <nav class="tabs" id="tabs">
       <button data-tab="dash" class="active">Dashboard</button>
+      <button data-tab="preview">Vista previa</button>
       <button data-tab="hero">Hero</button>
       <button data-tab="about">Sobre Mí</button>
       <button data-tab="services">Servicios</button>
@@ -79,6 +144,25 @@
       <div data-panel="dash">
         <div class="stats" id="dashStats"></div>
         <div class="panel"><h3>Estado</h3><p class="hint">Edita cada sección y guarda. Los cambios se aplican a <code>data/portfolio.json</code> y se reflejan en <code>index.html</code>.</p></div>
+      </div>
+      <!-- PREVIEW -->
+      <div data-panel="preview" class="hidden">
+        <div class="panel"><h3>Vista previa en vivo</h3>
+          <div class="pv-toolbar">
+            <span class="pv-status" id="pvStatus"><i></i><em>Listo</em></span>
+            <div class="pv-seg" id="pvDevices" role="group" aria-label="Dispositivo">
+              <button data-w="100%" class="active">Desktop</button><button data-w="768px">Tablet</button><button data-w="390px">Móvil</button>
+            </div>
+            <div class="pv-jump" id="pvJump">
+              <button data-hash="#inicio">Inicio</button><button data-hash="#proyectos">Proyectos</button><button data-hash="#sobre-mi">Sobre mí</button><button data-hash="#expertise">Expertise</button><button data-hash="#trayectoria">Trayectoria</button><button data-hash="#contacto">Contacto</button>
+            </div>
+            <label class="pv-sync"><input type="checkbox" id="pvAuto" checked> Sincro en vivo</label>
+            <button class="btn ghost small" id="pvReload">Recargar</button>
+            <a class="btn ghost small" href="index.html" target="_blank">Abrir</a>
+          </div>
+          <div class="pv-frame"><iframe id="livePreview" src="index.html" title="Vista previa del sitio"></iframe></div>
+          <p class="hint">Edita cualquier pestaña: la vista previa se actualiza sola <b>sin guardar</b>. <b>Guardar todo</b> persiste los cambios en disco.</p>
+        </div>
       </div>
       <!-- HERO -->
       <div data-panel="hero" class="hidden">
@@ -891,6 +975,10 @@
       </div>
       <!-- DESIGN -->
       <div data-panel="design" class="hidden">
+        <div class="panel"><h3>Temas rápidos</h3>
+          <div class="preset-grid" id="presetGrid"></div>
+          <p class="hint">Un clic aplica la paleta al instante en la <b>Vista previa</b>. Pulsa <b>Guardar todo</b> para persistir. Los campos de abajo permiten el ajuste fino.</p>
+        </div>
         <div class="panel"><h3>Diseño — Colores</h3>
           <div class="grid2">
             <div class="field"><label>Fondo primario (--bg-primary)</label><input type="color" id="d_bg"><input type="text" id="d_bg_hex" class="mono"></div>
@@ -902,7 +990,7 @@
             <div class="field"><label>Texto muteado (--text-muted)</label><input type="color" id="d_muted"><input type="text" id="d_muted_hex" class="mono"></div>
             <div class="field"><label>Borde (--border)</label><input type="color" id="d_border"><input type="text" id="d_border_hex" class="mono"></div>
             <div class="field"><label>Borde hover (--border-hover)</label><input type="color" id="d_border_hover"><input type="text" id="d_border_hover_hex" class="mono"></div>
-            <div class="field"><label>Acento azul (--accent-blue)</label><input type="color" id="d_accent"><input type="text" id="d_accent_hex" class="mono"></div>
+            <div class="field"><label>Acento principal · lima del index (--accent)</label><input type="color" id="d_accent"><input type="text" id="d_accent_hex" class="mono"></div>
             <div class="field"><label>Acento morado (--accent-purple)</label><input type="color" id="d_accent2"><input type="text" id="d_accent2_hex" class="mono"></div>
             <div class="field"><label>Esmeralda (--accent-emerald)</label><input type="color" id="d_accent_emerald"><input type="text" id="d_accent_emerald_hex" class="mono"></div>
             <div class="field"><label>Ámbar (--accent-amber)</label><input type="color" id="d_accent_amber"><input type="text" id="d_accent_amber_hex" class="mono"></div>
@@ -918,7 +1006,7 @@
             <div class="field"><label>Gradiente 3 medio</label><input type="color" id="d_grad3_mid"><input type="text" id="d_grad3_mid_hex" class="mono"></div>
             <div class="field"><label>Gradiente 3 fin</label><input type="color" id="d_grad3_to"><input type="text" id="d_grad3_to_hex" class="mono"></div>
           </div>
-          <div class="hint">Colores se guardan como CSS vars (--bg-primary, --accent-blue, etc.) y se aplican en index.html</div>
+          <div class="hint">El index usa <b>fondo→canvas</b>, <b>acento→lima</b>, <b>texto/muted/borde</b> y las 3 fuentes. Todo cambio se ve en vivo en la Vista previa.</div>
         </div>
 
         <div class="panel"><h3>Tipografía</h3>
@@ -1159,6 +1247,8 @@ async function saveState(){
   if(!r.ok) throw new Error('No se pudo guardar en disco (¿serve.js corriendo?)');
   const preview=document.getElementById('ren_livePreview');
   if(preview?.contentWindow) preview.contentWindow.postMessage({type:'portfolio-update',data:JSON.parse(json)},'*');
+  const lp=document.getElementById('livePreview');
+  if(lp?.contentWindow) lp.contentWindow.postMessage({type:'portfolio-update',data:JSON.parse(json)},'*');
 }
 
 function renderAll(){
@@ -2100,20 +2190,173 @@ async function doSave(){
     }catch(e){}
     await saveState();
     renderAll();
-    alert('Guardado ✔');
+    renderPresets();
+    hideDirty();
+    toast('Guardado en disco ✔', 'ok');
   }catch(e){
     console.error(e);
-    alert('✘ No se pudo guardar: '+(e.message||e)+'\n¿Está corriendo serve.js en localhost:5173?');
+    toast('No se pudo guardar: '+(e.message||e), 'err');
   }
 }
 $('#saveAllBtn').onclick=doSave;
+
+/* ===== M.R. CMS Pro: toasts, presets, live preview ===== */
+function toast(msg, type){
+  const box = document.getElementById('toasts');
+  if(!box){ alert(msg); return; }
+  const el = document.createElement('div');
+  el.className = 'toast ' + (type || 'info');
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(), 350); }, 3400);
+  while(box.children.length > 4) box.firstChild.remove();
+}
+function markDirty(){ const d = document.getElementById('dirtyDot'); if(d) d.hidden = false; }
+function hideDirty(){ const d = document.getElementById('dirtyDot'); if(d) d.hidden = true; }
+
+const DESIGN_PAIRS = [['bg','d_bg'],['bg2','d_bg2'],['bg3','d_bg3'],['bg_card','d_bg_card'],['texto','d_text'],['text2','d_text2'],['muted','d_muted'],['border','d_border'],['border_hover','d_border_hover'],['accent','d_accent'],['accent2','d_accent2'],['accent_emerald','d_accent_emerald'],['accent_amber','d_accent_amber'],['accent_rose','d_accent_rose'],['accent_cyan','d_accent_cyan']];
+const HEXOK = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+function readColorPair(base){
+  const hex = document.getElementById(base + '_hex');
+  if(hex && HEXOK.test(hex.value.trim())) return hex.value.trim();
+  const c = document.getElementById(base);
+  return c ? c.value : '';
+}
+function writeColorPair(base, val){
+  if(!val) return;
+  const c = document.getElementById(base), h = document.getElementById(base + '_hex');
+  try{ if(c) c.value = val; }catch(e){}
+  if(h) h.value = val;
+}
+const THEME_PRESETS = [
+  { name: 'Lima Editorial', colors: { bg: '#111310', bg2: '#161a15', bg3: '#1c211a', bg_card: '#171c13', texto: '#f0f1eb', text2: '#a2a89c', muted: '#92968d', border: '#2a2d26', border_hover: '#3a3a4f', accent: '#c2f383' } },
+  { name: 'Cian Neón', colors: { bg: '#05070d', bg2: '#0a0e18', bg3: '#0d1424', bg_card: '#0a0e18', texto: '#e8f4ff', text2: '#8fa3c0', muted: '#5c6b85', border: '#1a2340', border_hover: '#2a3a5f', accent: '#00d4ff' } },
+  { name: 'Violeta Noche', colors: { bg: '#0d0a14', bg2: '#120e1d', bg3: '#181226', bg_card: '#151022', texto: '#f2ecff', text2: '#a89cc8', muted: '#6f6390', border: '#2a2140', border_hover: '#3d2f5f', accent: '#b06bff' } },
+  { name: 'Arena Cálida', colors: { bg: '#141210', bg2: '#1a1614', bg3: '#221d18', bg_card: '#1e1a16', texto: '#f4efe6', text2: '#b8ab98', muted: '#7d7264', border: '#2e2823', border_hover: '#4a4038', accent: '#E4572E' } },
+  { name: 'Grafito Mono', colors: { bg: '#101012', bg2: '#141416', bg3: '#1a1a1e', bg_card: '#17171a', texto: '#f5f5f5', text2: '#b5b5b5', muted: '#737373', border: '#2a2a2e', border_hover: '#3f3f46', accent: '#e8e8e8' } }
+];
+function renderPresets(){
+  const grid = document.getElementById('presetGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  THEME_PRESETS.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.className = 'preset' + (state && state.design && state.design.accent === p.colors.accent ? ' active' : '');
+    b.innerHTML = '<i style="background:linear-gradient(135deg,' + p.colors.accent + ' 0 50%,' + p.colors.bg + ' 50% 100%)"></i><span>' + p.name + '</span>';
+    b.addEventListener('click', () => applyPreset(i));
+    grid.appendChild(b);
+  });
+}
+function applyPreset(i){
+  const p = THEME_PRESETS[i];
+  if(!p || !state) return;
+  Object.assign(state.design, p.colors);
+  Object.keys(p.colors).forEach(k => {
+    const pair = DESIGN_PAIRS.find(x => x[0] === k);
+    if(pair) writeColorPair(pair[1], p.colors[k]);
+  });
+  renderPresets();
+  markDirty();
+  pushPreview();
+  toast('Tema "' + p.name + '" aplicado — Guarda para persistir', 'ok');
+}
+function liveCollect(){
+  if(!state) return;
+  try{
+    const v = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+    if(!state.hero) state.hero = {};
+    if(v('h_badge')) state.hero.badge = v('h_badge');
+    if(v('h_h1a')) state.hero.h1a = v('h_h1a');
+    if(v('h_h1b')) state.hero.h1b = v('h_h1b');
+    if(v('h_sub')) state.hero.subtitle = v('h_sub');
+    if(!state.about) state.about = {};
+    if(v('a_label')) state.about.label = v('a_label');
+    if(v('a_title')) state.about.title = v('a_title');
+    if(v('a_sub')) state.about.subtitle = v('a_sub');
+    if(v('a_paras')) state.about.paragraphs = v('a_paras').split('\n---\n').map(s => s.trim()).filter(Boolean);
+    if(!state.contact) state.contact = {};
+    if(v('c_label')) state.contact.label = v('c_label');
+    if(v('c_title')) state.contact.title = v('c_title');
+    if(v('c_sub')) state.contact.subtitle = v('c_sub');
+    if(!state.site) state.site = {};
+    const siteMap = [['site_brand','brand'],['site_email','email'],['site_linkedin','linkedin'],['site_github','github'],['site_portfolio','portfolio'],['site_phone','telefono'],['site_footer','footer']];
+    siteMap.forEach(([id, k]) => { if(v(id)) state.site[k] = v(id); });
+    if(!state.seo) state.seo = {};
+    if(v('seo_title')) state.seo.title = v('seo_title');
+    if(v('seo_desc')) state.seo.description = v('seo_desc');
+    if(!state.design) state.design = {};
+    DESIGN_PAIRS.forEach(([k, base]) => { const c = readColorPair(base); if(c) state.design[k] = c; });
+    [['d_font_heading','font_heading'],['d_font_body','font_body'],['d_font_mono','font_mono']].forEach(([id, k]) => { if(v(id)) state.design[k] = v(id); });
+  }catch(e){}
+}
+function setPvStatus(text, live){
+  const el = document.getElementById('pvStatus');
+  if(!el) return;
+  el.classList.toggle('live', !!live);
+  el.querySelector('em').textContent = text;
+}
+let pvTimer = null;
+function pushPreview(){
+  try{
+    const f = document.getElementById('livePreview');
+    if(f && f.contentWindow && state){
+      f.contentWindow.postMessage({ type: 'portfolio-update', data: JSON.parse(JSON.stringify(state)) }, '*');
+      setPvStatus('EN VIVO · ' + new Date().toLocaleTimeString(), true);
+    }
+  }catch(e){}
+}
+function schedulePush(){
+  const auto = document.getElementById('pvAuto');
+  if(auto && !auto.checked) return;
+  clearTimeout(pvTimer);
+  pvTimer = setTimeout(pushPreview, 350);
+}
+function onAdminChange(){ markDirty(); schedulePush(); }
+document.addEventListener('input', e => {
+  if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)){ liveCollect(); onAdminChange(); }
+}, true);
+document.addEventListener('change', e => {
+  if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)){ liveCollect(); onAdminChange(); }
+}, true);
+if('MutationObserver' in window){
+  let moTimer = null;
+  new MutationObserver(() => { clearTimeout(moTimer); moTimer = setTimeout(() => { markDirty(); schedulePush(); }, 400); })
+    .observe(document.querySelector('.content'), { childList: true, subtree: true });
+}
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); doSave(); }
+});
+(function initPreviewPro(){
+  renderPresets();
+  const dev = document.getElementById('pvDevices');
+  if(dev) dev.addEventListener('click', e => {
+    const b = e.target.closest('button[data-w]'); if(!b) return;
+    dev.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+    const f = document.getElementById('livePreview');
+    if(f) f.style.width = b.getAttribute('data-w');
+  });
+  const jump = document.getElementById('pvJump');
+  if(jump) jump.addEventListener('click', e => {
+    const b = e.target.closest('button[data-hash]'); if(!b) return;
+    const f = document.getElementById('livePreview');
+    if(f && f.contentWindow) f.contentWindow.postMessage({ type: 'preview-nav', hash: b.getAttribute('data-hash') }, '*');
+  });
+  const rel = document.getElementById('pvReload');
+  if(rel) rel.addEventListener('click', () => {
+    const f = document.getElementById('livePreview');
+    if(f){ f.src = 'index.html'; setPvStatus('Recargando…', false); }
+  });
+  const f = document.getElementById('livePreview');
+  if(f) f.addEventListener('load', () => setTimeout(pushPreview, 400));
+  setTimeout(pushPreview, 3000);
+})();
 
 // Download / Import
 $('#downloadBtn').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='portfolio.json'; a.click(); };
 $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').addEventListener('change',async e=>{
   const f=e.target.files[0]; if(!f) return;
-  try{ state=JSON.parse(await f.text()); await saveState(); renderAll(); alert('Importado ✔'); }catch(err){ alert('Error: '+err.message); }
+  try{ state=JSON.parse(await f.text()); await saveState(); renderAll(); renderPresets(); hideDirty(); toast('Importado ✔', 'ok'); }catch(err){ toast('Error: '+err.message, 'err'); }
 });
 
 // GitHub publish (conservado)
