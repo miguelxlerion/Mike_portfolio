@@ -2,12 +2,17 @@
 // Por qué existe: el navegador solo puede hacer 60 req/hora contra
 // api.github.com sin token. Este endpoint cachea perfil+repos 1 hora
 // en el PoP más cercano, así el sitio aguanta tráfico sin romperse.
-// Con GITHUB_TOKEN (env var) el límite sube a 5000 req/hora.
+// Con GITHUB_TOKEN (variable del Worker) el límite sube a 5000 req/hora.
 //
 //   GET /api/github?user=miguelxlerion&kind=profile
 //   GET /api/github?user=miguelxlerion&kind=repos
 
-interface Env {
+// Tipos estructurales mínimos (sin dependencias): lo que el Worker usa.
+export interface CtxLike {
+  waitUntil: (p: Promise<unknown>) => void;
+}
+
+export interface GithubEnv {
   GITHUB_TOKEN?: string;
 }
 
@@ -20,8 +25,8 @@ function json(data: unknown, status: number) {
   });
 }
 
-export const onRequest: PagesFunction<Env> = async (ctx) => {
-  const url = new URL(ctx.request.url);
+export async function handleGithub(request: Request, env: GithubEnv, ctx: CtxLike): Promise<Response> {
+  const url = new URL(request.url);
   const user = (url.searchParams.get("user") || "miguelxlerion").trim();
   if (!USER_RE.test(user)) return json({ message: "bad user" }, 400);
 
@@ -38,12 +43,12 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
     const hit = await cache.match(cacheKey);
     if (hit) return hit;
 
-    // 2) Ir al origen con token si existe
+    // 2) Ir al origen con token si existe (nunca se expone al navegador)
     const headers: Record<string, string> = {
       "User-Agent": "mike-portfolio",
       Accept: "application/vnd.github+json",
     };
-    if (ctx.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${ctx.env.GITHUB_TOKEN}`;
+    if (env.GITHUB_TOKEN) headers.Authorization = `Bearer ${env.GITHUB_TOKEN}`;
 
     const upstream = await fetch(target, { headers });
     if (!upstream.ok) {
@@ -59,4 +64,4 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
   } catch {
     return json({ message: "proxy-error" }, 502);
   }
-};
+}

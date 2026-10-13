@@ -672,7 +672,7 @@ export default function AdminPanel() {
               <p className="text-sm leading-relaxed text-zinc-400">
                 Este botón toma <strong className="text-white">todo lo que editaste en el panel</strong> y lo
                 publica como commit en <code className="bg-white/10 px-1 font-mono text-xs text-acid">src/data/content.ts</code> de
-                tu repo. Cloudflare Pages detecta el push y <strong className="text-white">redespliega el sitio solo</strong> en 1–2 minutos.
+                tu repo. Cloudflare detecta el push y <strong className="text-white">redespliega el sitio solo</strong> en 1–2 minutos.
               </p>
               <Field label="Token de GitHub" hint="Clásico con scope repo (o fino con Contents: lectura y escritura). Vive solo en este navegador, jamás se publica.">
                 <div className="flex gap-2">
@@ -715,7 +715,7 @@ export default function AdminPanel() {
                     {" · "}
                     <a href={pubResult.fileUrl} target="_blank" rel="noreferrer" className="underline hover:text-acid">Ver archivo</a>
                   </p>
-                  <p className="mt-2 text-zinc-400">Cloudflare Pages empezará el deploy solo. Compruébalo en el dashboard (Deployments) en ~1–2 min.</p>
+                  <p className="mt-2 text-zinc-400">Cloudflare empezará el deploy solo. Compruébalo en el dashboard (Deployments) en ~1–2 min.</p>
                 </div>
               )}
               {pubStatus === "error" && (

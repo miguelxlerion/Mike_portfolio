@@ -52,24 +52,24 @@ npm run build    # build multi-archivo a dist/ (assets con hash para caché edge
 npm run preview  # previsualizar el build
 ```
 
-## Deploy en Cloudflare Pages ☁
+## Deploy en Cloudflare ☁ (Worker + assets)
 
-1. Sube el repo a GitHub y conéctalo en **Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git**.
-2. Build settings: **Framework preset `Vite`**, Build command `npm run build`, Output `dist`. (`wrangler.toml` ya fija el nombre `mike-portfolio`.)
-3. Obtendrás `https://mike-portfolio.pages.dev` + **preview deployments** por cada PR.
-4. Variables (Pages → Settings → Variables → Production):
-   - `GITHUB_TOKEN` (opcional): token clásico con `public_repo` → el proxy `/api/github` pasa de 60 a 5000 req/h.
+1. Sube el repo a GitHub y conéctalo en **Cloudflare Dashboard → Workers & Pages → Create → Import a repository** (el flujo dice "Worker": es el correcto, Pages vive ahí ahora).
+2. Project name `mike-portfolio`. Deja tal cual: Build `npm run build`, Deploy `npx wrangler deploy`, Preview `npx wrangler preview` (el `wrangler.toml` ya define Worker + `dist/` + SPA fallback).
+3. Obtendrás `https://mike-portfolio.workers.dev` + **preview deployments** por cada cambio (déjalas activadas).
+4. Variables (Worker → Settings → Variables and Secrets):
+   - `GITHUB_TOKEN` (opcional): el proxy `/api/github` pasa de 60 a 5000 req/h.
    - `RESEND_API_KEY` + `CONTACT_TO`: activan el envío real del formulario (sin ellas, cae a `mailto`).
    - `TURNSTILE_SECRET` (+ sitekey en el front): anti-spam del formulario.
-5. Activa gratis en el dashboard: **Web Analytics** (sin cookies), **Early Hints + HTTP/3** (Speed → Optimization), **WAF managed rules** (Security), **DNSSEC** cuando apuntes tu dominio.
+5. Activa gratis en el dashboard: **Web Analytics** (sin cookies), **Speed → Optimization**, **WAF**, **DNSSEC** cuando apuntes tu dominio.
 
 Qué demuestra cada pieza:
 
 | Pieza | Uso correcto que demuestra |
 |---|---|
 | Build multi-archivo + `public/_headers` | Assets `immutable` 1 año en edge, HTML revalidado; CSP + hardening sin plugins raros |
-| `functions/api/github.ts` | No quemar el rate-limit del visitante: caché edge 1h + `stale-while-revalidate` + token server-side (nunca expuesto) |
-| `functions/api/contact.ts` | Serverless progresivo: Resend si hay clave, `mailto` si no; validación + Turnstile en servidor |
+| `worker/github.ts` | No quemar el rate-limit del visitante: caché edge 1h + `stale-while-revalidate` + token server-side (nunca expuesto) |
+| `worker/contact.ts` | Serverless progresivo: Resend si hay clave, `mailto` si no; validación + Turnstile en servidor |
 | Preview deployments | Cada cambio se revisa en URL temporal antes de producción |
 
 > Nota: `vite-plugin-singlefile` sigue instalado pero desactivado en `vite.config.ts`. Úsalo solo si necesitas un `.html` portable fuera de Cloudflare.
