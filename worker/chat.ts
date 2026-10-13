@@ -89,20 +89,30 @@ export async function handleChat(request: Request, env: ChatEnv): Promise<Respon
       cleanHistory.length > 0 && cleanHistory[cleanHistory.length - 1].role === "user"
         ? `${cleanHistory[cleanHistory.length - 1].content}\n${question.trim()}`
         : question.trim();
-    const emb = (await env.AI.run(EMBED_MODEL, { text: queryText })) as
-      | { data?: number[][] }
-      | { shape?: number[]; data?: number[] };
+    let emb: unknown;
+    try {
+      emb = await env.AI.run(EMBED_MODEL, { text: queryText });
+    } catch {
+      return json({ error: "stage-embed" }, 502);
+    }
     const vector: number[] | undefined = Array.isArray((emb as { data?: unknown }).data?.[0])
       ? ((emb as { data: number[][] }).data[0] as number[])
       : ((emb as { data?: number[] }).data as number[] | undefined);
     if (!vector || vector.length === 0) return json({ error: "embed-failed" }, 502);
 
     // 2) Búsqueda semántica topK
-    const found = await env.VECTORIZE.query(vector, {
-      topK: TOP_K,
-      returnValues: false,
-      returnMetadata: "all",
-    });
+    let found: {
+      matches?: { id?: string; score?: number; metadata?: Record<string, unknown> }[];
+    };
+    try {
+      found = await env.VECTORIZE.query(vector, {
+        topK: TOP_K,
+        returnValues: false,
+        returnMetadata: "all",
+      });
+    } catch {
+      return json({ error: "stage-query" }, 502);
+    }
     const matches = (found.matches ?? []).filter((m) => (m.score ?? 0) > MIN_SCORE);
     if (matches.length === 0) {
       return json({
@@ -131,11 +141,16 @@ export async function handleChat(request: Request, env: ChatEnv): Promise<Respon
         content: `Contexto del perfil:\n${context}\n\nPregunta: ${question.trim()}`,
       },
     ];
-    const out = (await env.AI.run(CHAT_MODEL, {
-      messages,
-      max_tokens: MAX_TOKENS,
-      temperature: Number(RAG_CONFIG.temperature ?? 0.3),
-    })) as { response?: unknown };
+    let out: { response?: unknown };
+    try {
+      out = (await env.AI.run(CHAT_MODEL, {
+        messages,
+        max_tokens: MAX_TOKENS,
+        temperature: Number(RAG_CONFIG.temperature ?? 0.3),
+      })) as { response?: unknown };
+    } catch {
+      return json({ error: "stage-gen" }, 502);
+    }
     const answer = typeof out.response === "string" ? out.response.trim() : "";
     if (!answer) return json({ error: "gen-failed" }, 502);
     return json({ answer, sources: [...new Set(sources)].slice(0, 5) });
