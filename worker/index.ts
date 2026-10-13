@@ -1,6 +1,7 @@
 import { handleGithub } from "./github";
 import { handleContact } from "./contact";
 import { handleTranslate } from "./translate";
+import { handleChat } from "./chat";
 
 // Worker único: sirve el sitio estático (dist/) y las rutas /api/*.
 // Todo lo que no sea /api/* cae al asset estático (binding ASSETS).
@@ -32,6 +33,10 @@ export default {
     }
     if (url.pathname === "/api/translate") {
       if (request.method === "POST") return handleTranslate(request, env, ctx);
+      return new Response("Method Not Allowed", { status: 405 });
+    }
+    if (url.pathname === "/api/chat") {
+      if (request.method === "POST") return handleChat(request, env);
       return new Response("Method Not Allowed", { status: 405 });
     }
 

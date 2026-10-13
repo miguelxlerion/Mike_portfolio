@@ -54,6 +54,22 @@ Pestaña **Medios** del panel (requiere token):
 - **Galería**: lista lo subido (miniaturas inmediatas vía raw), copiar ruta y borrar.
 - **Videos (solo URL)**: los videos no se suben (pesan demasiado). Pega la URL del .mp4, elige proyecto y **Asignar**: la ficha mostrará reproductor en vez de foto. CSP ya permite `media-src https:`.
 
+## Asistente RAG 🤖 (Workers AI + Vectorize)
+
+Burbuja inferior-izquierda: responde sobre el perfil (experiencia, stack, proyectos, contacto) con búsqueda semántica + Llama 3.1 8B, citando fuentes. Bilingüe ES/EN, sugerencias, historial de sesión.
+
+- `worker/knowledge.mjs` → la base (edítala y re-ejecuta ingest).
+- `worker/chat.ts` → `POST /api/chat {question, history?}` con tope 12 req/min por IP (más regla Rate Limiting recomendada en dashboard).
+- Sin bindings responde `501/502` y el widget deriva al email: nunca se rompe.
+- Activarlo (una vez):
+  ```bash
+  npx wrangler vectorize create portfolio-kb --dimensions=384 --metric=cosine
+  $env:CLOUDFLARE_API_TOKEN="<token con Workers AI + Vectorize>"
+  $env:CLOUDFLARE_ACCOUNT_ID="<account id>"
+  npm run rag:ingest
+  ```
+  Probar: `POST /api/chat {"question":"¿En qué stack trabajas?"}`.
+
 ## Publicar cambios 🚀 (cero terminal)
 
 Pestaña **Publicar** del panel local, con tu token de GitHub:

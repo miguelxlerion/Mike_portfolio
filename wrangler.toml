@@ -1,14 +1,13 @@
 # Cloudflare Worker + assets estáticos (mike-portfolio)
 # Deploy conectado a git: Build `npm run build`, Deploy `npx wrangler deploy`.
-# El Worker sirve dist/ y responde /api/github y /api/contact.
+# El Worker sirve dist/ y responde /api/github, /api/contact, /api/translate y /api/chat.
 #
 # Variables (dashboard del Worker → Settings → Variables and Secrets):
 #   GITHUB_TOKEN (opcional, sube el rate-limit de la API a 5000 req/h)
-#   TRANSLATE_API_KEY (Google Cloud Translation: lote oficial sin throttling;
-#     calentar todo el sitio cuesta ~$0.40 una vez, luego tira de caché edge)
 #   RESEND_API_KEY (para que /api/contact envíe emails de verdad)
 #   CONTACT_TO (destinatario, por defecto miguelxlerion@gmail.com)
 #   TURNSTILE_SECRET (opcional, anti-spam del formulario)
+#   TRANSLATE_API_KEY (Google Cloud Translation: lote oficial sin throttling)
 name = "mike-portfolio"
 compatibility_date = "2026-10-01"
 main = "worker/index.ts"
@@ -16,3 +15,13 @@ main = "worker/index.ts"
 [assets]
 directory = "./dist"
 not_found_handling = "single-page-application"
+
+# RAG del asistente: embeddings + LLM (Workers AI) y búsqueda (Vectorize).
+# Crear el índice una vez: npx wrangler vectorize create portfolio-kb --dimensions=384 --metric=cosine
+# Luego: npm run rag:ingest (pide CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID)
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "portfolio-kb"

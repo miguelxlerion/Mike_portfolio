@@ -10,6 +10,7 @@ import GitHubReal from "./components/GitHubReal";
 import Viewer3D from "./components/Viewer3D";
 import Contact from "./components/Contact";
 import Footer, { BackToTop } from "./components/Footer";
+import ChatWidget from "./components/ChatWidget";
 
 // Patrón ternary a propósito: con __ADMIN_ENABLED__ en false (producción)
 // el bundler elimina la rama del import() y el chunk del admin no se emite.
@@ -80,6 +81,7 @@ export default function App() {
 
       <Footer />
       <BackToTop />
+      <ChatWidget />
     </div>
   );
 }
