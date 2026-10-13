@@ -5,6 +5,11 @@ import { defaultContent, type SiteContent } from "../data/content";
 const STORAGE_KEY = "mike-portfolio-v2";
 
 function loadInitial(): SiteContent {
+  // En producción el contenido es 100% el del build: se ignora
+  // localStorage a propósito. Si no, quien visitó el sitio una vez
+  // congelaría los valores de ese día y jamás vería tus publishes.
+  // (En local/dev el panel sí lee y escribe localStorage.)
+  if (!__ADMIN_ENABLED__) return defaultContent;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultContent;
@@ -32,6 +37,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [content, setContentState] = useState<SiteContent>(() => loadInitial());
 
   useEffect(() => {
+    // En producción no se persiste nada: el build es la única fuente.
+    if (!__ADMIN_ENABLED__) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
     } catch {

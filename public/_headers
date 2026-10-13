@@ -4,6 +4,13 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# El HTML nunca se cachea en edge: cada publish genera un index.html
+# distinto y debe verse al instante (los JS/CSS sí son inmutables).
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
