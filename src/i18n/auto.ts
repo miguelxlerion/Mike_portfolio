@@ -52,10 +52,9 @@ function saveCache() {
 const OVERRIDES: Record<string, string> = {
   INICIO: "Home",
 };
-
-async function fetchOne(text: string): Promise<string> {
+async function fetchOne(text: string, signal?: AbortSignal): Promise<string> {
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURIComponent(text)}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { signal });
   if (!res.ok) throw new Error(`http-${res.status}`);
   const data = (await res.json()) as unknown;
   // Forma: [[[traducido, original, ...], ...], ...]
@@ -66,6 +65,8 @@ async function fetchOne(text: string): Promise<string> {
   return out;
 }
 
+import { CHROME_EN } from "./chrome";
+
 /** Traduce un texto ES→EN con caché + deduplicación. Lanza si falla. */
 export async function translateString(text: string): Promise<string> {
   const src = text.trim();
@@ -73,13 +74,13 @@ export async function translateString(text: string): Promise<string> {
   // Sin letras o ya no-español obvio: no gastar peticiones
   if (!/[a-záéíóúñüA-ZÁÉÍÓÚÑÜ]/.test(src)) return text;
   const key = hash(src);
-  // El DOM guarda "Inicio" pero innerText muestra "INICIO" (CSS uppercase):
-  // buscar en ambas formas para que los overrides siempre apliquen.
-  const fixed = OVERRIDES[src] ?? OVERRIDES[src.toUpperCase()];
-  if (fixed) {
-    getCache().set(key, fixed);
+  // 1) Diccionario curado (instantáneo, sin API). El DOM guarda "Inicio"
+  // pero innerText muestra "INICIO" (CSS uppercase): probar ambas formas.
+  const dict = CHROME_EN[src] ?? CHROME_EN[src.toUpperCase()] ?? OVERRIDES[src] ?? OVERRIDES[src.toUpperCase()];
+  if (dict) {
+    getCache().set(key, dict);
     saveCache();
-    return fixed;
+    return dict;
   }
   const hit = getCache().get(key);
   if (hit) return hit;
@@ -117,9 +118,16 @@ export async function translateMany(uniqueTexts: string[]): Promise<Map<string, 
   const out = new Map<string, string | null>();
   const pending: string[] = [];
   for (const t of uniqueTexts) {
+    const dict = CHROME_EN[t] ?? CHROME_EN[t.toUpperCase()];
+    if (dict) {
+      getCache().set(hash(t), dict);
+      out.set(t, dict);
+      continue;
+    }
     const hit = getCache().get(hash(t));
-    if (hit) out.set(t, hit);
-    else pending.push(t);
+    if (hit) {
+      out.set(t, hit);
+    } else pending.push(t);
   }
   for (let k = 0; k < pending.length; k += BATCH) {
     const slice = pending.slice(k, k + BATCH);
@@ -137,13 +145,17 @@ export async function translateMany(uniqueTexts: string[]): Promise<Map<string, 
 /**
  * Un lote: primero el Worker same-origin (prod: agrupa + caché edge
  * compartida globalmente), si no existe (dev local) directo a Google.
+ * Timeout duro: nada cuelga jamás; lo no resuelto queda en español.
  */
+const BATCH_TIMEOUT = 12000;
+
 async function fetchBatch(texts: string[]): Promise<(string | null)[]> {
   try {
     const res = await fetch("/api/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sl: "es", tl: "en", texts }),
+      signal: AbortSignal.timeout(BATCH_TIMEOUT),
     });
     if (res.ok) {
       const data = (await res.json()) as { translations?: unknown };
@@ -156,10 +168,14 @@ async function fetchBatch(texts: string[]): Promise<(string | null)[]> {
   }
   const out: (string | null)[] = [];
   for (const t of texts) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), BATCH_TIMEOUT);
     try {
-      out.push(await fetchOne(t));
+      out.push(await fetchOne(t, ctrl.signal));
     } catch {
       out.push(null);
+    } finally {
+      clearTimeout(timer);
     }
   }
   return out;
@@ -257,9 +273,7 @@ export async function translatePageToEnglish(): Promise<void> {
     }
   }
   const unique = [...new Set(jobs.map((j) => j.key))];
-  const got = await translateMany(unique);
-  for (const [key, value] of got) {
-    if (!value) continue;
+  const applyKey = (key: string, value: string) => {
     for (const j of jobs) {
       if (j.key !== key) continue;
       try {
@@ -268,6 +282,27 @@ export async function translatePageToEnglish(): Promise<void> {
         /* nodo ya inexistente */
       }
     }
+  };
+  // 1) Instantáneo y sin red: diccionario + caché local. Esto pinta YA
+  // aunque la red cuelgue: el progreso nunca depende de la API.
+  const rest: string[] = [];
+  for (const key of unique) {
+    const dict = CHROME_EN[key] ?? CHROME_EN[key.toUpperCase()];
+    if (dict) {
+      getCache().set(hash(key), dict);
+      applyKey(key, dict);
+      continue;
+    }
+    const hit = getCache().get(hash(key));
+    if (hit) applyKey(key, hit);
+    else rest.push(key);
+  }
+  saveCache();
+  if (rest.length === 0) return;
+  // 2) Solo lo restante viaja por red, con timeout duro por lote.
+  const got = await translateMany(rest);
+  for (const [key, value] of got) {
+    if (value) applyKey(key, value);
   }
 }
 
