@@ -455,7 +455,8 @@ export const defaultContent: SiteContent = {
           "label": "Vectorial",
           "value": "PostgreSQL pgvector"
         }
-      ]
+      ],
+      "image": "/uploads/mv60rfcx-ragx.png"
     },
     {
       "id": "ingest-pipeline",
@@ -500,7 +501,8 @@ export const defaultContent: SiteContent = {
           "label": "Formatos",
           "value": "PDF · CSV · JSON · TXT"
         }
-      ]
+      ],
+      "image": "/uploads/mv610gjw-logopipelineingest.jpg"
     },
     {
       "id": "fovis-platform",
@@ -509,7 +511,7 @@ export const defaultContent: SiteContent = {
       "tagline": "1.200+ unidades y KPIs en tiempo real para la Alcaldía de Caucasia",
       "description": "Plataforma construida desde cero: dashboards de KPIs que recortaron 60% el tiempo de decisiones.",
       "longDescription": "Arquitecté y desarrollé desde cero la plataforma de gestión habitacional de la Alcaldía de Caucasia (FOVIS): frontend React con biblioteca propia de componentes UI reutilizables y backend Django/MySQL desacoplado por APIs. Los dashboards de KPIs en tiempo real para 12+ administradores redujeron el tiempo de toma de decisiones un 60% y los tiempos de carga un 35%.",
-      "image": "https://picsum.photos/seed/fovis-dashboard/1200/800",
+      "image": "/uploads/mv60jz35-fovis_mark.jpg",
       "tags": [
         "React",
         "Tailwind",
@@ -544,7 +546,7 @@ export const defaultContent: SiteContent = {
       "tagline": "Datasets masivos convertidos en mundos 3D navegables",
       "description": "Entornos 3D gamificados para análisis visual en tiempo real. −40% en tiempo de análisis.",
       "longDescription": "Como Director de Diseño 3D & Data Visualization en AONC Neuroscientific Strategies, transformé conjuntos de datos masivos y complejos en entornos 3D gamificados y navegables para análisis visual en tiempo real. Aplicando principios UX/UI de claridad visual, reduje el tiempo de análisis un 40% para usuarios no técnicos.",
-      "image": "https://picsum.photos/seed/neurodata-3d/1200/800",
+      "image": "/uploads/mv6085i9-portada_aonc.jpg",
       "tags": [
         "Unity",
         "DataViz",
@@ -574,7 +576,7 @@ export const defaultContent: SiteContent = {
       "tagline": "Videojuego musical en Unity basado en la discografía de Redemthor",
       "description": "Dirección conceptual y técnica: sonido, narrativa y desarrollo unificados en Unity.",
       "longDescription": "Lideré el desarrollo conceptual y técnico de Total Darkness, videojuego musical basado en la discografía de Redemthor, unificando diseño de sonido, narrativa y desarrollo en Unity. Proyecto de Xlerion Studio que combina mi perfil técnico con el artístico.",
-      "image": "https://picsum.photos/seed/total-darkness-game/1200/800",
+      "image": "/uploads/mv5zro02-total-darkness-logo.png",
       "tags": [
         "Unity",
         "Diseño de sonido",
@@ -595,7 +597,9 @@ export const defaultContent: SiteContent = {
           "label": "Género",
           "value": "Videojuego musical"
         }
-      ]
+      ],
+      "repoUrl": "https://github.com/miguelxlerion/TotalDarkness.git",
+      "featured": true
     }
   ],
   "github": {
