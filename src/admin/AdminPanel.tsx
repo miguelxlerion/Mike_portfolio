@@ -1061,10 +1061,35 @@ export default function AdminPanel() {
                     <h2 className="font-display text-xl font-bold text-white">Re-indexar ahora</h2>
                     <p className="text-sm text-zinc-400">Manda lo de arriba al índice Vectorize vía tu Worker (sin terminal ni redeploy). Requiere <code className="bg-white/10 px-1 font-mono text-xs text-acid">RAG_ADMIN_KEY</code> en el Worker.</p>
                     <Field label="URL del Worker">
-                      <input value={ragWorker} onChange={(e) => setRagWorker(e.target.value)} className={cn(inputCls, "font-mono text-xs")} />
+                      <input
+                        value={ragWorker}
+                        onChange={(e) => {
+                          setRagWorker(e.target.value);
+                          try {
+                            localStorage.setItem("mike-rag-worker", e.target.value);
+                          } catch {
+                            /* noop */
+                          }
+                        }}
+                        className={cn(inputCls, "font-mono text-xs")}
+                      />
                     </Field>
                     <Field label="RAG_ADMIN_KEY">
-                      <input type="password" value={ragKey} onChange={(e) => setRagKey(e.target.value)} placeholder="La del secret del Worker" autoComplete="off" className={cn(inputCls, "font-mono text-xs")} />
+                      <input
+                        type="password"
+                        value={ragKey}
+                        onChange={(e) => {
+                          setRagKey(e.target.value);
+                          try {
+                            localStorage.setItem("mike-rag-key", e.target.value);
+                          } catch {
+                            /* noop */
+                          }
+                        }}
+                        placeholder="La del secret del Worker"
+                        autoComplete="off"
+                        className={cn(inputCls, "font-mono text-xs")}
+                      />
                     </Field>
                     <button onClick={() => void doReingest()} disabled={ingestState === "working"} className={cn(btnPrimary, "w-full justify-center")}>
                       <Upload className="h-4 w-4" /> {ingestState === "working" ? "Indexando…" : "Re-indexar ahora"}
