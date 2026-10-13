@@ -725,18 +725,16 @@ export default function AdminPanel() {
             <div className="h-fit space-y-4 border border-white/10 bg-panel p-6">
               <h2 className="font-display text-xl font-bold text-white">Primer push del proyecto</h2>
               <p className="text-sm text-zinc-400">
-                El botón de arriba actualiza el archivo, pero <strong className="text-white">la primera vez</strong> el
-                repo necesita el proyecto completo. Ejecuta esto una sola vez en la carpeta del proyecto:
+                Tu repo ya tiene el portafolio viejo: primero se respalda a una rama y luego se reemplaza
+                con este proyecto. Ejecuta esto <strong className="text-white">una sola vez</strong> en la
+                carpeta del proyecto (el commit inicial y el remote ya están listos en tu carpeta):
               </p>
               <pre className="overflow-x-auto border border-white/10 bg-black/50 p-4 font-mono text-xs leading-relaxed text-zinc-300">
-{`git init -b main
-git add .
-git commit -m "Portafolio inicial"
-git remote add origin https://github.com/miguelxlerion/Mike_portfolio.git
-git push -u origin main`}
+{`git push origin origin/main:refs/heads/backup-portafolio-viejo
+git push --force origin main`}
               </pre>
               <button
-                onClick={() => navigator.clipboard.writeText("git init -b main && git add . && git commit -m \"Portafolio inicial\" && git remote add origin https://github.com/miguelxlerion/Mike_portfolio.git && git push -u origin main").catch(() => {})}
+                onClick={() => navigator.clipboard.writeText("git push origin origin/main:refs/heads/backup-portafolio-viejo && git push --force origin main").catch(() => {})}
                 className={btnGhost}
               >
                 <Copy className="h-4 w-4" /> Copiar comandos
