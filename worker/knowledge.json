@@ -115,6 +115,16 @@
     "text": "Español nativo. Inglés B2 intermedio-alto: lee documentación técnica, diseña arquitecturas y participa en reuniones internacionales."
   },
   {
+    "id": "ubicacion-movilidad",
+    "title": "Ubicación y movilidad",
+    "text": "Miguel vive en Bogotá, Colombia, y trabaja remoto para todo el mundo. Está abierto a moverse o viajar según la oferta: remoto, híbrido o presencial si el proyecto lo amerita."
+  },
+  {
+    "id": "edad",
+    "title": "Edad",
+    "text": "Miguel no publica su edad. Si le preguntas, responde con un comentario jocoso y breve preguntando para qué la necesitas (¿visado? ¿formulario? ¿pura curiosidad de reclutador?), y redirige la charla a su experiencia de más de 10 años, que sí está documentada."
+  },
+  {
     "id": "servicios",
     "title": "Servicios y contratación",
     "text": "Ofrece arquitectura de software, plataformas 3D y WebGL, integración de IA y RAG, y dashboards con visualización de datos. Rangos orientativos: menos de 1k USD, 1 a 3k, 3 a 8k, más de 8k o a convenir. El formulario de contacto del sitio genera la solicitud por email."
