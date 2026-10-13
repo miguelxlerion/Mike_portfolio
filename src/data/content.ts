@@ -572,7 +572,7 @@ export const defaultContent: SiteContent = {
       "tagline": "Videojuego musical en Unity basado en la discografía de Redemthor",
       "description": "Dirección conceptual y técnica: sonido, narrativa y desarrollo unificados en Unity.",
       "longDescription": "Lideré el desarrollo conceptual y técnico de Total Darkness, videojuego musical basado en la discografía de Redemthor, unificando diseño de sonido, narrativa y desarrollo en Unity. Proyecto de Xlerion Studio que combina mi perfil técnico con el artístico.",
-      "image": "https://picsum.photos/seed/total-darkness-game/1200/800",
+      "image": "/uploads/mv5zro02-total-darkness-logo.png",
       "tags": [
         "Unity",
         "Diseño de sonido",
@@ -593,7 +593,9 @@ export const defaultContent: SiteContent = {
           "label": "Género",
           "value": "Videojuego musical"
         }
-      ]
+      ],
+      "repoUrl": "https://github.com/miguelxlerion/TotalDarkness.git",
+      "featured": true
     }
   ],
   "github": {
