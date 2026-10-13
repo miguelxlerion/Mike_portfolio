@@ -233,6 +233,9 @@ export default function AdminPanel() {
     id: string;
     title: string;
     text: string;
+    /** Clave estable solo para React (nunca se guarda): evita que editar
+        cualquier campo —incluido el ID— desmonte la tarjeta y robe el foco. */
+    _key: string;
   }
   const [kbItems, setKbItems] = useState<KbChunk[]>([]);
   const [kbSha, setKbSha] = useState("");
@@ -302,7 +305,7 @@ export default function AdminPanel() {
       const kb = JSON.parse(kbText) as KbChunk[];
       const cfg = JSON.parse(cfgText) as Record<string, unknown>;
       if (!Array.isArray(kb)) throw new Error("bad-kb");
-      setKbItems(kb);
+      setKbItems(kb.map((k) => ({ ...k, _key: crypto.randomUUID() })));
       setKbSha(kbFile.sha ?? "");
       setRagCfg({
         chatModel: String(cfg.chatModel ?? "@cf/meta/llama-3.1-8b-instruct"),
@@ -350,12 +353,22 @@ export default function AdminPanel() {
     setRagMsg("");
     setSavingKb(true);
     try {
-      const clean = kbItems.map((k) => ({ id: k.id.trim(), title: k.title.trim(), text: k.text.trim() })).filter((k) => k.id && k.text);
+      const clean = kbItems
+        .map((k) => ({ id: k.id.trim(), title: k.title.trim(), text: k.text.trim(), _key: k._key || crypto.randomUUID() }))
+        .filter((k) => k.id && k.text);
       if (clean.some((k, i) => clean.findIndex((x) => x.id === k.id) !== i)) {
         setRagMsg("Hay IDs duplicados: cada chunk necesita un id único.");
         return;
       }
-      const sha = await putRagFile("worker/knowledge.json", kbSha, JSON.stringify(clean, null, 2) + "\n");
+      const sha = await putRagFile(
+        "worker/knowledge.json",
+        kbSha,
+        JSON.stringify(
+          clean.map(({ _key, ...rest }) => rest),
+          null,
+          2,
+        ) + "\n",
+      );
       setKbSha(sha);
       setKbItems(clean);
       flashSaved();
@@ -1051,7 +1064,7 @@ export default function AdminPanel() {
               <>
                 <div className="space-y-3">
                   {kbItems.map((k, i) => (
-                    <div key={k.id + i} className="grid gap-3 border border-white/10 bg-panel p-4 lg:grid-cols-[220px_1fr_auto]">
+                    <div key={k._key} className="grid gap-3 border border-white/10 bg-panel p-4 lg:grid-cols-[220px_1fr_auto]">
                       <div className="space-y-2">
                         <Field label="ID único">
                           <input value={k.id} onChange={(e) => setKbItems((arr) => arr.map((x, j) => (j === i ? { ...x, id: e.target.value } : x)))} className={cn(inputCls, "font-mono text-xs")} />
@@ -1071,7 +1084,9 @@ export default function AdminPanel() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button
-                    onClick={() => setKbItems((arr) => [...arr, { id: `nuevo-${Date.now().toString(36)}`, title: "Nuevo tema", text: "" }])}
+                    onClick={() =>
+                      setKbItems((arr) => [...arr, { id: `nuevo-${Date.now().toString(36)}`, title: "Nuevo tema", text: "", _key: crypto.randomUUID() }])
+                    }
                     className={btnGhost}
                   >
                     <Plus className="h-4 w-4" /> Añadir chunk
