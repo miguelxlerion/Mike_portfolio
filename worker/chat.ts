@@ -141,18 +141,28 @@ export async function handleChat(request: Request, env: ChatEnv): Promise<Respon
         content: `Contexto del perfil:\n${context}\n\nPregunta: ${question.trim()}`,
       },
     ];
-    let out: { response?: unknown };
-    try {
-      out = (await env.AI.run(CHAT_MODEL, {
-        messages,
-        max_tokens: MAX_TOKENS,
-        temperature: Number(RAG_CONFIG.temperature ?? 0.3),
-      })) as { response?: unknown };
-    } catch {
-      return json({ error: "stage-gen" }, 502);
+    let out: { response?: unknown } | null = null;
+    let lastErr = "";
+    // Fallback de modelo: si el principal falla (cuenta, despliegue),
+    // se intenta con uno liviano antes de rendirse.
+    for (const m of [CHAT_MODEL, "@cf/meta/llama-3.2-3b-instruct"]) {
+      try {
+        const r = (await env.AI.run(m, {
+          messages,
+          max_tokens: MAX_TOKENS,
+          temperature: Number(RAG_CONFIG.temperature ?? 0.3),
+        })) as { response?: unknown };
+        if (typeof r.response === "string" && r.response.trim()) {
+          out = r;
+          break;
+        }
+        lastErr = `${m}: empty-response`;
+      } catch (e) {
+        lastErr = `${m}: ${String((e as Error)?.message ?? e).slice(0, 160)}`;
+      }
     }
-    const answer = typeof out.response === "string" ? out.response.trim() : "";
-    if (!answer) return json({ error: "gen-failed" }, 502);
+    const answer = out && typeof out.response === "string" ? out.response.trim() : "";
+    if (!answer) return json({ error: "stage-gen", detail: lastErr }, 502);
     return json({ answer, sources: [...new Set(sources)].slice(0, 5) });
   } catch {
     return json({ error: "rag-error" }, 502);
