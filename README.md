@@ -35,14 +35,14 @@ Secciones finales: **Hero · Sobre mí · Proyectos · Sitios Web · GitHub en v
 - Edita **todo**: identidad, hero, roles, stats, marquee, bio, habilidades, proyectos, sitios web, modelos 3D, GitHub, contacto, colores y visibilidad de secciones.
 - Todo se **autoguarda en el navegador** (localStorage `mike-portfolio-v2`).
 
-## Publicar cambios 🚀 (flujo recomendado)
+## Publicar cambios 🚀 (cero terminal)
 
-1. Edita en el panel local y comprueba en **Ver sitio**.
-2. Ve a la pestaña **Publicar**, pega tu token de GitHub y pulsa **Publicar contenido en GitHub**.
-3. Eso hace commit de `src/data/content.ts` en tu repo → Cloudflare Pages **redespliega solo** en 1–2 min.
-4. Primera vez: el botón no basta — haz el push inicial del proyecto (los comandos están en la propia pestaña Publicar).
+Pestaña **Publicar** del panel local, con tu token de GitHub:
 
-Alternativa sin token: pestaña *Datos* → Exportar JSON → commitea a mano.
+1. **Publicar contenido** — sube solo `src/data/content.ts` (rápido, para cambios de textos/fotos/colores).
+2. **Publicar TODO el proyecto** — 1) *Comparar con GitHub* (lista Añadidos/Modificados), 2) *Publicar N archivos*: sube código + contenido en un solo commit, subiendo solo lo cambiado (compara SHA-1 de blob git). Lee los archivos frescos del disco vía `/__sources.json` (solo existe en dev), así nunca sube código viejo. Los borrados en local se conservan en GitHub.
+3. Cloudflare detecta el push y **redespliega solo** en 1–2 min. Si luego usas la terminal, haz `git pull` primero.
+4. Primera vez: haz el push inicial del proyecto (los comandos están en la propia pestaña Publicar).
 
 ## Comandos
 

@@ -8,11 +8,15 @@ import { useSite } from "../store/SiteContext";
 import type { CategoryId, Model3D, Project, SiteContent, WebWork } from "../data/content";
 import { cn } from "../utils/cn";
 import {
+  fetchSnapshot,
   forgetPublishToken,
   loadPublishConfig,
+  previewPublishAll,
+  publishAll,
   publishContent,
   publishErrorMessage,
   savePublishConfig,
+  type PublishAllPreview,
   type PublishConfig,
   type PublishResult,
 } from "./publish";
@@ -93,6 +97,47 @@ export default function AdminPanel() {
     } catch (e) {
       setPubStatus("error");
       setPubMsg(publishErrorMessage(e instanceof Error ? e.message : "network"));
+    }
+  };
+
+  const [snapStatus, setSnapStatus] = useState<"idle" | "comparing" | "ready" | "pushing" | "ok" | "error">("idle");
+  const [snapshot, setSnapshot] = useState<Record<string, string> | null>(null);
+  const [preview, setPreview] = useState<PublishAllPreview | null>(null);
+  const [allMsg, setAllMsg] = useState("");
+  const [allResult, setAllResult] = useState<PublishResult | null>(null);
+
+  const errMsg = (e: unknown) => publishErrorMessage(e instanceof Error ? e.message : "network");
+
+  const doCompare = async () => {
+    setSnapStatus("comparing");
+    setAllMsg("");
+    setPreview(null);
+    setAllResult(null);
+    try {
+      const snap = await fetchSnapshot();
+      setSnapshot(snap);
+      const pv = await previewPublishAll(content, snap, pubCfg);
+      setPreview(pv);
+      setSnapStatus("ready");
+    } catch (e) {
+      setSnapStatus("error");
+      setAllMsg(errMsg(e));
+    }
+  };
+
+  const doPublishAll = async () => {
+    if (!snapshot) return;
+    setSnapStatus("pushing");
+    setAllMsg("");
+    setAllResult(null);
+    try {
+      const r = await publishAll(content, snapshot, pubCfg);
+      setAllResult(r);
+      setSnapStatus("ok");
+      setPreview(null);
+    } catch (e) {
+      setSnapStatus("error");
+      setAllMsg(errMsg(e));
     }
   };
 
@@ -679,6 +724,7 @@ export default function AdminPanel() {
 
         {/* ── PUBLICAR ── */}
         {tab === "publicar" && (
+          <div className="space-y-5">
           <div className="grid gap-5 lg:grid-cols-2">
             <div className="space-y-4 border border-white/10 bg-panel p-6">
               <h2 className="font-display text-xl font-bold text-white">Subir contenido a GitHub</h2>
@@ -761,6 +807,63 @@ git push --force origin main`}
                 </ol>
               </div>
             </div>
+          </div>
+
+          {/* Publicar TODO el proyecto */}
+          <div className="border border-acid/30 bg-panel p-6">
+            <h2 className="font-display text-xl font-bold text-white">Publicar TODO el proyecto <span className="ml-2 border border-acid/50 bg-acid/10 px-2 py-0.5 align-middle font-mono text-[10px] uppercase tracking-wider text-acid">sin terminal</span></h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-400">
+              Sube <strong className="text-white">código + contenido</strong> en un solo commit: lee los archivos
+              frescos de tu disco al momento de pulsar (imposible subir código viejo), reemplaza el contenido
+              con lo que editaste aquí y solo sube los archivos que cambiaron. Los borrados en local se
+              conservan en GitHub. Después, si usas la terminal, haz <code className="bg-white/10 px-1 font-mono text-xs text-acid">git pull</code> primero.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button onClick={doCompare} disabled={snapStatus === "comparing" || snapStatus === "pushing"} className={btnGhost}>
+                <Eye className="h-4 w-4" /> {snapStatus === "comparing" ? "Comparando…" : preview ? "Volver a comparar" : "1 · Comparar con GitHub"}
+              </button>
+              {preview && preview.changes.length > 0 && (
+                <button onClick={doPublishAll} disabled={snapStatus === "pushing"} className={btnPrimary}>
+                  <Upload className="h-4 w-4" /> {snapStatus === "pushing" ? "Publicando todo…" : `2 · Publicar ${preview.changes.length} archivo${preview.changes.length === 1 ? "" : "s"}`}
+                </button>
+              )}
+            </div>
+            {preview && (
+              <div className="mt-4 border border-white/10 bg-black/40 p-4">
+                <p className="font-mono text-xs text-zinc-400">
+                  Base <span className="text-acid">{preview.baseCommit}</span> · {preview.remoteFiles} archivos en GitHub ·{" "}
+                  {preview.changes.length === 0 ? (
+                    <span className="text-acid">todo al día, nada que subir ✓</span>
+                  ) : (
+                    <>{preview.changes.length} con cambios:</>
+                  )}
+                </p>
+                {preview.changes.length > 0 && (
+                  <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto font-mono text-xs">
+                    {preview.changes.map((c) => (
+                      <li key={c.path} className="flex gap-2">
+                        <span className={c.status === "added" ? "text-acid" : "text-amber-300"}>{c.status === "added" ? "A" : "M"}</span>
+                        <span className="truncate text-zinc-300">{c.path}</span>
+                        <span className="ml-auto shrink-0 text-zinc-600">{(c.bytes / 1024).toFixed(1)} KB</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+            {snapStatus === "ok" && allResult && (
+              <div className="mt-4 border border-acid/50 bg-acid/10 p-4 text-sm">
+                <p className="font-display font-bold text-acid">✓ Proyecto publicado ({allResult.commitSha})</p>
+                <p className="mt-1 text-zinc-300">
+                  <a href={allResult.commitUrl} target="_blank" rel="noreferrer" className="underline hover:text-acid">Ver commit</a>
+                </p>
+                <p className="mt-2 text-zinc-400">Cloudflare empezará el deploy solo en ~1–2 min.</p>
+              </div>
+            )}
+            {snapStatus === "error" && (
+              <p className="mt-4 border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-200">{allMsg}</p>
+            )}
+          </div>
           </div>
         )}
       </div>
