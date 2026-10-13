@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Check, Download, Eye, FileJson, KeyRound, Lock, Plus,
   RefreshCcw, Save, Settings2, Trash2, Copy, FolderKanban, User,
@@ -196,8 +196,29 @@ export default function AdminPanel() {
     );
   }
 
+  // Vista previa que también funciona en local: si la ruta /uploads/...
+  // aún no existe en el disco (subida reciente), reintenta vía raw de GitHub.
+  function SmartPreview({ src, className, alt }: { src: string; className?: string; alt?: string }) {
+    const [fallback, setFallback] = useState(false);
+    useEffect(() => setFallback(false), [src]);
+    const looksUpload = src.startsWith("/uploads/");
+    const rawBase = `https://raw.githubusercontent.com/${pubCfg.repo.trim().replace(/\/$/, "")}/${(pubCfg.branch.trim() || "main")}/public`;
+    return (
+      <img
+        src={!fallback && looksUpload ? rawBase + src : src}
+        alt={alt ?? "Vista previa"}
+        loading="lazy"
+        onError={() => {
+          if (!fallback && looksUpload) setFallback(true);
+        }}
+        className={className ?? "h-40 w-full border border-white/15 object-cover"}
+      />
+    );
+  }
+
   // ── Medios ──
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
   const [mediaMsg, setMediaMsg] = useState("");
   const [uploadStates, setUploadStates] = useState<Record<string, string>>({});
   const [importUrl, setImportUrl] = useState("");
@@ -382,7 +403,7 @@ export default function AdminPanel() {
                 <input value={content.profile.portrait} onChange={(e) => patch({ profile: { ...content.profile, portrait: e.target.value } })} className={inputCls} placeholder="https://…" />
               </Field>
               <ImageUploadButton onDone={(item) => patch({ profile: { ...content.profile, portrait: item.siteUrl } })} />
-              {content.profile.portrait && <img src={content.profile.portrait} alt="Vista previa" className="h-40 w-32 border border-white/15 object-cover" />}
+              {content.profile.portrait && <SmartPreview src={content.profile.portrait} className="h-40 w-32 border border-white/15 object-cover" />}
             </div>
             <div className="space-y-4 border border-white/10 bg-panel p-6">
               <h2 className="font-display text-xl font-bold text-white">Contacto y disponibilidad</h2>
@@ -528,7 +549,7 @@ export default function AdminPanel() {
                     <Field label="Video (URL .mp4, opcional)" hint="Si hay video, la ficha muestra reproductor en vez de foto."><input value={project.videoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, videoUrl: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
                   </div>
                 </div>
-                {(project.image ?? "").length > 0 && <img src={project.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                {(project.image ?? "").length > 0 && <SmartPreview src={project.image ?? ""} />}
                 <label className="flex items-center gap-3 border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-200">
                   <input type="checkbox" checked={!!project.featured} onChange={(e) => patchProject(project.id, (p) => ({ ...p, featured: e.target.checked }))} className="h-4 w-4 accent-[#a3e635]" />
                   Proyecto destacado
@@ -613,7 +634,7 @@ export default function AdminPanel() {
                     <ImageUploadButton onDone={(item) => patchSite(currentSite.id, (w) => ({ ...w, image: item.siteUrl }))} />
                     <Field label="Etiquetas (separadas por comas)"><input value={currentSite.tags.join(", ")} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
                   </div>
-                  {(currentSite.image ?? "").length > 0 && <img src={currentSite.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                  {(currentSite.image ?? "").length > 0 && <SmartPreview src={currentSite.image ?? ""} />}
                 </div>
               ) : (
                 <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay sitios. Crea el primero con el botón.</p>
