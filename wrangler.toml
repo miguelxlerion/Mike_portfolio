@@ -1,0 +1,9 @@
+# Cloudflare Pages + Functions
+# Deploy conectado a git: Build command `npm run build`, output `dist`.
+# Las variables se configuran en el dashboard: Pages > Settings > Variables.
+#   GITHUB_TOKEN (opcional, sube el rate-limit de la API a 5000 req/h)
+#   RESEND_API_KEY (para que /api/contact envíe emails de verdad)
+#   CONTACT_TO (destinatario, por defecto miguelxlerion@gmail.com)
+#   TURNSTILE_SECRET (opcional, anti-spam del formulario)
+name = "mike-portfolio"
+compatibility_date = "2026-10-01"

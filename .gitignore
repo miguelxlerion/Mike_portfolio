@@ -1,0 +1,17 @@
+# Deps y build
+node_modules/
+dist/
+
+# Caché local de Wrangler
+.wrangler/
+
+# Logs de servidores locales
+*.log
+
+# Scripts efímeros de QA
+qa-*.mjs
+shot-*.png
+
+# Secretos locales (tokens de GitHub/Resend si los guardas en .env.local)
+.env.local
+.env.*.local

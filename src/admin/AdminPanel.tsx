@@ -1,0 +1,758 @@
+import { useMemo, useState } from "react";
+import {
+  ArrowLeft, Check, Download, Eye, FileJson, KeyRound, Lock, Plus,
+  RefreshCcw, Save, Settings2, Trash2, Copy, FolderKanban, User,
+  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload,
+} from "lucide-react";
+import { useSite } from "../store/SiteContext";
+import type { CategoryId, Model3D, Project, SiteContent, WebWork } from "../data/content";
+import { cn } from "../utils/cn";
+import {
+  forgetPublishToken,
+  loadPublishConfig,
+  publishContent,
+  publishErrorMessage,
+  savePublishConfig,
+  type PublishConfig,
+  type PublishResult,
+} from "./publish";
+
+type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "modelos" | "github" | "contact" | "design" | "data" | "publicar";
+
+const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
+  { id: "general", label: "General", icon: <User className="h-4 w-4" /> },
+  { id: "hero", label: "Hero", icon: <Rocket className="h-4 w-4" /> },
+  { id: "about", label: "Sobre mí", icon: <Info className="h-4 w-4" /> },
+  { id: "projects", label: "Proyectos", icon: <FolderKanban className="h-4 w-4" /> },
+  { id: "sitios", label: "Sitios Web", icon: <Globe className="h-4 w-4" /> },
+  { id: "modelos", label: "Modelos 3D", icon: <Box className="h-4 w-4" /> },
+  { id: "github", label: "GitHub", icon: <GitBranch className="h-4 w-4" /> },
+  { id: "contact", label: "Contacto", icon: <Mail className="h-4 w-4" /> },
+  { id: "design", label: "Diseño", icon: <Palette className="h-4 w-4" /> },
+  { id: "data", label: "Datos", icon: <Database className="h-4 w-4" /> },
+  { id: "publicar", label: "Publicar", icon: <Upload className="h-4 w-4" /> },
+];
+
+function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
+  return (
+    <label className="block">
+      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400">{label}</span>
+      <div className="mt-1.5">{children}</div>
+      {hint && <span className="mt-1 block text-xs text-zinc-600">{hint}</span>}
+    </label>
+  );
+}
+
+const inputCls = "w-full border border-white/15 bg-black/40 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-acid";
+const btnPrimary = "inline-flex items-center gap-2 bg-acid px-4 py-2.5 font-display text-sm font-bold text-ink transition hover:bg-acid-soft";
+const btnGhost = "inline-flex items-center gap-2 border border-white/15 px-4 py-2.5 font-display text-sm font-bold text-zinc-200 transition hover:border-acid hover:text-acid";
+
+function newProject(): Project {
+  const id = `proyecto-${Date.now().toString(36)}`;
+  return {
+    id, title: "Nuevo proyecto", category: "codigo", tagline: "Describe tu proyecto en una línea",
+    description: "Descripción corta para la tarjeta.", longDescription: "Descripción larga para la ficha completa.",
+    image: "", tags: ["Nuevo"], year: String(new Date().getFullYear()),
+    demoUrl: "", repoUrl: "", featured: false, specs: [],
+  };
+}
+
+export default function AdminPanel() {
+  const { content, update, reset, exportJSON, importJSON } = useSite();
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem("mike-admin") === "1");
+  const [pass, setPass] = useState("");
+  const [passError, setPassError] = useState("");
+  const [tab, setTab] = useState<TabId>("general");
+  const [saved, setSaved] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<string>(content.projects[0]?.id ?? "");
+  const [selectedModel, setSelectedModel] = useState<string>(content.showcase3d.models[0]?.id ?? "");
+  const [selectedSite, setSelectedSite] = useState<string>(content.webworks.items[0]?.id ?? "");
+  const [importText, setImportText] = useState("");
+  const [importMsg, setImportMsg] = useState("");
+  const [pubCfg, setPubCfgState] = useState<PublishConfig>(() => loadPublishConfig());
+  const [pubStatus, setPubStatus] = useState<"idle" | "pushing" | "ok" | "error">("idle");
+  const [pubMsg, setPubMsg] = useState("");
+  const [pubResult, setPubResult] = useState<PublishResult | null>(null);
+
+  const setPub = (patch: Partial<PublishConfig>) => {
+    setPubCfgState((prev) => {
+      const next = { ...prev, ...patch };
+      savePublishConfig(next);
+      return next;
+    });
+  };
+
+  const doPublish = async () => {
+    setPubStatus("pushing");
+    setPubMsg("");
+    setPubResult(null);
+    try {
+      const r = await publishContent(content, pubCfg);
+      setPubResult(r);
+      setPubStatus("ok");
+    } catch (e) {
+      setPubStatus("error");
+      setPubMsg(publishErrorMessage(e instanceof Error ? e.message : "network"));
+    }
+  };
+
+  const flashSaved = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 1600);
+  };
+
+  const patch = (p: Partial<SiteContent>) => {
+    update(p);
+    flashSaved();
+  };
+
+  const project = useMemo(
+    () => content.projects.find((p) => p.id === selectedProject) ?? null,
+    [content.projects, selectedProject],
+  );
+
+  const patchProject = (id: string, fn: (p: Project) => Project) => {
+    update({ projects: content.projects.map((p) => (p.id === id ? fn(p) : p)) });
+    flashSaved();
+  };
+
+  const currentModel = useMemo(
+    () => content.showcase3d.models.find((m) => m.id === selectedModel) ?? null,
+    [content.showcase3d.models, selectedModel],
+  );
+
+  const patchModel = (id: string, fn: (m: Model3D) => Model3D) => {
+    update({ showcase3d: { ...content.showcase3d, models: content.showcase3d.models.map((m) => (m.id === id ? fn(m) : m)) } });
+    flashSaved();
+  };
+
+  const currentSite = useMemo(
+    () => content.webworks.items.find((w) => w.id === selectedSite) ?? null,
+    [content.webworks.items, selectedSite],
+  );
+
+  const patchSite = (id: string, fn: (w: WebWork) => WebWork) => {
+    update({ webworks: { ...content.webworks, items: content.webworks.items.map((w) => (w.id === id ? fn(w) : w)) } });
+    flashSaved();
+  };
+
+  if (!authed) {
+    return (
+      <div className="min-h-screen bg-ink px-5 py-20">
+        <div className="mx-auto max-w-md border border-white/12 bg-panel p-8">
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-acid"><Lock className="h-4 w-4" /> Panel de control</p>
+          <h1 className="mt-3 font-display text-3xl font-bold text-white">Acceso privado</h1>
+          <p className="mt-2 text-sm text-zinc-400">Introduce tu contraseña de administrador para editar todo el contenido del sitio. Por defecto es <code className="bg-white/10 px-1.5 py-0.5 font-mono text-acid">mike123</code> (cámbiala en la pestaña Datos).</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (pass === content.adminPassword) {
+                sessionStorage.setItem("mike-admin", "1");
+                setAuthed(true);
+              } else setPassError("Contraseña incorrecta.");
+            }}
+            className="mt-6 space-y-3"
+          >
+            <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} placeholder="Contraseña" className={inputCls} autoFocus />
+            {passError && <p className="text-sm text-red-300">{passError}</p>}
+            <button className={cn(btnPrimary, "w-full justify-center")}><KeyRound className="h-4 w-4" /> Entrar al panel</button>
+            <a href="#inicio" className={cn(btnGhost, "w-full justify-center")}><ArrowLeft className="h-4 w-4" /> Volver al sitio</a>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-ink">
+      {/* Barra superior */}
+      <div className="sticky top-0 z-40 border-b border-white/10 bg-ink/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-5 py-3 lg:px-8">
+          <span className="flex items-center gap-2 font-display text-base font-bold text-white"><Settings2 className="h-5 w-5 text-acid" /> Panel de control</span>
+          {saved && <span className="inline-flex items-center gap-1.5 border border-acid/50 bg-acid/10 px-2.5 py-1 font-mono text-xs text-acid"><Check className="h-3.5 w-3.5" /> Guardado ✓</span>}
+          <span className="hidden font-mono text-xs text-zinc-600 sm:inline">Los cambios se guardan solos en este navegador</span>
+          <div className="ml-auto flex gap-2">
+            <a href="#inicio" className={btnGhost}><Eye className="h-4 w-4" /> Ver sitio</a>
+            <button onClick={() => { sessionStorage.removeItem("mike-admin"); setAuthed(false); }} className={btnGhost}><Lock className="h-4 w-4" /> Salir</button>
+          </div>
+        </div>
+        <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-5 pb-3 lg:px-8">
+          {TABS.map((t) => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={cn("flex shrink-0 items-center gap-2 border px-3.5 py-2 font-mono text-xs uppercase tracking-wider transition", tab === t.id ? "border-acid bg-acid/10 text-acid" : "border-white/10 text-zinc-400 hover:text-white")}>
+              {t.icon} {t.label}
+              {t.id === "projects" && <span className="rounded-full bg-white/10 px-1.5 text-[10px]">{content.projects.length}</span>}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+        {/* ── GENERAL ── */}
+        {tab === "general" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Identidad</h2>
+              <Field label="Nombre grande (Hero)">
+                <input value={content.profile.name} onChange={(e) => patch({ profile: { ...content.profile, name: e.target.value } })} className={inputCls} />
+              </Field>
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Nombre corto"><input value={content.profile.shortName} onChange={(e) => patch({ profile: { ...content.profile, shortName: e.target.value } })} className={inputCls} /></Field>
+                <Field label="Iniciales"><input value={content.profile.initials} onChange={(e) => patch({ profile: { ...content.profile, initials: e.target.value } })} className={inputCls} /></Field>
+              </div>
+              <Field label="Rol / titular"><input value={content.profile.role} onChange={(e) => patch({ profile: { ...content.profile, role: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Frase de presentación"><textarea value={content.profile.tagline} onChange={(e) => patch({ profile: { ...content.profile, tagline: e.target.value } })} rows={2} className={inputCls} /></Field>
+              <Field label="Foto de retrato (URL)" hint="Pega la URL de tu foto. Recomendado: 800×1000px.">
+                <input value={content.profile.portrait} onChange={(e) => patch({ profile: { ...content.profile, portrait: e.target.value } })} className={inputCls} placeholder="https://…" />
+              </Field>
+              {content.profile.portrait && <img src={content.profile.portrait} alt="Vista previa" className="h-40 w-32 border border-white/15 object-cover" />}
+            </div>
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Contacto y disponibilidad</h2>
+              <Field label="Email"><input value={content.profile.email} onChange={(e) => patch({ profile: { ...content.profile, email: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Teléfono"><input value={content.profile.phone} onChange={(e) => patch({ profile: { ...content.profile, phone: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Ubicación"><input value={content.profile.location} onChange={(e) => patch({ profile: { ...content.profile, location: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Estado de disponibilidad"><input value={content.profile.availability} onChange={(e) => patch({ profile: { ...content.profile, availability: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Detalle de agenda"><input value={content.profile.availabilityDetail} onChange={(e) => patch({ profile: { ...content.profile, availabilityDetail: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Texto del CV descargable" hint="Es lo que se descarga al pulsar “Descargar CV”.">
+                <textarea value={content.profile.cvText} onChange={(e) => patch({ profile: { ...content.profile, cvText: e.target.value } })} rows={8} className={cn(inputCls, "font-mono text-xs")} />
+              </Field>
+            </div>
+          </div>
+        )}
+
+        {/* ── HERO ── */}
+        {tab === "hero" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Cabecera</h2>
+              <Field label="Etiqueta superior"><input value={content.hero.badge} onChange={(e) => patch({ hero: { ...content.hero, badge: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Descripción"><textarea value={content.hero.description} onChange={(e) => patch({ hero: { ...content.hero, description: e.target.value } })} rows={3} className={inputCls} /></Field>
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Botón principal"><input value={content.hero.ctaPrimary} onChange={(e) => patch({ hero: { ...content.hero, ctaPrimary: e.target.value } })} className={inputCls} /></Field>
+                <Field label="Botón secundario"><input value={content.hero.ctaSecondary} onChange={(e) => patch({ hero: { ...content.hero, ctaSecondary: e.target.value } })} className={inputCls} /></Field>
+              </div>
+              <Field label="Cinta infinita (una por línea)">
+                <textarea value={content.marquee.join("\n")} onChange={(e) => patch({ marquee: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })} rows={6} className={inputCls} />
+              </Field>
+            </div>
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Roles del typewriter + estadísticas</h2>
+              {content.hero.roles.map((r, i) => (
+                <div key={i} className="flex gap-2">
+                  <input value={r.text} onChange={(e) => { const roles = [...content.hero.roles]; roles[i] = { ...roles[i], text: e.target.value }; patch({ hero: { ...content.hero, roles } }); }} className={inputCls} />
+                  <input type="color" value={r.color} onChange={(e) => { const roles = [...content.hero.roles]; roles[i] = { ...roles[i], color: e.target.value }; patch({ hero: { ...content.hero, roles } }); }} className="h-10 w-12 shrink-0 cursor-pointer border border-white/15 bg-transparent" title="Color del rol" />
+                  <button onClick={() => patch({ hero: { ...content.hero, roles: content.hero.roles.filter((_, j) => j !== i) } })} className="grid h-10 w-10 shrink-0 place-items-center border border-white/15 text-zinc-400 hover:border-red-400 hover:text-red-300" aria-label="Eliminar rol"><Trash2 className="h-4 w-4" /></button>
+                </div>
+              ))}
+              <button onClick={() => patch({ hero: { ...content.hero, roles: [...content.hero.roles, { text: "Nuevo rol", color: "#a3e635" }] } })} className={btnGhost}><Plus className="h-4 w-4" /> Añadir rol</button>
+              <div className="border-t border-white/10 pt-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400">Estadísticas (valor · sufijo · etiqueta)</p>
+                {content.hero.stats.map((s, i) => (
+                  <div key={i} className="mt-2 flex gap-2">
+                    <input type="number" value={s.value} onChange={(e) => { const stats = [...content.hero.stats]; stats[i] = { ...stats[i], value: Number(e.target.value) }; patch({ hero: { ...content.hero, stats } }); }} className={cn(inputCls, "w-20")} />
+                    <input value={s.suffix} onChange={(e) => { const stats = [...content.hero.stats]; stats[i] = { ...stats[i], suffix: e.target.value }; patch({ hero: { ...content.hero, stats } }); }} className={cn(inputCls, "w-16")} placeholder="+" />
+                    <input value={s.label} onChange={(e) => { const stats = [...content.hero.stats]; stats[i] = { ...stats[i], label: e.target.value }; patch({ hero: { ...content.hero, stats } }); }} className={inputCls} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── ABOUT ── */}
+        {tab === "about" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Historia</h2>
+              <Field label="Titular"><input value={content.about.title} onChange={(e) => patch({ about: { ...content.about, title: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Párrafos (uno por bloque)">
+                <textarea value={content.about.paragraphs.join("\n\n")} onChange={(e) => patch({ about: { ...content.about, paragraphs: e.target.value.split(/\n\n+/).map((s) => s.trim()).filter(Boolean) } })} rows={6} className={inputCls} />
+              </Field>
+              <Field label="Cita destacada"><input value={content.about.quote} onChange={(e) => patch({ about: { ...content.about, quote: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Idiomas / etiquetas (una por línea)">
+                <textarea value={content.about.languages.join("\n")} onChange={(e) => patch({ about: { ...content.about, languages: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) } })} rows={3} className={inputCls} />
+              </Field>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400">Disciplinas</p>
+                {content.about.disciplines.map((d, i) => (
+                  <div key={i} className="mt-2 grid grid-cols-[1fr_auto] gap-2">
+                    <input value={d.title} onChange={(e) => { const arr = [...content.about.disciplines]; arr[i] = { ...arr[i], title: e.target.value }; patch({ about: { ...content.about, disciplines: arr } }); }} className={inputCls} placeholder="Título" />
+                    <input type="color" value={d.color} onChange={(e) => { const arr = [...content.about.disciplines]; arr[i] = { ...arr[i], color: e.target.value }; patch({ about: { ...content.about, disciplines: arr } }); }} className="h-10 w-12 cursor-pointer border border-white/15 bg-transparent" />
+                    <input value={d.desc} onChange={(e) => { const arr = [...content.about.disciplines]; arr[i] = { ...arr[i], desc: e.target.value }; patch({ about: { ...content.about, disciplines: arr } }); }} className={cn(inputCls, "col-span-2")} placeholder="Descripción" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Habilidades (barras)</h2>
+              {content.skills.map((s, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <input value={s.name} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)) })} className={inputCls} />
+                  <input type="number" min={0} max={100} value={s.level} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, level: Math.max(0, Math.min(100, Number(e.target.value))) } : x)) })} className={cn(inputCls, "w-20")} />
+                  <input type="color" value={s.color} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, color: e.target.value } : x)) })} className="h-10 w-10 shrink-0 cursor-pointer border border-white/15 bg-transparent" />
+                  <button onClick={() => { update({ skills: content.skills.filter((_, j) => j !== i) }); flashSaved(); }} className="grid h-10 w-10 shrink-0 place-items-center border border-white/15 text-zinc-400 hover:border-red-400 hover:text-red-300" aria-label="Eliminar habilidad"><Trash2 className="h-4 w-4" /></button>
+                </div>
+              ))}
+              <button onClick={() => { update({ skills: [...content.skills, { name: "Nueva habilidad", level: 70, color: "#a3e635" }] }); flashSaved(); }} className={btnGhost}><Plus className="h-4 w-4" /> Añadir habilidad</button>
+            </div>
+          </div>
+        )}
+
+        {/* ── PROJECTS ── */}
+        {tab === "projects" && (
+          <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
+            <div className="h-fit border border-white/10 bg-panel p-4">
+              <button onClick={() => { const n = newProject(); update({ projects: [n, ...content.projects] }); setSelectedProject(n.id); flashSaved(); }} className={cn(btnPrimary, "w-full justify-center")}><Plus className="h-4 w-4" /> Nuevo proyecto</button>
+              <div className="mt-3 max-h-[60vh] space-y-1 overflow-y-auto">
+                {content.projects.map((p) => (
+                  <button key={p.id} onClick={() => setSelectedProject(p.id)} className={cn("block w-full border px-3 py-2.5 text-left transition", selectedProject === p.id ? "border-acid bg-acid/10" : "border-white/10 hover:border-white/30")}>
+                    <span className="block truncate font-display text-sm font-bold text-white">{p.title}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">{p.category} · {p.year}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            {project ? (
+              <div className="space-y-4 border border-white/10 bg-panel p-6">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="font-display text-xl font-bold text-white">Editando: {project.title}</h2>
+                  <div className="ml-auto flex gap-2">
+                    <button onClick={() => { const copy = { ...project, id: `proyecto-${Date.now().toString(36)}`, title: `${project.title} (copia)` }; update({ projects: [copy, ...content.projects] }); setSelectedProject(copy.id); flashSaved(); }} className={btnGhost}><Copy className="h-4 w-4" /> Duplicar</button>
+                    <button onClick={() => { if (!confirm(`¿Eliminar “${project.title}”?`)) return; const rest = content.projects.filter((p) => p.id !== project.id); update({ projects: rest }); setSelectedProject(rest[0]?.id ?? ""); flashSaved(); }} className="inline-flex items-center gap-2 border border-red-400/50 px-4 py-2.5 font-display text-sm font-bold text-red-300 hover:bg-red-400/10"><Trash2 className="h-4 w-4" /> Eliminar</button>
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Título"><input value={project.title} onChange={(e) => patchProject(project.id, (p) => ({ ...p, title: e.target.value }))} className={inputCls} /></Field>
+                  <Field label="Año"><input value={project.year} onChange={(e) => patchProject(project.id, (p) => ({ ...p, year: e.target.value }))} className={inputCls} /></Field>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Categoría">
+                    <select value={project.category} onChange={(e) => patchProject(project.id, (p) => ({ ...p, category: e.target.value as CategoryId }))} className={cn(inputCls, "bg-coal")}>
+                      <option value="codigo">Código</option>
+                      <option value="diseno3d">Diseño 3D</option>
+                      <option value="grafico">Diseño Gráfico</option>
+                      <option value="personajes">Personajes</option>
+                    </select>
+                  </Field>
+                  <Field label="Etiquetas (separadas por comas)">
+                    <input value={project.tags.join(", ")} onChange={(e) => patchProject(project.id, (p) => ({ ...p, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} />
+                  </Field>
+                </div>
+                <Field label="Tagline (una línea)"><input value={project.tagline} onChange={(e) => patchProject(project.id, (p) => ({ ...p, tagline: e.target.value }))} className={inputCls} /></Field>
+                <Field label="Descripción corta"><textarea value={project.description} onChange={(e) => patchProject(project.id, (p) => ({ ...p, description: e.target.value }))} rows={2} className={inputCls} /></Field>
+                <Field label="Descripción larga"><textarea value={project.longDescription} onChange={(e) => patchProject(project.id, (p) => ({ ...p, longDescription: e.target.value }))} rows={4} className={inputCls} /></Field>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto."><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  <div className="grid gap-4">
+                    <Field label="URL GitHub"><input value={project.repoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repoUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/…" /></Field>
+                    <Field label="URL demo"><input value={project.demoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, demoUrl: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  </div>
+                </div>
+                {(project.image ?? "").length > 0 && <img src={project.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                <label className="flex items-center gap-3 border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-200">
+                  <input type="checkbox" checked={!!project.featured} onChange={(e) => patchProject(project.id, (p) => ({ ...p, featured: e.target.checked }))} className="h-4 w-4 accent-[#a3e635]" />
+                  Proyecto destacado
+                </label>
+                <Field label="Specs (una por línea: Etiqueta | Valor)" hint="Ej: Cliente | VOLT Live">
+                  <textarea
+                    value={(project.specs ?? []).map((s) => `${s.label} | ${s.value}`).join("\n")}
+                    onChange={(e) => patchProject(project.id, (p) => ({ ...p, specs: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => { const [label, ...rest] = l.split("|"); return { label: label.trim(), value: rest.join("|").trim() }; }) }))}
+                    rows={3}
+                    className={cn(inputCls, "font-mono text-xs")}
+                  />
+                </Field>
+                <details className="border border-white/10 bg-black/30 p-4">
+                  <summary className="cursor-pointer font-mono text-xs uppercase tracking-wider text-zinc-400">Snippet de código (solo categoría Código)</summary>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    <Field label="Nombre repo"><input value={project.repo?.name ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repo: { ...(p.repo ?? { language: "TypeScript", langColor: "#3178c6", stars: 0, forks: 0, updated: "hoy", snippetLang: "typescript", snippet: "" }), name: e.target.value } }))} className={inputCls} /></Field>
+                    <Field label="Lenguaje"><input value={project.repo?.language ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repo: { ...(p.repo ?? { name: "", langColor: "#3178c6", stars: 0, forks: 0, updated: "hoy", snippetLang: "", snippet: "" }), language: e.target.value } }))} className={inputCls} /></Field>
+                    <Field label="Tipo snippet"><input value={project.repo?.snippetLang ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repo: { ...(p.repo ?? { name: "", language: "", langColor: "#3178c6", stars: 0, forks: 0, updated: "hoy", snippet: "" }), snippetLang: e.target.value } }))} className={inputCls} /></Field>
+                  </div>
+                  <Field label="Código">
+                    <textarea value={project.repo?.snippet ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repo: { ...(p.repo ?? { name: "", language: "TypeScript", langColor: "#3178c6", stars: 0, forks: 0, updated: "hoy", snippetLang: "typescript" }), snippet: e.target.value } }))} rows={8} className={cn(inputCls, "font-mono text-xs")} spellCheck={false} />
+                  </Field>
+                </details>
+              </div>
+            ) : (
+              <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay proyectos. Crea el primero con el botón.</p>
+            )}
+          </div>
+        )}
+
+        {/* ── SITIOS WEB ── */}
+        {tab === "sitios" && (
+          <div className="space-y-5">
+            <div className="grid gap-4 border border-white/10 bg-panel p-6 lg:grid-cols-2">
+              <Field label="Título de la sección"><input value={content.webworks.title} onChange={(e) => patch({ webworks: { ...content.webworks, title: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Texto de la sección"><textarea value={content.webworks.text} onChange={(e) => patch({ webworks: { ...content.webworks, text: e.target.value } })} rows={3} className={inputCls} /></Field>
+            </div>
+            <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
+              <div className="h-fit border border-white/10 bg-panel p-4">
+                <button
+                  onClick={() => {
+                    const n: WebWork = { id: `sitio-${Date.now().toString(36)}`, title: "Nuevo sitio", desc: "Describe el proyecto.", url: "https://", tags: ["Web"], year: String(new Date().getFullYear()), image: "" };
+                    update({ webworks: { ...content.webworks, items: [...content.webworks.items, n] } });
+                    setSelectedSite(n.id);
+                    flashSaved();
+                  }}
+                  className={cn(btnPrimary, "w-full justify-center")}
+                >
+                  <Plus className="h-4 w-4" /> Nuevo sitio
+                </button>
+                <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto">
+                  {content.webworks.items.map((w) => (
+                    <button key={w.id} onClick={() => setSelectedSite(w.id)} className={cn("block w-full border px-3 py-2.5 text-left transition", selectedSite === w.id ? "border-acid bg-acid/10" : "border-white/10 hover:border-white/30")}>
+                      <span className="block truncate font-display text-sm font-bold text-white">{w.title}</span>
+                      <span className="block truncate font-mono text-[10px] tracking-wider text-zinc-500">{w.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {currentSite ? (
+                <div className="space-y-4 border border-white/10 bg-panel p-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-xl font-bold text-white">Editando: {currentSite.title}</h2>
+                    <div className="ml-auto flex gap-2">
+                      <a href={currentSite.url} target="_blank" rel="noreferrer" className={btnGhost}><Eye className="h-4 w-4" /> Abrir</a>
+                      <button
+                        onClick={() => { if (!confirm(`¿Eliminar “${currentSite.title}”?`)) return; const rest = content.webworks.items.filter((w) => w.id !== currentSite.id); update({ webworks: { ...content.webworks, items: rest } }); setSelectedSite(rest[0]?.id ?? ""); flashSaved(); }}
+                        className="inline-flex items-center gap-2 border border-red-400/50 px-4 py-2.5 font-display text-sm font-bold text-red-300 hover:bg-red-400/10"
+                      >
+                        <Trash2 className="h-4 w-4" /> Eliminar
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Título"><input value={currentSite.title} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, title: e.target.value }))} className={inputCls} /></Field>
+                    <Field label="Año"><input value={currentSite.year} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, year: e.target.value }))} className={inputCls} /></Field>
+                  </div>
+                  <Field label="URL del sitio" hint="Debe empezar por https:// — el punto verde la verifica en vivo."><input value={currentSite.url} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, url: e.target.value }))} className={cn(inputCls, "font-mono text-xs")} placeholder="https://…" /></Field>
+                  <Field label="Descripción"><textarea value={currentSite.desc} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, desc: e.target.value }))} rows={3} className={inputCls} /></Field>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio."><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <Field label="Etiquetas (separadas por comas)"><input value={currentSite.tags.join(", ")} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
+                  </div>
+                  {(currentSite.image ?? "").length > 0 && <img src={currentSite.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                </div>
+              ) : (
+                <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay sitios. Crea el primero con el botón.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── MODELOS 3D ── */}
+        {tab === "modelos" && (
+          <div className="space-y-5">
+            <div className="grid gap-4 border border-white/10 bg-panel p-6 lg:grid-cols-2">
+              <Field label="Título de la sección"><input value={content.showcase3d.title} onChange={(e) => patch({ showcase3d: { ...content.showcase3d, title: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Texto de la sección"><textarea value={content.showcase3d.text} onChange={(e) => patch({ showcase3d: { ...content.showcase3d, text: e.target.value } })} rows={3} className={inputCls} /></Field>
+            </div>
+            <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
+              <div className="h-fit border border-white/10 bg-panel p-4">
+                <button
+                  onClick={() => {
+                    const n: Model3D = { id: `modelo-${Date.now().toString(36)}`, title: "Nuevo modelo", desc: "Describe tu pieza.", preset: "reactor", poster: "", tags: ["3D"], specs: [] };
+                    update({ showcase3d: { ...content.showcase3d, models: [...content.showcase3d.models, n] } });
+                    setSelectedModel(n.id);
+                    flashSaved();
+                  }}
+                  className={cn(btnPrimary, "w-full justify-center")}
+                >
+                  <Plus className="h-4 w-4" /> Nuevo modelo
+                </button>
+                <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto">
+                  {content.showcase3d.models.map((m) => (
+                    <button key={m.id} onClick={() => setSelectedModel(m.id)} className={cn("block w-full border px-3 py-2.5 text-left transition", selectedModel === m.id ? "border-acid bg-acid/10" : "border-white/10 hover:border-white/30")}>
+                      <span className="block truncate font-display text-sm font-bold text-white">{m.title}</span>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">{m.preset === "custom" ? ".glb" : m.preset}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {currentModel ? (
+                <div className="space-y-4 border border-white/10 bg-panel p-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-xl font-bold text-white">Editando: {currentModel.title}</h2>
+                    <button
+                      onClick={() => { if (!confirm(`¿Eliminar “${currentModel.title}”?`)) return; const rest = content.showcase3d.models.filter((m) => m.id !== currentModel.id); update({ showcase3d: { ...content.showcase3d, models: rest } }); setSelectedModel(rest[0]?.id ?? ""); flashSaved(); }}
+                      className="ml-auto inline-flex items-center gap-2 border border-red-400/50 px-4 py-2.5 font-display text-sm font-bold text-red-300 hover:bg-red-400/10"
+                    >
+                      <Trash2 className="h-4 w-4" /> Eliminar
+                    </button>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Título"><input value={currentModel.title} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, title: e.target.value }))} className={inputCls} /></Field>
+                    <Field label="Fuente del modelo">
+                      <select value={currentModel.preset} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, preset: e.target.value as Model3D["preset"] }))} className={cn(inputCls, "bg-coal")}>
+                        <option value="reactor">Demo: Núcleo Reactor</option>
+                        <option value="cristal">Demo: Cristal de Datos</option>
+                        <option value="toroide">Demo: Toroide Industrial</option>
+                        <option value="custom">URL de mi .glb</option>
+                      </select>
+                    </Field>
+                  </div>
+                  <Field label="Descripción"><textarea value={currentModel.desc} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, desc: e.target.value }))} rows={2} className={inputCls} /></Field>
+                  {currentModel.preset === "custom" && (
+                    <Field label="URL del .glb" hint="Ej: /models/mi-pieza.glb (carpeta public/models/) o URL de tu bucket R2. Máx. recomendado 5 MB.">
+                      <input value={currentModel.modelUrl ?? ""} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, modelUrl: e.target.value }))} className={inputCls} placeholder="/models/mi-pieza.glb" />
+                    </Field>
+                  )}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Póster (URL imagen previa)"><input value={currentModel.poster ?? ""} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, poster: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <Field label="Etiquetas (separadas por comas)"><input value={currentModel.tags.join(", ")} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
+                  </div>
+                  <Field label="Specs (una por línea: Etiqueta | Valor)">
+                    <textarea
+                      value={(currentModel.specs ?? []).map((s) => `${s.label} | ${s.value}`).join("\n")}
+                      onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, specs: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => { const [label, ...rest] = l.split("|"); return { label: label.trim(), value: rest.join("|").trim() }; }) }))}
+                      rows={3}
+                      className={cn(inputCls, "font-mono text-xs")}
+                    />
+                  </Field>
+                </div>
+              ) : (
+                <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay modelos. Crea el primero con el botón.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── GITHUB ── */}
+        {tab === "github" && (
+          <div className="max-w-2xl space-y-4 border border-white/10 bg-panel p-6">
+            <h2 className="font-display text-xl font-bold text-white">GitHub en vivo</h2>
+            <Field label="Usuario de GitHub" hint="Se carga automáticamente al abrir el sitio."><input value={content.github.username} onChange={(e) => patch({ github: { ...content.github, username: e.target.value } })} className={inputCls} /></Field>
+            <Field label="Nº máximo de repos"><input type="number" min={2} max={24} value={content.github.maxRepos} onChange={(e) => patch({ github: { ...content.github, maxRepos: Math.max(2, Math.min(24, Number(e.target.value))) } })} className={inputCls} /></Field>
+            <Field label="Texto de la sección"><textarea value={content.github.text} onChange={(e) => patch({ github: { ...content.github, text: e.target.value } })} rows={2} className={inputCls} /></Field>
+            <a href={`https://github.com/${content.github.username}`} target="_blank" rel="noreferrer" className={btnGhost}>Probar perfil ↗</a>
+          </div>
+        )}
+
+        {/* ── CONTACT ── */}
+        {tab === "contact" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Textos</h2>
+              <Field label="Titular"><input value={content.contact.title} onChange={(e) => patch({ contact: { ...content.contact, title: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Texto"><textarea value={content.contact.text} onChange={(e) => patch({ contact: { ...content.contact, text: e.target.value } })} rows={2} className={inputCls} /></Field>
+              <Field label="Redes (una por línea: Nombre | URL)">
+                <textarea value={content.contact.socials.map((s) => `${s.label} | ${s.url}`).join("\n")} onChange={(e) => patch({ contact: { ...content.contact, socials: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => { const [label, ...rest] = l.split("|"); return { label: label.trim(), url: rest.join("|").trim() }; }) } })} rows={4} className={cn(inputCls, "font-mono text-xs")} />
+              </Field>
+            </div>
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Formulario</h2>
+              <Field label="Servicios (uno por línea)">
+                <textarea value={content.contact.services.join("\n")} onChange={(e) => patch({ contact: { ...content.contact, services: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) } })} rows={5} className={inputCls} />
+              </Field>
+              <Field label="Presupuestos (uno por línea)">
+                <textarea value={content.contact.budgets.join("\n")} onChange={(e) => patch({ contact: { ...content.contact, budgets: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) } })} rows={5} className={inputCls} />
+              </Field>
+              <Field label="Nota del pie"><input value={content.footer.note} onChange={(e) => patch({ footer: { ...content.footer, note: e.target.value } })} className={inputCls} /></Field>
+              <Field label="Marca de agua gigante del pie" hint="Texto corto en mayúsculas (ej. MIKE). El nombre completo no cabe a ese tamaño.">
+                <input value={content.footer.watermark} onChange={(e) => patch({ footer: { ...content.footer, watermark: e.target.value } })} className={inputCls} />
+              </Field>
+            </div>
+          </div>
+        )}
+
+        {/* ── DESIGN ── */}
+        {tab === "design" && (
+          <div className="max-w-2xl space-y-4 border border-white/10 bg-panel p-6">
+            <h2 className="font-display text-xl font-bold text-white">Apariencia</h2>
+            <Field label="Color de acento">
+              <div className="flex items-center gap-3">
+                <input type="color" value={content.appearance.accent} onChange={(e) => patch({ appearance: { ...content.appearance, accent: e.target.value } })} className="h-11 w-20 cursor-pointer border border-white/15 bg-transparent" />
+                <code className="font-mono text-sm text-acid">{content.appearance.accent}</code>
+              </div>
+            </Field>
+            {([
+              ["showParticles", "Partículas del Hero"],
+              ["showMarquee", "Cinta infinita"],
+              ["showStats", "Estadísticas del Hero"],
+              ["showCursor", "Cursor personalizado"],
+            ] as const).map(([key, label]) => (
+              <label key={key} className="flex items-center gap-3 border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-200">
+                <input type="checkbox" checked={content.appearance[key]} onChange={(e) => patch({ appearance: { ...content.appearance, [key]: e.target.checked } })} className="h-4 w-4 accent-[#a3e635]" />
+                {label}
+              </label>
+            ))}
+            <Field label="Categorías (Nombre | Color)" hint="La primera fila debe ser la categoría Todos.">
+              <textarea
+                value={content.categories.map((c) => `${c.label} | ${c.color}`).join("\n")}
+                onChange={(e) => {
+                  const ids: (CategoryId | "todos")[] = ["todos", "codigo", "diseno3d", "grafico", "personajes"];
+                  const lines = e.target.value.split("\n").map((s) => s.trim()).filter(Boolean);
+                  patch({ categories: lines.map((l, i) => { const [label, ...rest] = l.split("|"); return { id: ids[i] ?? "todos", label: label.trim(), color: (rest.join("|").trim() || "#a3e635") }; }) });
+                }}
+                rows={5}
+                className={cn(inputCls, "font-mono text-xs")}
+              />
+            </Field>
+          </div>
+        )}
+
+        {/* ── DATA ── */}
+        {tab === "data" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Copia de seguridad</h2>
+              <p className="text-sm text-zinc-400">Exporta tu contenido a JSON para guardarlo o versionarlo. Al importar, se reemplaza todo el contenido actual.</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    const blob = new Blob([exportJSON()], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `portafolio-mike-${new Date().toISOString().slice(0, 10)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className={btnPrimary}
+                >
+                  <Download className="h-4 w-4" /> Exportar JSON
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(exportJSON()).catch(() => {});
+                    flashSaved();
+                  }}
+                  className={btnGhost}
+                >
+                  <FileJson className="h-4 w-4" /> Copiar JSON
+                </button>
+                <button onClick={() => { if (confirm("¿Restablecer todo al contenido original?")) reset(); }} className="inline-flex items-center gap-2 border border-red-400/50 px-4 py-2.5 font-display text-sm font-bold text-red-300 hover:bg-red-400/10">
+                  <RefreshCcw className="h-4 w-4" /> Restablecer
+                </button>
+              </div>
+              <Field label="Importar JSON">
+                <textarea value={importText} onChange={(e) => setImportText(e.target.value)} rows={6} placeholder='Pega aquí el JSON exportado…' className={cn(inputCls, "font-mono text-xs")} spellCheck={false} />
+              </Field>
+              <button
+                onClick={() => {
+                  if (!importText.trim()) { setImportMsg("Pega primero un JSON."); return; }
+                  const ok = importJSON(importText);
+                  setImportMsg(ok ? "✓ Contenido importado correctamente." : "✗ JSON no válido.");
+                  if (ok) { setImportText(""); flashSaved(); }
+                }}
+                className={btnPrimary}
+              >
+                <Save className="h-4 w-4" /> Importar y aplicar
+              </button>
+              {importMsg && <p className="text-sm text-zinc-300">{importMsg}</p>}
+              <div className="border-t border-white/10 pt-4">
+                <Field label="Cambiar contraseña del panel">
+                  <div className="flex gap-2">
+                    <input value={content.adminPassword} onChange={(e) => update({ adminPassword: e.target.value })} className={inputCls} placeholder="Nueva contraseña" />
+                    <button onClick={flashSaved} className={btnGhost}><Save className="h-4 w-4" /></button>
+                  </div>
+                </Field>
+              </div>
+            </div>
+            <div className="h-fit border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">¿Cómo funciona?</h2>
+              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-400">
+                <li>Todo lo que edites aquí se <strong className="text-white">guarda solo en este navegador</strong> al instante.</li>
+                <li>Pulsa <strong className="text-white">“Ver sitio”</strong> para comprobar el resultado en vivo.</li>
+                <li><strong className="text-white">Exporta el JSON</strong> cada vez que hagas cambios importantes y guárdalo junto al proyecto.</li>
+                <li>Para publicar cambios definitivos usa la pestaña <strong className="text-white">Publicar</strong>: sube el contenido a GitHub y Cloudflare redespliega solo.</li>
+                <li>El acceso al panel es <code className="bg-white/10 px-1 font-mono text-xs text-acid">#/admin</code> con tu contraseña (solo existe en local, nunca se publica).</li>
+              </ol>
+              <pre className="mt-4 max-h-64 overflow-auto border border-white/10 bg-black/50 p-3 font-mono text-[11px] leading-relaxed text-zinc-400">{exportJSON().slice(0, 1500)}…</pre>
+            </div>
+          </div>
+        )}
+
+        {/* ── PUBLICAR ── */}
+        {tab === "publicar" && (
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Subir contenido a GitHub</h2>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                Este botón toma <strong className="text-white">todo lo que editaste en el panel</strong> y lo
+                publica como commit en <code className="bg-white/10 px-1 font-mono text-xs text-acid">src/data/content.ts</code> de
+                tu repo. Cloudflare Pages detecta el push y <strong className="text-white">redespliega el sitio solo</strong> en 1–2 minutos.
+              </p>
+              <Field label="Token de GitHub" hint="Clásico con scope repo (o fino con Contents: lectura y escritura). Vive solo en este navegador, jamás se publica.">
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    value={pubCfg.token}
+                    onChange={(e) => setPub({ token: e.target.value })}
+                    placeholder="ghp_… o github_pat_…"
+                    className={cn(inputCls, "font-mono text-xs")}
+                    autoComplete="off"
+                  />
+                  {pubCfg.token && (
+                    <button
+                      onClick={() => { forgetPublishToken(); setPubCfgState((p) => ({ ...p, token: "" })); }}
+                      className={btnGhost}
+                      title="Olvidar token"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Repo"><input value={pubCfg.repo} onChange={(e) => setPub({ repo: e.target.value })} className={cn(inputCls, "font-mono text-xs")} placeholder="usuario/repo" /></Field>
+                <Field label="Rama"><input value={pubCfg.branch} onChange={(e) => setPub({ branch: e.target.value })} className={inputCls} placeholder="main" /></Field>
+              </div>
+              <Field label="Mensaje del commit"><input value={pubCfg.message} onChange={(e) => setPub({ message: e.target.value })} className={inputCls} /></Field>
+              <button onClick={doPublish} disabled={pubStatus === "pushing"} className={cn(btnPrimary, "w-full justify-center text-base")}>
+                {pubStatus === "pushing" ? (
+                  <>Publicando… espera al commit</>
+                ) : (
+                  <><Upload className="h-5 w-5" /> Publicar contenido en GitHub</>
+                )}
+              </button>
+              {pubStatus === "ok" && pubResult && (
+                <div className="border border-acid/50 bg-acid/10 p-4 text-sm">
+                  <p className="font-display font-bold text-acid">✓ Publicado ({pubResult.commitSha})</p>
+                  <p className="mt-1 text-zinc-300">
+                    <a href={pubResult.commitUrl} target="_blank" rel="noreferrer" className="underline hover:text-acid">Ver commit</a>
+                    {" · "}
+                    <a href={pubResult.fileUrl} target="_blank" rel="noreferrer" className="underline hover:text-acid">Ver archivo</a>
+                  </p>
+                  <p className="mt-2 text-zinc-400">Cloudflare Pages empezará el deploy solo. Compruébalo en el dashboard (Deployments) en ~1–2 min.</p>
+                </div>
+              )}
+              {pubStatus === "error" && (
+                <p className="border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-200">{pubMsg}</p>
+              )}
+            </div>
+            <div className="h-fit space-y-4 border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Primer push del proyecto</h2>
+              <p className="text-sm text-zinc-400">
+                El botón de arriba actualiza el archivo, pero <strong className="text-white">la primera vez</strong> el
+                repo necesita el proyecto completo. Ejecuta esto una sola vez en la carpeta del proyecto:
+              </p>
+              <pre className="overflow-x-auto border border-white/10 bg-black/50 p-4 font-mono text-xs leading-relaxed text-zinc-300">
+{`git init -b main
+git add .
+git commit -m "Portafolio inicial"
+git remote add origin https://github.com/miguelxlerion/Mike_portfolio.git
+git push -u origin main`}
+              </pre>
+              <button
+                onClick={() => navigator.clipboard.writeText("git init -b main && git add . && git commit -m \"Portafolio inicial\" && git remote add origin https://github.com/miguelxlerion/Mike_portfolio.git && git push -u origin main").catch(() => {})}
+                className={btnGhost}
+              >
+                <Copy className="h-4 w-4" /> Copiar comandos
+              </button>
+              <div className="border-t border-white/10 pt-4 text-sm leading-relaxed text-zinc-400">
+                <p className="font-display font-bold text-white">Cómo crear el token (2 min)</p>
+                <ol className="mt-2 list-decimal space-y-1 pl-5">
+                  <li>GitHub → Settings → Developer settings → <strong className="text-white">Personal access tokens</strong>.</li>
+                  <li>Clásico con scope <code className="bg-white/10 px-1 font-mono text-xs text-acid">repo</code>, o fino solo para este repo con <code className="bg-white/10 px-1 font-mono text-xs text-acid">Contents: Read and write</code>.</li>
+                  <li>Pégalo arriba. Caduca cuando tú decidas; renuévalo y repite.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
