@@ -118,5 +118,10 @@
     "id": "servicios",
     "title": "Servicios y contratación",
     "text": "Ofrece arquitectura de software, plataformas 3D y WebGL, integración de IA y RAG, y dashboards con visualización de datos. Rangos orientativos: menos de 1k USD, 1 a 3k, 3 a 8k, más de 8k o a convenir. El formulario de contacto del sitio genera la solicitud por email."
+  },
+  {
+    "id": "edad",
+    "title": "Edad",
+    "text": "42 Años."
   }
 ]
