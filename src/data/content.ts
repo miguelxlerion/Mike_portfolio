@@ -542,7 +542,7 @@ export const defaultContent: SiteContent = {
       "tagline": "Datasets masivos convertidos en mundos 3D navegables",
       "description": "Entornos 3D gamificados para análisis visual en tiempo real. −40% en tiempo de análisis.",
       "longDescription": "Como Director de Diseño 3D & Data Visualization en AONC Neuroscientific Strategies, transformé conjuntos de datos masivos y complejos en entornos 3D gamificados y navegables para análisis visual en tiempo real. Aplicando principios UX/UI de claridad visual, reduje el tiempo de análisis un 40% para usuarios no técnicos.",
-      "image": "https://picsum.photos/seed/neurodata-3d/1200/800",
+      "image": "/uploads/mv6085i9-portada_aonc.jpg",
       "tags": [
         "Unity",
         "DataViz",
