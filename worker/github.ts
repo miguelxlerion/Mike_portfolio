@@ -36,8 +36,11 @@ export async function handleGithub(request: Request, env: GithubEnv, ctx: CtxLik
       ? `https://api.github.com/users/${user}`
       : `https://api.github.com/users/${user}/repos?per_page=100&sort=updated`;
 
-  // 1) Intentar caché del edge
-  const cacheKey = new Request(target, { method: "GET" });
+  // 1) Intentar caché del edge.
+  // La clave lleva versión de forma: si cambia lo que servimos, los
+  // visitantes jamás leen una forma vieja cacheada (ni tras un deploy).
+  const CACHE_VERSION = "v2";
+  const cacheKey = new Request(`${target}${target.includes("?") ? "&" : "?"}cv=${CACHE_VERSION}`, { method: "GET" });
   try {
     const cache = (caches as unknown as { default: Cache }).default;
     const hit = await cache.match(cacheKey);
@@ -52,12 +55,41 @@ export async function handleGithub(request: Request, env: GithubEnv, ctx: CtxLik
 
     const upstream = await fetch(target, { headers });
     if (!upstream.ok) {
-      const status = upstream.status === 404 ? 404 : 502;
-      return json({ message: upstream.status === 404 ? "not-found" : "upstream-error" }, status);
+      if (upstream.status === 404) return json({ message: "not-found" }, 404);
+      // Sin token, el límite de GitHub (60 req/h) se comparte entre miles de
+      // Workers detrás del mismo egress: se agota a ratos. Con GITHUB_TOKEN
+      // configurado esto casi nunca pasa (5000 req/h).
+      if (upstream.status === 403 || upstream.status === 429) {
+        return json({ message: "rate-limited" }, 429);
+      }
+      return json({ message: "upstream-error" }, 502);
+    }
+
+    // Respuesta adelgazada: solo los campos que usa el frontend.
+    // 45 repos completos pesan ~250 KB; proyectados ~40 KB (caché + móvil).
+    let body: BodyInit | null = upstream.body;
+    if (kind === "repos") {
+      const all = (await upstream.json().catch(() => null)) as Record<string, unknown>[] | null;
+      if (!Array.isArray(all)) return json({ message: "upstream-error" }, 502);
+      const slim = all.map((r) => ({
+        id: r.id,
+        name: r.name,
+        description: r.description ?? null,
+        html_url: r.html_url,
+        homepage: r.homepage ?? null,
+        language: r.language ?? null,
+        stargazers_count: r.stargazers_count ?? 0,
+        forks_count: r.forks_count ?? 0,
+        updated_at: r.updated_at,
+        topics: Array.isArray(r.topics) ? (r.topics as string[]).slice(0, 5) : [],
+        fork: !!r.fork,
+      }));
+      body = JSON.stringify(slim);
     }
 
     // 3) Guardar 1h en edge + servir (stale 24h si GitHub cae)
-    const res = new Response(upstream.body, upstream);
+    const res = new Response(body, upstream);
+    if (kind === "repos") res.headers.set("Content-Type", "application/json");
     res.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
     ctx.waitUntil(cache.put(cacheKey, res.clone()));
     return res;
