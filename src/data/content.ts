@@ -32,6 +32,8 @@ export interface Project {
   description: string;
   longDescription: string;
   image?: string;
+  /** Video opcional (URL .mp4): si existe, la ficha muestra reproductor en vez de foto. */
+  videoUrl?: string;
   tags: string[];
   year: string;
   demoUrl?: string;

@@ -35,6 +35,15 @@ Secciones finales: **Hero · Sobre mí · Proyectos · Sitios Web · GitHub en v
 - Edita **todo**: identidad, hero, roles, stats, marquee, bio, habilidades, proyectos, sitios web, modelos 3D, GitHub, contacto, colores y visibilidad de secciones.
 - Todo se **autoguarda en el navegador** (localStorage `mike-portfolio-v2`).
 
+## Medios: imágenes y videos 🖼
+
+Pestaña **Medios** del panel (requiere token):
+
+- **Subir desde el PC**: jpg/png/webp/gif/svg/avif hasta 10 MB → van a `public/uploads/` del repo → Cloudflare las sirve en ~1–2 min como `/uploads/archivo.jpg`. Copia la ruta y pégala en Retrato, Proyecto, Modelo o Sitio.
+- **Importar por URL**: trae una imagen externa al repo (si el origen bloquea CORS, te avisa y la subes desde el PC).
+- **Galería**: lista lo subido (miniaturas inmediatas vía raw), copiar ruta y borrar.
+- **Videos (solo URL)**: los videos no se suben (pesan demasiado). Pega la URL del .mp4, elige proyecto y **Asignar**: la ficha mostrará reproductor en vez de foto. CSP ya permite `media-src https:`.
+
 ## Publicar cambios 🚀 (cero terminal)
 
 Pestaña **Publicar** del panel local, con tu token de GitHub:

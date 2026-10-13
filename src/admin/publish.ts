@@ -55,7 +55,7 @@ export function replaceBlock(fileText: string, content: SiteContent): string {
   return fileText.slice(0, i + START_MARKER.length) + "\n" + buildContentBlock(content) + "\n" + fileText.slice(j);
 }
 
-async function gh(path: string, token: string, init?: RequestInit) {
+export async function gh(path: string, token: string, init?: RequestInit) {
   const res = await fetch(`https://api.github.com${path}`, {
     ...init,
     headers: {
