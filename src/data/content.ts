@@ -455,7 +455,8 @@ export const defaultContent: SiteContent = {
           "label": "Vectorial",
           "value": "PostgreSQL pgvector"
         }
-      ]
+      ],
+      "image": "/uploads/mv60rfcx-ragx.png"
     },
     {
       "id": "ingest-pipeline",
