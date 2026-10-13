@@ -156,6 +156,8 @@ export interface SiteContent {
   };
   appearance: {
     accent: string;
+    ink: string;
+    panel: string;
     showCursor: boolean;
     showParticles: boolean;
     showMarquee: boolean;
@@ -170,8 +172,10 @@ export const CATEGORY_COLOR: Record<CategoryId, string> = {
   personajes: "#fbbf24",
 };
 
-const P = (seed: string, w = 1200, h = 800) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+/** Color de una categoría según lo editado en el panel (con fallback seguro). */
+export function categoryColor(categories: Category[], id: CategoryId): string {
+  return categories.find((c) => c.id === id)?.color || CATEGORY_COLOR[id];
+}
 
 // <defaultContent>
 export const defaultContent: SiteContent = {
@@ -757,6 +761,8 @@ export const defaultContent: SiteContent = {
   },
   "appearance": {
     "accent": "#00fffb",
+    "ink": "#0a0a0b",
+    "panel": "#141418",
     "showCursor": true,
     "showParticles": true,
     "showMarquee": true,

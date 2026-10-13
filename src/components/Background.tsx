@@ -16,6 +16,13 @@ export default function ParticleCanvas({ density = 16000, maxLinks = 120 }: { de
     let w = 0;
     let h = 0;
     let raf = 0;
+    const hexToRgb = (hex: string): [number, number, number] => {
+      const h = hex.replace("#", "");
+      const v = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+      const n = parseInt(v, 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    };
+    const [ar, ag, ab] = hexToRgb(content.appearance.accent);
     const mouse = { x: -9999, y: -9999 };
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     interface P { x: number; y: number; vx: number; vy: number; r: number }
@@ -59,7 +66,7 @@ export default function ParticleCanvas({ density = 16000, maxLinks = 120 }: { de
           const b = points[j];
           const d = Math.hypot(a.x - b.x, a.y - b.y);
           if (d < maxLinks) {
-            ctx.strokeStyle = `rgba(163,230,53,${(1 - d / maxLinks) * 0.16})`;
+            ctx.strokeStyle = `rgba(${ar},${ag},${ab},${(1 - d / maxLinks) * 0.16})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -98,7 +105,7 @@ export default function ParticleCanvas({ density = 16000, maxLinks = 120 }: { de
       canvas.removeEventListener("mousemove", onMouse);
       canvas.removeEventListener("mouseleave", onLeave);
     };
-  }, [density, maxLinks, content.appearance.showParticles]);
+  }, [density, maxLinks, content.appearance.showParticles, content.appearance.accent]);
 
   if (!content.appearance.showParticles) return null;
   return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-70" aria-hidden />;

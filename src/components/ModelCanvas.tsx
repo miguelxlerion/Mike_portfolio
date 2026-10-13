@@ -14,12 +14,13 @@ interface Props {
   model: Model3D;
   quality: "auto" | "high" | "low";
   autoRotate: boolean;
+  accent?: string;
   onStats?: (tris: number, fps: number) => void;
 }
 
-function buildProcedural(preset: Model3D["preset"]): THREE.Group {
+function buildProcedural(preset: Model3D["preset"], accentHex = "#a3e635"): THREE.Group {
   const g = new THREE.Group();
-  const acid = new THREE.Color("#a3e635");
+  const acid = new THREE.Color(accentHex);
 
   if (preset === "cristal") {
     const glass = new THREE.MeshPhysicalMaterial({
@@ -92,7 +93,7 @@ function buildProcedural(preset: Model3D["preset"]): THREE.Group {
   return g;
 }
 
-export default function ModelCanvas({ model, quality, autoRotate, onStats }: Props) {
+export default function ModelCanvas({ model, quality, autoRotate, accent = "#a3e635", onStats }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const autoRef = useRef(autoRotate);
@@ -127,7 +128,7 @@ export default function ModelCanvas({ model, quality, autoRotate, onStats }: Pro
     const key = new THREE.DirectionalLight(0xffffff, 1.4);
     key.position.set(4, 6, 6);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(new THREE.Color("#a3e635"), 0.8);
+    const rim = new THREE.DirectionalLight(new THREE.Color(accent), 0.8);
     rim.position.set(-6, -2, -4);
     scene.add(rim);
 
@@ -220,7 +221,7 @@ export default function ModelCanvas({ model, quality, autoRotate, onStats }: Pro
           if (!disposed) setError("No se pudo iniciar el cargador 3D.");
         });
     } else {
-      const demo = buildProcedural(model.preset);
+      const demo = buildProcedural(model.preset, accent);
       extraSpin = [...demo.children];
       rig.add(demo);
       finishLoad();
@@ -306,7 +307,7 @@ export default function ModelCanvas({ model, quality, autoRotate, onStats }: Pro
       renderer.dispose();
       mount.removeChild(el);
     };
-  }, [model.id, model.preset, model.modelUrl, quality]);
+  }, [model.id, model.preset, model.modelUrl, quality, accent]);
 
   return (
     <div className="relative h-full w-full">

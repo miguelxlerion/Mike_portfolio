@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, Search, SearchX, Star, GitFork, X } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import type { CategoryId, Project } from "../data/content";
-import { CATEGORY_COLOR } from "../data/content";
+import { categoryColor } from "../data/content";
 import { highlightCode, Reveal, SectionHeader } from "./ui";
 import { cn } from "../utils/cn";
 
@@ -39,7 +39,8 @@ function ProjectModal({ project, onClose, onPrev, onNext }: { project: Project; 
     };
   }, [onClose, onPrev, onNext]);
 
-  const color = CATEGORY_COLOR[project.category];
+  const { content } = useSite();
+  const color = categoryColor(content.categories, project.category);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[90] grid place-items-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm" onClick={onClose} role="dialog" aria-modal="true" aria-label={project.title}>
@@ -185,7 +186,7 @@ export default function Projects() {
           <motion.div layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
               {filtered.map((p) => {
-                const color = CATEGORY_COLOR[p.category];
+                const color = categoryColor(content.categories, p.category);
                 return (
                   <motion.article
                     layout

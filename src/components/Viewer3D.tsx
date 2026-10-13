@@ -49,6 +49,7 @@ export default function Viewer3D() {
                       model={selected}
                       quality={quality}
                       autoRotate={autoRotate}
+                      accent={content.appearance.accent}
                       onStats={(tris, fps) => setStats({ tris, fps })}
                     />
                   </Suspense>

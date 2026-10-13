@@ -39,10 +39,15 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     }
   }, [content]);
 
-  // Aplica el color de acento como variable CSS global
+  // Aplica los colores del panel como variables CSS globales.
+  // Todas las utilidades (bg-acid, bg-ink, bg-panel, text-acid…) las
+  // referencian, así que el diseño entero sigue al panel sin rebuild.
   useEffect(() => {
-    document.documentElement.style.setProperty("--color-acid", content.appearance.accent);
-  }, [content.appearance.accent]);
+    const root = document.documentElement.style;
+    root.setProperty("--color-acid", content.appearance.accent);
+    root.setProperty("--color-ink", content.appearance.ink);
+    root.setProperty("--color-panel", content.appearance.panel);
+  }, [content.appearance.accent, content.appearance.ink, content.appearance.panel]);
 
   const update = useCallback((patch: Partial<SiteContent>) => {
     setContentState((prev) => ({ ...prev, ...patch }));

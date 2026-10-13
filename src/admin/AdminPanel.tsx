@@ -560,10 +560,23 @@ export default function AdminPanel() {
         {tab === "design" && (
           <div className="max-w-2xl space-y-4 border border-white/10 bg-panel p-6">
             <h2 className="font-display text-xl font-bold text-white">Apariencia</h2>
-            <Field label="Color de acento">
+            <p className="text-sm text-zinc-400">Todo se aplica al instante en el sitio y viaja en el botón Publicar. Pruébalo aquí y luego mira con “Ver sitio”.</p>
+            <Field label="Color de acento (botones, enlaces, detalles)">
               <div className="flex items-center gap-3">
                 <input type="color" value={content.appearance.accent} onChange={(e) => patch({ appearance: { ...content.appearance, accent: e.target.value } })} className="h-11 w-20 cursor-pointer border border-white/15 bg-transparent" />
                 <code className="font-mono text-sm text-acid">{content.appearance.accent}</code>
+              </div>
+            </Field>
+            <Field label="Fondo base del sitio">
+              <div className="flex items-center gap-3">
+                <input type="color" value={content.appearance.ink} onChange={(e) => patch({ appearance: { ...content.appearance, ink: e.target.value } })} className="h-11 w-20 cursor-pointer border border-white/15 bg-transparent" />
+                <code className="font-mono text-sm text-zinc-300">{content.appearance.ink}</code>
+              </div>
+            </Field>
+            <Field label="Superficies (tarjetas, paneles, modales)">
+              <div className="flex items-center gap-3">
+                <input type="color" value={content.appearance.panel} onChange={(e) => patch({ appearance: { ...content.appearance, panel: e.target.value } })} className="h-11 w-20 cursor-pointer border border-white/15 bg-transparent" />
+                <code className="font-mono text-sm text-zinc-300">{content.appearance.panel}</code>
               </div>
             </Field>
             {([
@@ -577,7 +590,7 @@ export default function AdminPanel() {
                 {label}
               </label>
             ))}
-            <Field label="Categorías (Nombre | Color)" hint="La primera fila debe ser la categoría Todos.">
+            <Field label="Categorías (Nombre | Color)" hint="La primera fila debe ser la categoría Todos. El color se usa en filtros Y en las tarjetas de proyecto.">
               <textarea
                 value={content.categories.map((c) => `${c.label} | ${c.color}`).join("\n")}
                 onChange={(e) => {

@@ -39,6 +39,7 @@ export default function Cursor() {
   }, [enabled, content.appearance.showCursor]);
 
   if (!enabled || !content.appearance.showCursor) return null;
+  const accent = content.appearance.accent;
 
   return (
     <>
@@ -53,7 +54,7 @@ export default function Cursor() {
         style={{
           width: mode === "hover" ? 44 : mode === "text" ? 56 : 28,
           height: mode === "hover" ? 44 : mode === "text" ? 56 : 28,
-          borderColor: mode === "default" ? "rgba(163,230,53,.5)" : "rgba(163,230,53,.9)",
+          borderColor: mode === "default" ? `color-mix(in srgb, ${accent} 50%, transparent)` : `color-mix(in srgb, ${accent} 90%, transparent)`,
           transform: `translate3d(${ring.x - (mode === "default" ? 14 : mode === "hover" ? 22 : 28)}px, ${ring.y - (mode === "default" ? 14 : mode === "hover" ? 22 : 28)}px, 0)`,
         }}
       />
