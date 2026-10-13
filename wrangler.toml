@@ -4,6 +4,8 @@
 #
 # Variables (dashboard del Worker → Settings → Variables and Secrets):
 #   GITHUB_TOKEN (opcional, sube el rate-limit de la API a 5000 req/h)
+#   TRANSLATE_API_KEY (Google Cloud Translation: lote oficial sin throttling;
+#     calentar todo el sitio cuesta ~$0.40 una vez, luego tira de caché edge)
 #   RESEND_API_KEY (para que /api/contact envíe emails de verdad)
 #   CONTACT_TO (destinatario, por defecto miguelxlerion@gmail.com)
 #   TURNSTILE_SECRET (opcional, anti-spam del formulario)

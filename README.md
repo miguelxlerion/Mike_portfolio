@@ -41,6 +41,8 @@ Secciones finales: **Hero · Sobre mí · Proyectos · Sitios Web · GitHub en v
 - **Caché persistente** (`mike-i18n-cache-en-v1`): la primera visita traduce, las siguientes cuestan 0 peticiones. `?lang=en` enlace compartible; preferencia guardada.
 - Respeta **código** (`pre`/`code` jamás se tocan), nombres propios (marca nav) y el toggle; el typewriter del Hero traduce sus roles aparte.
 - Un `MutationObserver` traduce el contenido dinámico (modales, filtros, repos). Volver a ES restaura el texto exacto. Si la API falla, el nodo queda en español: nunca se rompe.
+- Arquitectura anti-429: el navegador pide **lotes de 15** a `POST /api/translate` (Worker), que agrupa, cachea 30 días en el edge y reintenta con backoff. Sin el Worker (dev local), cae a Google directo.
+- Para producción blindada: variable `TRANSLATE_API_KEY` (Google Cloud Translation, calentar todo el sitio ≈ $0.40 una vez; luego todo es caché). Sin ella usa el endpoint público con backoff.
 - Correcciones puntuales en `OVERRIDES` de `src/i18n/auto.ts` (ej. INICIO→Home).
 
 ## Medios: imágenes y videos 🖼

@@ -15,7 +15,6 @@ export type Lang = "es" | "en";
 
 const CACHE_KEY = "mike-i18n-cache-en-v1";
 const MAX_CACHE = 3000;
-const CONCURRENCY = 6;
 
 function hash(s: string): string {
   let h = 5381;
@@ -48,7 +47,6 @@ function saveCache() {
   }
 }
 
-const inflight = new Map<string, Promise<string>>();
 
 // Términos de UI donde Google elige mal: corrección directa, sin gastar API.
 const OVERRIDES: Record<string, string> = {
@@ -80,42 +78,91 @@ export async function translateString(text: string): Promise<string> {
   const fixed = OVERRIDES[src] ?? OVERRIDES[src.toUpperCase()];
   if (fixed) {
     getCache().set(key, fixed);
+    saveCache();
     return fixed;
   }
   const hit = getCache().get(key);
   if (hit) return hit;
-  const pending = inflight.get(key);
-  if (pending) return pending;
-  const p = (async () => {
-    try {
-      // Textos largos: por frases para no recortar
-      const CHUNK = 1500;
-      let out: string;
-      if (src.length <= CHUNK) {
-        out = await fetchOne(src);
-      } else {
-        const parts = src.split(/(?<=[.!?])\s+/);
-        const chunks: string[] = [];
-        let cur = "";
-        for (const part of parts) {
-          if ((cur + " " + part).length > CHUNK && cur) {
-            chunks.push(cur);
-            cur = part;
-          } else cur = cur ? cur + " " + part : part;
-        }
-        if (cur) chunks.push(cur);
-        out = "";
-        for (const c of chunks) out += (out ? " " : "") + (await fetchOne(c));
+  // Textos largos: por frases para no recortar (el worker corta a 2000)
+  const parts = splitChunks(src);
+  const got = await translateMany(parts);
+  const pieces = parts.map((p) => got.get(p) ?? null);
+  if (pieces.some((v) => !v)) throw new Error("untranslated");
+  const out = pieces.join(" ");
+  getCache().set(key, out);
+  saveCache();
+  return out;
+}
+
+function splitChunks(src: string): string[] {
+  const CHUNK = 1500;
+  if (src.length <= CHUNK) return [src];
+  const parts = src.split(/(?<=[.!?])\s+/);
+  const chunks: string[] = [];
+  let cur = "";
+  for (const part of parts) {
+    if ((cur + " " + part).length > CHUNK && cur) {
+      chunks.push(cur);
+      cur = part;
+    } else cur = cur ? cur + " " + part : part;
+  }
+  if (cur) chunks.push(cur);
+  return chunks.length ? chunks : [src];
+}
+
+const BATCH = 15;
+
+/** Traduce una lista (única) preservando orden. Nulo = ese índice falló. */
+export async function translateMany(uniqueTexts: string[]): Promise<Map<string, string | null>> {
+  const out = new Map<string, string | null>();
+  const pending: string[] = [];
+  for (const t of uniqueTexts) {
+    const hit = getCache().get(hash(t));
+    if (hit) out.set(t, hit);
+    else pending.push(t);
+  }
+  for (let k = 0; k < pending.length; k += BATCH) {
+    const slice = pending.slice(k, k + BATCH);
+    const got = await fetchBatch(slice);
+    slice.forEach((t, j) => {
+      const v = got[j] ?? null;
+      out.set(t, v);
+      if (v) getCache().set(hash(t), v);
+    });
+    saveCache();
+  }
+  return out;
+}
+
+/**
+ * Un lote: primero el Worker same-origin (prod: agrupa + caché edge
+ * compartida globalmente), si no existe (dev local) directo a Google.
+ */
+async function fetchBatch(texts: string[]): Promise<(string | null)[]> {
+  try {
+    const res = await fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sl: "es", tl: "en", texts }),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { translations?: unknown };
+      if (Array.isArray(data.translations) && data.translations.length === texts.length) {
+        return data.translations.map((v) => (typeof v === "string" && v ? v : null));
       }
-      getCache().set(key, out);
-      saveCache();
-      return out;
-    } finally {
-      inflight.delete(key);
     }
-  })();
-  inflight.set(key, p);
-  return p;
+  } catch {
+    /* sin worker (dev): fallback directo */
+  }
+  const out: (string | null)[] = [];
+  for (const t of texts) {
+    try {
+      out.push(await fetchOne(t));
+    } catch {
+      out.push(null);
+    }
+  }
+  return out;
 }
 
 // Nodo traducido → texto original (para volver a ES exacto)
@@ -159,19 +206,10 @@ function collectPlaceholders(root: ParentNode): HTMLElement[] {
   return out;
 }
 
-async function runPool<T>(items: T[], limit: number, fn: (item: T) => Promise<void>): Promise<void> {
-  let i = 0;
-  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (i < items.length) {
-      const item = items[i++];
-      try {
-        await fn(item);
-      } catch {
-        /* ese nodo se queda en español */
-      }
-    }
-  });
-  await Promise.all(workers);
+/** Separa espacios de borde para no perderlos al sustituir el nodo. */
+function splitAffix(t: string): { pre: string; core: string; post: string } {
+  const m = t.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  return { pre: m?.[1] ?? "", core: m?.[2] ?? t, post: m?.[3] ?? "" };
 }
 
 /** Traduce todo el <main> + nav + footer al inglés (progresivo). */
@@ -179,35 +217,58 @@ export async function translatePageToEnglish(): Promise<void> {
   const roots = [document.querySelector("main"), document.querySelector("header"), document.querySelector("footer")].filter(
     (el): el is HTMLElement => !!el,
   );
-  const texts: { node: Text; text: string }[] = [];
-  const holders: HTMLElement[] = [];
+  interface Job {
+    key: string;
+    pre: string;
+    post: string;
+    apply: (translated: string) => void;
+  }
+  const jobs: Job[] = [];
   for (const root of roots) {
-    texts.push(...collectCandidates(root));
-    holders.push(...collectPlaceholders(root));
-  }
-  // Deduplicar por texto: una petición por cadena única
-  const byText = new Map<string, { node: Text; text: string }[]>();
-  for (const t of texts) {
-    const list = byText.get(t.text) ?? [];
-    list.push(t);
-    byText.set(t.text, list);
-  }
-  await runPool([...byText.values()], CONCURRENCY, async (group) => {
-    const translated = await translateString(group[0].text);
-    for (const { node } of group) {
-      if (!node.isConnected) continue;
-      if (!originals.has(node)) originals.set(node, node.nodeValue ?? "");
-      const fresh = document.createTextNode(translated);
-      originals.set(fresh, node.nodeValue ?? group[0].text);
-      node.replaceWith(fresh);
+    for (const { node, text } of collectCandidates(root)) {
+      const { pre, core, post } = splitAffix(text);
+      if (core.length < 2) continue;
+      jobs.push({
+        key: core,
+        pre,
+        post,
+        apply: (translated) => {
+          if (!node.isConnected) return;
+          if (!originals.has(node)) originals.set(node, node.nodeValue ?? "");
+          const fresh = document.createTextNode(pre + translated + post);
+          originals.set(fresh, node.nodeValue ?? text);
+          node.replaceWith(fresh);
+        },
+      });
     }
-  });
-  await runPool(holders, CONCURRENCY, async (el) => {
-    const h = el as HTMLElement & { placeholder: string };
-    const translated = await translateString(h.placeholder);
-    if (!originals.has(el)) originals.set(el, h.placeholder);
-    h.placeholder = translated;
-  });
+    for (const el of collectPlaceholders(root)) {
+      const h = el as HTMLElement & { placeholder: string };
+      const orig = h.placeholder;
+      const { pre, core, post } = splitAffix(orig);
+      jobs.push({
+        key: core,
+        pre,
+        post,
+        apply: (translated) => {
+          if (!originals.has(el)) originals.set(el, orig);
+          h.placeholder = pre + translated + post;
+        },
+      });
+    }
+  }
+  const unique = [...new Set(jobs.map((j) => j.key))];
+  const got = await translateMany(unique);
+  for (const [key, value] of got) {
+    if (!value) continue;
+    for (const j of jobs) {
+      if (j.key !== key) continue;
+      try {
+        j.apply(value);
+      } catch {
+        /* nodo ya inexistente */
+      }
+    }
+  }
 }
 
 /** Restaura el español exacto en los nodos tocados. */
