@@ -12,7 +12,7 @@
 
 import RAG_CONFIG from "./rag-config.json";
 
-const EMBED_MODEL = (RAG_CONFIG.embedModel as string) || "@cf/baai/bge-small-en-v1.5";
+const EMBED_MODEL = (RAG_CONFIG.embedModel as string) || "@cf/baai/bge-m3";
 
 function json(data: unknown, status: number) {
   return new Response(JSON.stringify(data), {

@@ -1,5 +1,5 @@
 // POST /api/chat — asistente RAG del portafolio.
-// Flujo: embed pregunta (bge-small 384d) → Vectorize topK → contexto +
+// Flujo: embed pregunta (bge-m3 multilingüe) → Vectorize topK → contexto +
 // historial corto → Llama 3.1 8B. Sin bindings (dev) responde 503 y el
 // widget muestra contacto directo. Con topes anti-abuso en el propio Worker.
 //
@@ -10,7 +10,7 @@
 
 import RAG_CONFIG from "./rag-config.json";
 
-const EMBED_MODEL = (RAG_CONFIG.embedModel as string) || "@cf/baai/bge-small-en-v1.5";
+const EMBED_MODEL = (RAG_CONFIG.embedModel as string) || "@cf/baai/bge-m3";
 const CHAT_MODEL = (RAG_CONFIG.chatModel as string) || "@cf/meta/llama-3.1-8b-instruct";
 const TOP_K = Number(RAG_CONFIG.topK) || 5;
 const MAX_Q = 500;

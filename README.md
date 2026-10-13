@@ -65,7 +65,7 @@ Burbuja inferior-izquierda: responde sobre el perfil (experiencia, stack, proyec
 - **Sin terminal**: Panel > RAG edita conocimiento y ajustes (guardan en GitHub) y **Re-indexar ahora** actualiza Vectorize vía tu Worker (protegido por el secret `RAG_ADMIN_KEY`: créalo en Settings → Variables and Secrets).
 - Activarlo (una vez):
   ```bash
-  npx wrangler vectorize create portfolio-kb --dimensions=384 --metric=cosine
+  npx wrangler vectorize create portfolio-kb --dimensions=1024 --metric=cosine
   $env:CLOUDFLARE_API_TOKEN="<token con Workers AI + Vectorize>"
   $env:CLOUDFLARE_ACCOUNT_ID="<account id>"
   npm run rag:ingest

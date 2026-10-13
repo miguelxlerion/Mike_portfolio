@@ -17,7 +17,8 @@ directory = "./dist"
 not_found_handling = "single-page-application"
 
 # RAG del asistente: embeddings + LLM (Workers AI) y búsqueda (Vectorize).
-# Crear el índice una vez: npx wrangler vectorize create portfolio-kb --dimensions=384 --metric=cosine
+# Crear el índice una vez: npx wrangler vectorize create portfolio-kb --dimensions=1024 --metric=cosine
+# (bge-m3 multilingüe: 1024 dims. Si cambias de modelo de embeddings, recrea el índice con sus dims).
 # Luego: npm run rag:ingest (pide CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID)
 [ai]
 binding = "AI"

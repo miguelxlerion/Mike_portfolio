@@ -16,7 +16,9 @@ const KNOWLEDGE = JSON.parse(fs.readFileSync(new URL("../worker/knowledge.json",
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN ?? "";
 const ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID ?? "";
 const INDEX = "portfolio-kb";
-const EMBED_MODEL = "@cf/baai/bge-small-en-v1.5";
+const EMBED_MODEL =
+  JSON.parse(fs.readFileSync(new URL("../worker/rag-config.json", import.meta.url), "utf8")).embedModel ||
+  "@cf/baai/bge-m3";
 
 if (!TOKEN || !ACCOUNT) {
   console.error("Falta CLOUDFLARE_API_TOKEN o CLOUDFLARE_ACCOUNT_ID.");

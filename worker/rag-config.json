@@ -1,7 +1,7 @@
 {
   "_nota": "Ajustes del asistente RAG. Editables desde Panel > RAG (sin tocar código). Se aplican con el deploy.",
   "chatModel": "@cf/meta/llama-3.1-8b-instruct",
-  "embedModel": "@cf/baai/bge-small-en-v1.5",
+  "embedModel": "@cf/baai/bge-m3",
   "temperature": 0.3,
   "maxTokens": 420,
   "topK": 5,
