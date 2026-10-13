@@ -507,7 +507,7 @@ export const defaultContent: SiteContent = {
       "tagline": "1.200+ unidades y KPIs en tiempo real para la Alcaldía de Caucasia",
       "description": "Plataforma construida desde cero: dashboards de KPIs que recortaron 60% el tiempo de decisiones.",
       "longDescription": "Arquitecté y desarrollé desde cero la plataforma de gestión habitacional de la Alcaldía de Caucasia (FOVIS): frontend React con biblioteca propia de componentes UI reutilizables y backend Django/MySQL desacoplado por APIs. Los dashboards de KPIs en tiempo real para 12+ administradores redujeron el tiempo de toma de decisiones un 60% y los tiempos de carga un 35%.",
-      "image": "https://picsum.photos/seed/fovis-dashboard/1200/800",
+      "image": "/uploads/mv60jz35-fovis_mark.jpg",
       "tags": [
         "React",
         "Tailwind",
