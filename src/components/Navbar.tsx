@@ -40,6 +40,50 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const active = useScrollSpy(LINKS.map((l) => l.id));
 
+  // Navegación explícita: cierra el menú, mueve el scroll por JS y actualiza
+  // el hash SIN disparar el scroll nativo del anchor (que compite con el
+  // re-render del menú y en móvil nunca llega).
+  // Si el menú estaba abierto, el scroll espera a que termine de desmontarse
+  // (~350 ms): desmontarlo a mitad de un smooth-scroll lo cancela y clava y=0.
+  const go = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const wasMenu = open;
+    (e.currentTarget as HTMLElement).blur();
+    setOpen(false);
+    const doScroll = () => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${id}`);
+    };
+    if (wasMenu) setTimeout(doScroll, 350);
+    else doScroll();
+  };
+
+  // Red de seguridad nativa: si un tap llega al menú sin pasar por el
+  // onClick de React, este listener (nativo, imposible de saltear) ejecuta
+  // la misma navegación. Cinturón y tirantes para taps móviles.
+  // Va en el <header> (siempre montado): el contenedor del menú solo
+  // existe cuando está abierto y el ref llegaría null.
+  useEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+    const onTap = (e: Event) => {
+      const a = (e.target as HTMLElement).closest?.("a[href^='#']") as HTMLAnchorElement | null;
+      if (!a || !a.closest("[data-mobile-menu]")) return;
+      if (a.getAttribute("href") === "#/admin") return;
+      const id = a.getAttribute("href")!.slice(1);
+      if (!document.getElementById(id)) return;
+      e.preventDefault();
+      (document.activeElement as HTMLElement | null)?.blur?.();
+      setOpen(false);
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${id}`);
+      }, 350);
+    };
+    header.addEventListener("click", onTap);
+    return () => header.removeEventListener("click", onTap);
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
@@ -57,7 +101,7 @@ export default function Navbar() {
         <div className="h-full bg-acid transition-[width]" style={{ width: `${progress * 100}%` }} />
       </div>
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <a data-notranslate href="#inicio" className="flex items-center gap-3">
+        <a data-notranslate href="#inicio" onClick={(e) => go(e, "inicio")} className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center bg-acid font-display text-sm font-bold text-ink">{content.profile.initials}</span>
           <span className="font-display text-sm font-bold tracking-wide text-white">
             {content.profile.shortName.toUpperCase()}
@@ -69,6 +113,7 @@ export default function Navbar() {
             <a
               key={l.id}
               href={`#${l.id}`}
+              onClick={(e) => go(e, l.id)}
               className={cn(
                 "relative rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors",
                 active === l.id ? "text-ink" : "text-zinc-400 hover:text-white",
@@ -83,6 +128,7 @@ export default function Navbar() {
           <LangToggle />
           <a
             href="#contacto"
+            onClick={(e) => go(e, "contacto")}
             className="hidden bg-acid px-5 py-2.5 font-display text-sm font-bold text-ink transition-colors hover:bg-acid-soft sm:inline-flex"
           >
             Hablemos
@@ -109,13 +155,14 @@ export default function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden border-t border-white/10 bg-ink/95 backdrop-blur-md lg:hidden"
+            data-mobile-menu
           >
             <div className="space-y-1 px-5 py-4">
               {LINKS.map((l) => (
                 <a
                   key={l.id}
                   href={`#${l.id}`}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => go(e, l.id)}
                   className={cn("block rounded-lg px-3 py-2.5 font-display text-base font-bold", active === l.id ? "bg-acid text-ink" : "text-zinc-300")}
                 >
                   {l.label}

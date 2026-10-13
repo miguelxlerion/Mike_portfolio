@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import Cursor from "./components/Cursor";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -33,11 +33,18 @@ function AdminDisabled() {
 
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(() => window.location.hash === "#/admin");
+  const wasAdmin = useRef(window.location.hash === "#/admin");
 
   useEffect(() => {
     const onHash = () => {
-      setIsAdmin(window.location.hash === "#/admin");
-      window.scrollTo({ top: 0 });
+      const admin = window.location.hash === "#/admin";
+      // Solo recentrar al ENTRAR o SALIR del admin. Los links de sección
+      // mueven el scroll por JS (Navbar.go) y no deben ser interferidos.
+      if (admin !== wasAdmin.current) {
+        wasAdmin.current = admin;
+        setIsAdmin(admin);
+        window.scrollTo({ top: 0 });
+      }
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
