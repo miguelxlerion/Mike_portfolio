@@ -1,0 +1,122 @@
+[
+  {
+    "id": "perfil",
+    "title": "Perfil profesional",
+    "text": "Miguel E. Rodriguez Martinez es Senior Full-Stack Engineer especializado en Real-Time 3D & AI Data Platforms, con más de 10 años de experiencia. Es fundador de Xlerion Studio. Vive en Bogotá, Colombia y trabaja remoto para todo el mundo. Tres resultados definen su trabajo: 40% menos tiempo de análisis de datos complejos (AONC), 60% menos tiempo de toma de decisiones para más de 12 administradores municipales (FOVIS) y 80% menos tiempo de exportación de pipeline 3D con una suite de automatización propia."
+  },
+  {
+    "id": "contacto",
+    "title": "Contacto",
+    "text": "Email: miguelxlerion@gmail.com. Teléfono/WhatsApp: +57 313 226 3265. LinkedIn: linkedin.com/in/miguelrodriguez-dataviz. GitHub: github.com/miguelxlerion. Ubicación: Bogotá, Colombia, disponible remoto. Responde en menos de 24 horas con propuesta y tiempos."
+  },
+  {
+    "id": "stack-frontend",
+    "title": "Stack frontend",
+    "text": "Frontend experto: React.js (experto), Next.js (avanzado), TypeScript (experto) y Tailwind CSS. Biblioteca propia de componentes UI reutilizables en React + Tailwind."
+  },
+  {
+    "id": "stack-backend",
+    "title": "Stack backend",
+    "text": "Backend experto: Python (experto), Django y Django REST Framework (experto), Node.js (experto), FastAPI, PostgreSQL (avanzado), MySQL, TimescaleDB, Celery + Redis y Asyncio."
+  },
+  {
+    "id": "stack-3d-realtime",
+    "title": "3D y tiempo real",
+    "text": "Visualización 3D y tiempo real nivel experto: Three.js, Unity 3D, Unreal Engine 5 y WebSockets; MQTT avanzado. Gemelos digitales WebGL a 60 FPS, probadores 3D con realidad aumentada y videojuegos en Unity."
+  },
+  {
+    "id": "stack-ia",
+    "title": "IA y RAG",
+    "text": "IA aplicada nivel avanzado: LangChain, pgvector, LlamaIndex y arquitecturas RAG. Integra LLMs (OpenAI, Claude API) en producción real con búsqueda híbrida y re-ranking para evitar alucinaciones. Certificado en AI/GenAI por UC Irvine con Honors."
+  },
+  {
+    "id": "stack-devops",
+    "title": "DevOps e infraestructura",
+    "text": "DevOps avanzado: Docker, Linux SysAdmin, Nginx y despliegues containerizados con Docker Compose. Alta disponibilidad: 99% de uptime en telemetría industrial. Certificado PMP en gestión del ciclo de vida del software."
+  },
+  {
+    "id": "stack-diseno",
+    "title": "3D Art y diseño",
+    "text": "Arte 3D y diseño: 3ds Max con MaxScript (experto, automatización de pipelines), Substance Painter (experto), ZBrush y Blender (avanzados), materiales PBR, retopología y UX/UI."
+  },
+  {
+    "id": "exp-xlerion",
+    "title": "Xlerion Studio (2023–presente)",
+    "text": "Lead Engineer y fundador de Xlerion Studio desde febrero de 2023. Arquitecturas frontend con datos en tiempo real (WebSockets/MQTT) e interfaces 3D para simulación industrial. Suite en MaxScript que recortó 80% la exportación de assets 3D. Gualivá CRM con experiencia de realidad aumentada Avistour. Videojuego musical Total Darkness en Unity."
+  },
+  {
+    "id": "exp-fovis",
+    "title": "Alcaldía de Caucasia FOVIS (2024–2025)",
+    "text": "Desarrollador Full-Stack Senior: arquitectó desde cero la plataforma de gestión habitacional con React, Tailwind, Django y MySQL, administrando más de 1.200 unidades con dashboards de KPIs en tiempo real para más de 12 administradores. Redujo 60% el tiempo de decisiones y 35% los tiempos de carga con una biblioteca UI propia."
+  },
+  {
+    "id": "exp-2ink",
+    "title": "2INK (2022–2023)",
+    "text": "Desarrollador Web e integración 3D: diseñó, modeló e integró gráficos 3D avanzados para campañas institucionales y web, con Blender, 3ds Max y Adobe Creative Cloud, optimizando tiempos de carga."
+  },
+  {
+    "id": "exp-aonc",
+    "title": "AONC (2018–2019)",
+    "text": "Director de Diseño 3D y Data Visualization en AONC Neuroscientific Strategies: convirtió datasets masivos en entornos 3D gamificados navegables para análisis visual en tiempo real, reduciendo 40% el tiempo de análisis para usuarios no técnicos."
+  },
+  {
+    "id": "exp-usaid",
+    "title": "USAID-ACDI/VOCA (2015–2017)",
+    "text": "Desarrollador Frontend y UI Designer: arquitectó el software ICOE, traduciendo bases de datos complejas en paneles interactivos para tomadores de decisiones a nivel nacional."
+  },
+  {
+    "id": "proj-smartfactory",
+    "title": "Proyecto: SmartFactory 3D",
+    "text": "SmartFactory 3D es un gemelo digital industrial: plataforma Full-Stack con React 18, Three.js, @react-three/fiber, Vite, FastAPI y WebSockets que sostiene más de 100 mensajes por segundo manteniendo 60 FPS, con interpolación Lerp, detección de anomalías Z-score con NumPy, control de acceso RBAC con JWT y despliegue en Docker Compose. Repositorio: github.com/miguelxlerion/smartfactory-3d."
+  },
+  {
+    "id": "proj-rag",
+    "title": "Proyecto: Enterprise RAG Assistant",
+    "text": "Enterprise RAG Assistant (Rag_X) es un sistema RAG empresarial con Python 3.10+, Django/DRF, LangChain, PostgreSQL con pgvector, Celery + Redis y Docker. Procesa PDFs de forma asíncrona con chunking semántico y búsqueda híbrida vectorial más léxica con re-ranking, integrando APIs de OpenAI y Claude. Repositorio: github.com/miguelxlerion/Rag_X."
+  },
+  {
+    "id": "proj-ingest",
+    "title": "Proyecto: IoT Telemetry Resilient Backend",
+    "text": "IoT Telemetry Resilient Backend (Ingest_Pipeline) es un backend tolerante a fallos para sensores industriales con conectividad intermitente: persistencia local con buffering y sincronización asíncrona, con 99% de uptime. Usa Python con Asyncio, Node.js, WebSockets/MQTT, PostgreSQL, Linux y Docker. Repositorio: github.com/miguelxlerion/Ingest_Pipeline."
+  },
+  {
+    "id": "proj-fovis-web",
+    "title": "Proyecto: plataforma FOVIS",
+    "text": "Plataforma de gestión habitacional para la Alcaldía de Caucasia: React + Tailwind + Django + MySQL, más de 1.200 unidades, dashboards de KPIs en tiempo real y biblioteca de componentes propia."
+  },
+  {
+    "id": "proj-ropero",
+    "title": "Proyecto: El Ropero Mágico",
+    "text": "El Ropero Mágico es un e-commerce de moda circular con drops cada 15 días, probador virtual 3D con realidad aumentada, carrito de compras, pagos con Wompi y comunidad de más de 2.300 personas por WhatsApp."
+  },
+  {
+    "id": "proj-tropical",
+    "title": "Proyecto: Tropical Biohostel",
+    "text": "Tropical Biohostel es una plataforma turística bilingüe español-inglés para un biohostel en Nocaima: hospedaje, Cosmic Bungaló, experiencias, gastronomía y buscador inteligente Zemisqua, desplegada en Cloudflare Pages."
+  },
+  {
+    "id": "proj-tranxport",
+    "title": "Proyecto: Tranxport",
+    "text": "Tranxport es un rastreador y cotizador de mensajería en moto para 5 municipios con códigos de seguimiento TRX, tarifario oficial, pedidos directos al sistema y confirmación por WhatsApp, desplegado en Cloudflare Workers."
+  },
+  {
+    "id": "proj-darkness",
+    "title": "Proyecto: Total Darkness",
+    "text": "Total Darkness es un videojuego musical desarrollado en Unity basado en la discografía de Redemthor, con dirección conceptual y técnica unificando diseño de sonido, narrativa y desarrollo."
+  },
+  {
+    "id": "edu",
+    "title": "Educación y certificaciones",
+    "text": "Diplomado en Estimación de Proyectos de Software (Universidad Sergio Arboleda y MinTIC, 2024). Especialización AI/GenAI con Honors (UC Irvine, 2024). PMP Project Management Professional (PMI, 2020). AI Developer Professional (IBM Watson, 2018). Bootcamp Watson AI (IBM, 2018). Bootcamp Full-Stack (Udemy, 2020). Brand Design Masterclass (Domestika, 2023). Técnico en Prototipado Digital (SENA, 2013-2014)."
+  },
+  {
+    "id": "idiomas",
+    "title": "Idiomas",
+    "text": "Español nativo. Inglés B2 intermedio-alto: lee documentación técnica, diseña arquitecturas y participa en reuniones internacionales."
+  },
+  {
+    "id": "servicios",
+    "title": "Servicios y contratación",
+    "text": "Ofrece arquitectura de software, plataformas 3D y WebGL, integración de IA y RAG, y dashboards con visualización de datos. Rangos orientativos: menos de 1k USD, 1 a 3k, 3 a 8k, más de 8k o a convenir. El formulario de contacto del sitio genera la solicitud por email."
+  }
+]

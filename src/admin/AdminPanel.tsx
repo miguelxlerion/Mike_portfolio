@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Check, Download, Eye, FileJson, KeyRound, Lock, Plus,
   RefreshCcw, Save, Settings2, Trash2, Copy, FolderKanban, User,
-  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload, Image as ImageIcon,
+  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload, Image as ImageIcon, Bot as BotIcon,
 } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import type { CategoryId, Model3D, Project, SiteContent, WebWork } from "../data/content";
@@ -30,7 +30,7 @@ import {
   type PublishResult,
 } from "./publish";
 
-type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "medios" | "modelos" | "github" | "contact" | "design" | "data" | "publicar";
+type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "medios" | "modelos" | "rag" | "github" | "contact" | "design" | "data" | "publicar";
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "general", label: "General", icon: <User className="h-4 w-4" /> },
@@ -40,6 +40,7 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "sitios", label: "Sitios Web", icon: <Globe className="h-4 w-4" /> },
   { id: "medios", label: "Medios", icon: <ImageIcon className="h-4 w-4" /> },
   { id: "modelos", label: "Modelos 3D", icon: <Box className="h-4 w-4" /> },
+  { id: "rag", label: "RAG", icon: <BotIcon className="h-4 w-4" /> },
   { id: "github", label: "GitHub", icon: <GitBranch className="h-4 w-4" /> },
   { id: "contact", label: "Contacto", icon: <Mail className="h-4 w-4" /> },
   { id: "design", label: "Diseño", icon: <Palette className="h-4 w-4" /> },
@@ -226,6 +227,182 @@ export default function AdminPanel() {
   const [imported, setImported] = useState<MediaItem | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoProject, setVideoProject] = useState("");
+
+  // ── RAG: conocimiento + ajustes + re-indexado ──
+  interface KbChunk {
+    id: string;
+    title: string;
+    text: string;
+  }
+  const [kbItems, setKbItems] = useState<KbChunk[]>([]);
+  const [kbSha, setKbSha] = useState("");
+  const [cfgSha, setCfgSha] = useState("");
+  const [ragLoaded, setRagLoaded] = useState(false);
+  const [ragLoading, setRagLoading] = useState(false);
+  const [ragMsg, setRagMsg] = useState("");
+  const [ragCfg, setRagCfg] = useState({
+    chatModel: "@cf/meta/llama-3.1-8b-instruct",
+    temperature: 0.3,
+    maxTokens: 420,
+    topK: 5,
+    minScore: 0.15,
+    systemPrompt: "",
+  });
+  const [ragWorker, setRagWorker] = useState(
+    () => localStorage.getItem("mike-rag-worker") ?? "https://mike-portfolio.xlerionultimate.workers.dev",
+  );
+  const [ragKey, setRagKey] = useState(() => localStorage.getItem("mike-rag-key") ?? "");
+  const [ingestState, setIngestState] = useState<"idle" | "working" | "ok" | "error">("idle");
+  const [ingestMsg, setIngestMsg] = useState("");
+
+  const ragGh = async (path: string, init?: RequestInit) => {
+    const res = await fetch(`https://api.github.com${path}`, {
+      ...init,
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${pubCfg.token.trim()}`,
+        "Content-Type": "application/json",
+        ...(init?.headers ?? {}),
+      },
+    });
+    return res;
+  };
+
+  const loadRag = async () => {
+    if (!pubCfg.token.trim()) {
+      setRagMsg("Pega tu token de GitHub primero (pestaña Publicar).");
+      return;
+    }
+    setRagLoading(true);
+    setRagMsg("");
+    try {
+      const repo = pubCfg.repo.trim().replace(/\/$/, "");
+      const branch = pubCfg.branch.trim() || "main";
+      const [kbRes, cfgRes] = await Promise.all([
+        ragGh(`/repos/${repo}/contents/worker/knowledge.json?ref=${encodeURIComponent(branch)}`),
+        ragGh(`/repos/${repo}/contents/worker/rag-config.json?ref=${encodeURIComponent(branch)}`),
+      ]);
+      if (!kbRes.ok || !cfgRes.ok) throw new Error("not-found");
+      const kbFile = (await kbRes.json()) as { sha?: string; content?: string; encoding?: string };
+      const cfgFile = (await cfgRes.json()) as { sha?: string; content?: string; encoding?: string };
+      const kbText = decodeURIComponent(escape(atob((kbFile.content ?? "").replace(/\s/g, ""))));
+      const cfgText = decodeURIComponent(escape(atob((cfgFile.content ?? "").replace(/\s/g, ""))));
+      const kb = JSON.parse(kbText) as KbChunk[];
+      const cfg = JSON.parse(cfgText) as Record<string, unknown>;
+      if (!Array.isArray(kb)) throw new Error("bad-kb");
+      setKbItems(kb);
+      setKbSha(kbFile.sha ?? "");
+      setRagCfg({
+        chatModel: String(cfg.chatModel ?? "@cf/meta/llama-3.1-8b-instruct"),
+        temperature: Number(cfg.temperature ?? 0.3),
+        maxTokens: Number(cfg.maxTokens ?? 420),
+        topK: Number(cfg.topK ?? 5),
+        minScore: Number(cfg.minScore ?? 0.15),
+        systemPrompt: String(cfg.systemPrompt ?? ""),
+      });
+      setCfgSha(cfgFile.sha ?? "");
+      setRagLoaded(true);
+      flashSaved();
+    } catch {
+      setRagMsg("No pude leer worker/knowledge.json o rag-config.json del repo. ¿Hiciste push del código RAG?");
+    } finally {
+      setRagLoading(false);
+    }
+  };
+
+  const putRagFile = async (path: string, sha: string, text: string) => {
+    const repo = pubCfg.repo.trim().replace(/\/$/, "");
+    const branch = pubCfg.branch.trim() || "main";
+    const bytes = new TextEncoder().encode(text);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    const res = await ragGh(`/repos/${repo}/contents/${path}`, {
+      method: "PUT",
+      body: JSON.stringify({ message: `Actualizar ${path} desde el panel`, content: btoa(bin), sha, branch }),
+    });
+    if (!res.ok) throw new Error(`http-${res.status}`);
+    const done = (await res.json()) as { content?: { sha?: string } };
+    return done.content?.sha ?? "";
+  };
+
+  const saveKb = async () => {
+    setRagMsg("");
+    try {
+      const clean = kbItems.map((k) => ({ id: k.id.trim(), title: k.title.trim(), text: k.text.trim() })).filter((k) => k.id && k.text);
+      if (clean.some((k, i) => clean.findIndex((x) => x.id === k.id) !== i)) {
+        setRagMsg("Hay IDs duplicados: cada chunk necesita un id único.");
+        return;
+      }
+      const sha = await putRagFile("worker/knowledge.json", kbSha, JSON.stringify(clean, null, 2) + "\n");
+      setKbSha(sha);
+      setKbItems(clean);
+      flashSaved();
+      setRagMsg("✓ Conocimiento guardado en GitHub. Ahora pulsa Re-indexar para activarlo.");
+    } catch {
+      setRagMsg("Error guardando. ¿Token válido y SHA vigente? Recarga con Cargar.");
+    }
+  };
+
+  const saveCfg = async () => {
+    setRagMsg("");
+    try {
+      const current = await ragGh(
+        `/repos/${pubCfg.repo.trim().replace(/\/$/, "")}/contents/worker/rag-config.json?ref=${encodeURIComponent(pubCfg.branch.trim() || "main")}`,
+      );
+      const cur = (await current.json()) as { sha?: string; content?: string };
+      const base = JSON.parse(decodeURIComponent(escape(atob((cur.content ?? "").replace(/\s/g, ""))))) as Record<string, unknown>;
+      const next = { ...base, ...ragCfg };
+      const sha = await putRagFile("worker/rag-config.json", cfgSha || cur.sha || "", JSON.stringify(next, null, 2) + "\n");
+      setCfgSha(sha);
+      flashSaved();
+      setRagMsg("✓ Ajustes guardados. Cloudflare redespliega en ~2 min y aplican solos.");
+    } catch {
+      setRagMsg("Error guardando ajustes. Recarga con Cargar e intenta de nuevo.");
+    }
+  };
+
+  const doReingest = async () => {
+    if (!ragKey.trim()) {
+      setIngestMsg("Pega tu RAG_ADMIN_KEY primero (la misma del secret del Worker).");
+      setIngestState("error");
+      return;
+    }
+    setIngestState("working");
+    setIngestMsg("");
+    try {
+      const base = ragWorker.trim().replace(/\/$/, "");
+      const res = await fetch(`${base}/api/rag/ingest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: ragKey.trim(), chunks: kbItems }),
+      });
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; inserted?: number; error?: string } | null;
+      if (res.ok && data?.ok) {
+        setIngestState("ok");
+        setIngestMsg(`✓ Índice actualizado: ${data.inserted ?? "?"} chunks. El widget ya responde con lo nuevo.`);
+        try {
+          localStorage.setItem("mike-rag-worker", base);
+          localStorage.setItem("mike-rag-key", ragKey.trim());
+        } catch {
+          /* noop */
+        }
+      } else if (data?.error === "forbidden") {
+        setIngestState("error");
+        setIngestMsg("Clave incorrecta (403). Revisa RAG_ADMIN_KEY.");
+      } else if (data?.error === "rag-admin-disabled") {
+        setIngestState("error");
+        setIngestMsg("El Worker no tiene RAG_ADMIN_KEY configurada. Añádela en Settings → Variables and Secrets y redespliega.");
+      } else {
+        setIngestState("error");
+        setIngestMsg(`Falló (${res.status}). Reintenta en un minuto.`);
+      }
+    } catch {
+      setIngestState("error");
+      setIngestMsg("Sin conexión con el Worker. Revisa la URL.");
+    }
+  };
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
   const copyUrl = (url: string) => {
@@ -829,6 +1006,110 @@ export default function AdminPanel() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ── RAG ── */}
+        {tab === "rag" && (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center gap-3 border border-white/10 bg-panel p-6">
+              <div>
+                <h2 className="font-display text-xl font-bold text-white">Conocimiento del asistente ({kbItems.length})</h2>
+                <p className="mt-1 text-sm text-zinc-400">Edita, añade o borra. Luego guarda e <strong className="text-white">re-indexa</strong>: sin re-indexar, el widget sigue con lo viejo.</p>
+              </div>
+              <button onClick={() => void loadRag()} disabled={ragLoading} className={cn(btnGhost, "ml-auto")}>
+                <RefreshCcw className="h-4 w-4" /> {ragLoading ? "Cargando…" : ragLoaded ? "Recargar" : "Cargar desde GitHub"}
+              </button>
+            </div>
+            {ragMsg && <p className="border border-acid/40 bg-acid/5 p-4 text-sm text-zinc-200">{ragMsg}</p>}
+            {ragLoaded && (
+              <>
+                <div className="space-y-3">
+                  {kbItems.map((k, i) => (
+                    <div key={k.id + i} className="grid gap-3 border border-white/10 bg-panel p-4 lg:grid-cols-[220px_1fr_auto]">
+                      <div className="space-y-2">
+                        <Field label="ID único">
+                          <input value={k.id} onChange={(e) => setKbItems((arr) => arr.map((x, j) => (j === i ? { ...x, id: e.target.value } : x)))} className={cn(inputCls, "font-mono text-xs")} />
+                        </Field>
+                        <Field label="Título (sale como fuente)">
+                          <input value={k.title} onChange={(e) => setKbItems((arr) => arr.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)))} className={inputCls} />
+                        </Field>
+                        <button onClick={() => setKbItems((arr) => arr.filter((_, j) => j !== i))} className="inline-flex items-center gap-2 border border-red-400/50 px-3 py-1.5 font-mono text-xs text-red-300 hover:bg-red-400/10">
+                          <Trash2 className="h-3.5 w-3.5" /> Borrar
+                        </button>
+                      </div>
+                      <Field label={`Texto (${k.text.length} caracteres)`}>
+                        <textarea value={k.text} onChange={(e) => setKbItems((arr) => arr.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)))} rows={5} className={inputCls} />
+                      </Field>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setKbItems((arr) => [...arr, { id: `nuevo-${Date.now().toString(36)}`, title: "Nuevo tema", text: "" }])}
+                    className={btnGhost}
+                  >
+                    <Plus className="h-4 w-4" /> Añadir chunk
+                  </button>
+                  <button onClick={() => void saveKb()} className={btnPrimary}>
+                    <Save className="h-4 w-4" /> Guardar conocimiento en GitHub
+                  </button>
+                </div>
+
+                <div className="grid gap-5 lg:grid-cols-2">
+                  <div className="space-y-4 border border-acid/30 bg-panel p-6">
+                    <h2 className="font-display text-xl font-bold text-white">Re-indexar ahora</h2>
+                    <p className="text-sm text-zinc-400">Manda lo de arriba al índice Vectorize vía tu Worker (sin terminal ni redeploy). Requiere <code className="bg-white/10 px-1 font-mono text-xs text-acid">RAG_ADMIN_KEY</code> en el Worker.</p>
+                    <Field label="URL del Worker">
+                      <input value={ragWorker} onChange={(e) => setRagWorker(e.target.value)} className={cn(inputCls, "font-mono text-xs")} />
+                    </Field>
+                    <Field label="RAG_ADMIN_KEY">
+                      <input type="password" value={ragKey} onChange={(e) => setRagKey(e.target.value)} placeholder="La del secret del Worker" autoComplete="off" className={cn(inputCls, "font-mono text-xs")} />
+                    </Field>
+                    <button onClick={() => void doReingest()} disabled={ingestState === "working"} className={cn(btnPrimary, "w-full justify-center")}>
+                      <Upload className="h-4 w-4" /> {ingestState === "working" ? "Indexando…" : "Re-indexar ahora"}
+                    </button>
+                    {ingestMsg && (
+                      <p className={cn("border p-4 text-sm", ingestState === "ok" ? "border-acid/50 bg-acid/10 text-acid" : "border-red-400/40 bg-red-400/10 text-red-200")}>
+                        {ingestMsg}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-4 border border-white/10 bg-panel p-6">
+                    <h2 className="font-display text-xl font-bold text-white">Ajustes de la IA</h2>
+                    <p className="text-sm text-zinc-400">Se guardan en <code className="bg-white/10 px-1 font-mono text-xs text-acid">worker/rag-config.json</code> y aplican con el deploy (~2 min).</p>
+                    <Field label="Modelo de chat">
+                      <select value={ragCfg.chatModel} onChange={(e) => setRagCfg((c) => ({ ...c, chatModel: e.target.value }))} className={cn(inputCls, "bg-coal font-mono text-xs")}>
+                        <option value="@cf/meta/llama-3.1-8b-instruct">@cf/meta/llama-3.1-8b-instruct (equilibrado)</option>
+                        <option value="@cf/meta/llama-3.2-3b-instruct">@cf/meta/llama-3.2-3b-instruct (rápido/barato)</option>
+                        <option value="@cf/meta/llama-3.3-70b-instruct-fp8">@cf/meta/llama-3.3-70b-instruct-fp8 (mejor calidad)</option>
+                      </select>
+                    </Field>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Field label={`Temp ${ragCfg.temperature}`}>
+                        <input type="range" min={0} max={1} step={0.05} value={ragCfg.temperature} onChange={(e) => setRagCfg((c) => ({ ...c, temperature: Number(e.target.value) }))} className="w-full" />
+                      </Field>
+                      <Field label="Max tokens">
+                        <input type="number" min={50} max={2000} step={50} value={ragCfg.maxTokens} onChange={(e) => setRagCfg((c) => ({ ...c, maxTokens: Number(e.target.value) }))} className={inputCls} />
+                      </Field>
+                      <Field label="TopK">
+                        <input type="number" min={1} max={10} value={ragCfg.topK} onChange={(e) => setRagCfg((c) => ({ ...c, topK: Math.max(1, Math.min(10, Number(e.target.value))) }))} className={inputCls} />
+                      </Field>
+                    </div>
+                    <Field label={`Similitud mínima ${ragCfg.minScore}`}>
+                      <input type="range" min={0} max={0.5} step={0.05} value={ragCfg.minScore} onChange={(e) => setRagCfg((c) => ({ ...c, minScore: Number(e.target.value) }))} className="w-full" />
+                    </Field>
+                    <Field label="Instrucciones del sistema">
+                      <textarea value={ragCfg.systemPrompt} onChange={(e) => setRagCfg((c) => ({ ...c, systemPrompt: e.target.value }))} rows={7} className={cn(inputCls, "font-mono text-xs")} />
+                    </Field>
+                    <button onClick={() => void saveCfg()} className={btnPrimary}>
+                      <Save className="h-4 w-4" /> Guardar ajustes
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
 

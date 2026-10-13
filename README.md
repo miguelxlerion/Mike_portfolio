@@ -58,9 +58,11 @@ Pestaña **Medios** del panel (requiere token):
 
 Burbuja inferior-izquierda: responde sobre el perfil (experiencia, stack, proyectos, contacto) con búsqueda semántica + Llama 3.1 8B, citando fuentes. Bilingüe ES/EN, sugerencias, historial de sesión.
 
-- `worker/knowledge.mjs` → la base (edítala y re-ejecuta ingest).
+- `worker/knowledge.json` → la base (24 chunks). Edítala en Panel > RAG o a mano y re-indexa.
+- `worker/rag-config.json` → modelo, temperatura, tokens, topK, similitud mínima e instrucciones (Panel > RAG, aplica con el deploy).
 - `worker/chat.ts` → `POST /api/chat {question, history?}` con tope 12 req/min por IP (más regla Rate Limiting recomendada en dashboard).
 - Sin bindings responde `501/502` y el widget deriva al email: nunca se rompe.
+- **Sin terminal**: Panel > RAG edita conocimiento y ajustes (guardan en GitHub) y **Re-indexar ahora** actualiza Vectorize vía tu Worker (protegido por el secret `RAG_ADMIN_KEY`: créalo en Settings → Variables and Secrets).
 - Activarlo (una vez):
   ```bash
   npx wrangler vectorize create portfolio-kb --dimensions=384 --metric=cosine

@@ -1,12 +1,17 @@
 // ─────────────────────────────────────────────
 //  Ingesta RAG: embeddings (Workers AI) → Vectorize.
+//  Lee worker/knowledge.json (la misma fuente que edita Panel > RAG).
 //  Uso:
 //    $env:CLOUDFLARE_API_TOKEN="tu-token-con-AI-y-Vectorize"
 //    $env:CLOUDFLARE_ACCOUNT_ID="tu-account-id"
 //    npm run rag:ingest
-//  Re-ejecútalo cada vez que edites worker/knowledge.mjs.
+//  Re-ejecútalo cada vez que cambie el conocimiento.
+//  (Alternativa sin terminal: Panel > RAG > Re-indexar ahora,
+//  con RAG_ADMIN_KEY configurada en el Worker.)
 // ─────────────────────────────────────────────
-import { KNOWLEDGE } from "../worker/knowledge.mjs";
+import fs from "node:fs";
+
+const KNOWLEDGE = JSON.parse(fs.readFileSync(new URL("../worker/knowledge.json", import.meta.url), "utf8"));
 
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN ?? "";
 const ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID ?? "";
