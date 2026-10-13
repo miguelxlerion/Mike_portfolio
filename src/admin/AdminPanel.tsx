@@ -151,9 +151,44 @@ export default function AdminPanel() {
     }
   };
 
+    // Botón reutilizable: sube una imagen del PC a GitHub y devuelve su URL pública.
+  // Se usa junto a los campos de imagen (proyecto, retrato, póster, sitio).
+  function ImageUploadButton({ onDone }: { onDone: (siteUrl: string) => void }) {
+    const [st, setSt] = useState<"idle" | "up" | "err">("idle");
+    return (
+      <label
+        title="Sube la imagen a public/uploads/ de tu repo (requiere token)"
+        className="inline-flex cursor-pointer items-center gap-2 border border-white/15 px-3 py-2 font-mono text-xs text-zinc-300 transition hover:border-acid hover:text-acid"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            e.target.value = "";
+            if (!f) return;
+            setSt("up");
+            uploadImageFile(pubCfg, f)
+              .then((item) => {
+                onDone(item.siteUrl);
+                flashSaved();
+                setSt("idle");
+              })
+              .catch(() => {
+                setSt("err");
+                setTimeout(() => setSt("idle"), 2600);
+              });
+          }}
+        />
+        <Upload className="h-3.5 w-3.5" />
+        {st === "up" ? "Subiendo…" : st === "err" ? "Error: ¿token?" : "Subir PC"}
+      </label>
+    );
+  }
+
   // ── Medios ──
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
-  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);  const [mediaLoading, setMediaLoading] = useState(false);
   const [mediaMsg, setMediaMsg] = useState("");
   const [uploadStates, setUploadStates] = useState<Record<string, string>>({});
   const [importUrl, setImportUrl] = useState("");
@@ -334,9 +369,10 @@ export default function AdminPanel() {
               </div>
               <Field label="Rol / titular"><input value={content.profile.role} onChange={(e) => patch({ profile: { ...content.profile, role: e.target.value } })} className={inputCls} /></Field>
               <Field label="Frase de presentación"><textarea value={content.profile.tagline} onChange={(e) => patch({ profile: { ...content.profile, tagline: e.target.value } })} rows={2} className={inputCls} /></Field>
-              <Field label="Foto de retrato (URL)" hint="Pega la URL de tu foto. Recomendado: 800×1000px.">
+              <Field label="Foto de retrato (URL)" hint="Pega la URL de tu foto o súbela desde tu PC. Recomendado: 800×1000px. Se verá tras el deploy.">
                 <input value={content.profile.portrait} onChange={(e) => patch({ profile: { ...content.profile, portrait: e.target.value } })} className={inputCls} placeholder="https://…" />
               </Field>
+              <ImageUploadButton onDone={(url) => patch({ profile: { ...content.profile, portrait: url } })} />
               {content.profile.portrait && <img src={content.profile.portrait} alt="Vista previa" className="h-40 w-32 border border-white/15 object-cover" />}
             </div>
             <div className="space-y-4 border border-white/10 bg-panel p-6">
@@ -475,7 +511,8 @@ export default function AdminPanel() {
                 <Field label="Descripción corta"><textarea value={project.description} onChange={(e) => patchProject(project.id, (p) => ({ ...p, description: e.target.value }))} rows={2} className={inputCls} /></Field>
                 <Field label="Descripción larga"><textarea value={project.longDescription} onChange={(e) => patchProject(project.id, (p) => ({ ...p, longDescription: e.target.value }))} rows={4} className={inputCls} /></Field>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto."><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto. O súbela desde tu PC:"><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  <ImageUploadButton onDone={(url) => patchProject(project.id, (p) => ({ ...p, image: url }))} />
                   <div className="grid gap-4">
                     <Field label="URL GitHub"><input value={project.repoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repoUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/…" /></Field>
                     <Field label="URL demo"><input value={project.demoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, demoUrl: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
@@ -563,7 +600,8 @@ export default function AdminPanel() {
                   <Field label="URL del sitio" hint="Debe empezar por https:// — el punto verde la verifica en vivo."><input value={currentSite.url} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, url: e.target.value }))} className={cn(inputCls, "font-mono text-xs")} placeholder="https://…" /></Field>
                   <Field label="Descripción"><textarea value={currentSite.desc} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, desc: e.target.value }))} rows={3} className={inputCls} /></Field>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio."><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio, o súbela desde tu PC:"><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <ImageUploadButton onDone={(url) => patchSite(currentSite.id, (w) => ({ ...w, image: url }))} />
                     <Field label="Etiquetas (separadas por comas)"><input value={currentSite.tags.join(", ")} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
                   </div>
                   {(currentSite.image ?? "").length > 0 && <img src={currentSite.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
@@ -634,6 +672,7 @@ export default function AdminPanel() {
                   )}
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field label="Póster (URL imagen previa)"><input value={currentModel.poster ?? ""} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, poster: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <ImageUploadButton onDone={(url) => patchModel(currentModel.id, (m) => ({ ...m, poster: url }))} />
                     <Field label="Etiquetas (separadas por comas)"><input value={currentModel.tags.join(", ")} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
                   </div>
                   <Field label="Specs (una por línea: Etiqueta | Valor)">
