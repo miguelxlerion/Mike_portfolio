@@ -28,6 +28,7 @@ Secciones finales: **Hero · Sobre mí · Proyectos · Sitios Web · GitHub en v
 
 ## Panel de control ⚙ (solo local, nunca se publica)
 
+- **Lanzador rápido (Windows):** doble clic a **`Abrir-Panel-Admin.bat`** — instala dependencias si faltan, levanta el servidor si no corre y abre `/#/admin` en tu navegador. No cierres la ventana del servidor mientras lo uses.
 - El panel **solo existe** con `npm run dev`. El build de producción (`npm run build`, lo que sube a Pages) lo elimina por completo: sin ruta, sin botones, sin código (verificado: `dist/` no contiene rastros del admin).
 - Abre `http://localhost:5173/#/admin` (o pulsa **Panel** en la navbar, visible solo en local).
 - Contraseña por defecto: **`mike123`** (cámbiala en la pestaña *Datos*).
