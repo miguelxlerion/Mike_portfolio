@@ -63,7 +63,7 @@ const main = async () => {
     body: ndjson,
     headers: { "Content-Type": "application/x-ndjson" },
   });
-  console.log(`Insertados: ${up?.count ?? "?"} vectores en ${INDEX}.`);
+  console.log(`Insertados ${KNOWLEDGE.length} vectores en ${INDEX} (respuesta API: ${JSON.stringify(up).slice(0, 120)}).`);
   console.log("Listo. Prueba: POST /api/chat {\"question\":\"¿En qué stack trabajas?\"}");
 };
 
