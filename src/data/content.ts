@@ -501,7 +501,8 @@ export const defaultContent: SiteContent = {
           "label": "Formatos",
           "value": "PDF · CSV · JSON · TXT"
         }
-      ]
+      ],
+      "image": "/uploads/mv610gjw-logopipelineingest.jpg"
     },
     {
       "id": "fovis-platform",
