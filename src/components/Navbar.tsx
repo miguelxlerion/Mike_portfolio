@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Settings2, X } from "lucide-react";
 import { useSite } from "../store/SiteContext";
+import { LangToggle } from "../i18n/LangContext";
 import { cn } from "../utils/cn";
 
 const LINKS = [
@@ -56,7 +57,7 @@ export default function Navbar() {
         <div className="h-full bg-acid transition-[width]" style={{ width: `${progress * 100}%` }} />
       </div>
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <a href="#inicio" className="flex items-center gap-3">
+        <a data-notranslate href="#inicio" className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center bg-acid font-display text-sm font-bold text-ink">{content.profile.initials}</span>
           <span className="font-display text-sm font-bold tracking-wide text-white">
             {content.profile.shortName.toUpperCase()}
@@ -79,6 +80,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-2">
+          <LangToggle />
           <a
             href="#contacto"
             className="hidden bg-acid px-5 py-2.5 font-display text-sm font-bold text-ink transition-colors hover:bg-acid-soft sm:inline-flex"
@@ -124,6 +126,9 @@ export default function Navbar() {
                   ⚙ Panel de control
                 </a>
               )}
+              <div className="px-3 py-2" onClick={() => setOpen(false)}>
+                <LangToggle compact />
+              </div>
             </div>
           </motion.div>
         )}

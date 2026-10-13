@@ -35,6 +35,14 @@ Secciones finales: **Hero · Sobre mí · Proyectos · Sitios Web · GitHub en v
 - Edita **todo**: identidad, hero, roles, stats, marquee, bio, habilidades, proyectos, sitios web, modelos 3D, GitHub, contacto, colores y visibilidad de secciones.
 - Todo se **autoguarda en el navegador** (localStorage `mike-portfolio-v2`).
 
+## Inglés automático (ES/EN) 🌐
+
+- Interruptor **ES|EN** en la navbar (desktop + móvil). Sin duplicar el modelo: traduce el DOM en vivo vía Google (gtx), 1 petición por cadena única.
+- **Caché persistente** (`mike-i18n-cache-en-v1`): la primera visita traduce, las siguientes cuestan 0 peticiones. `?lang=en` enlace compartible; preferencia guardada.
+- Respeta **código** (`pre`/`code` jamás se tocan), nombres propios (marca nav) y el toggle; el typewriter del Hero traduce sus roles aparte.
+- Un `MutationObserver` traduce el contenido dinámico (modales, filtros, repos). Volver a ES restaura el texto exacto. Si la API falla, el nodo queda en español: nunca se rompe.
+- Correcciones puntuales en `OVERRIDES` de `src/i18n/auto.ts` (ej. INICIO→Home).
+
 ## Medios: imágenes y videos 🖼
 
 Pestaña **Medios** del panel (requiere token):

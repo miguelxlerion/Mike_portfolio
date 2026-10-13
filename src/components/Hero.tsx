@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Boxes, Code2, Download, MapPin, PenTool } from "lucide-react";
 import { useSite } from "../store/SiteContext";
+import { useLang } from "../i18n/LangContext";
+import { translateString } from "../i18n/auto";
 import ParticleCanvas from "./Background";
 import { AnimatedCounter } from "./ui";
 
@@ -57,7 +59,30 @@ const fadeUp = { initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 } }
 export default function Hero() {
   const { content } = useSite();
   const { profile, hero } = content;
-  const { text, color } = useTypewriter(hero.roles);
+  const { lang } = useLang();
+  // Los roles del typewriter se traducen una vez (el observer los ignoraría
+  // a medias por el re-tecleo constante): van marcados data-notranslate.
+  const [roles, setRoles] = useState(hero.roles);
+  useEffect(() => {
+    setRoles(hero.roles);
+    if (lang !== "en") return;
+    let alive = true;
+    Promise.all(
+      hero.roles.map(async (r) => {
+        try {
+          return { ...r, text: await translateString(r.text) };
+        } catch {
+          return r;
+        }
+      }),
+    ).then((t) => {
+      if (alive) setRoles(t);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [lang, hero.roles]);
+  const { text, color } = useTypewriter(roles);
 
   return (
     <section id="inicio" className="relative overflow-hidden pt-16 md:pt-[72px]">
@@ -84,7 +109,7 @@ export default function Hero() {
 
           <motion.div {...fadeUp} transition={{ duration: 0.7, delay: 0.2 }} className="mt-6">
             <p className="font-mono text-sm uppercase tracking-[0.25em] text-zinc-500">Especializado en</p>
-            <p className="mt-2 min-h-[44px] font-display text-3xl font-bold sm:text-4xl" style={{ color }}>
+            <p data-notranslate className="mt-2 min-h-[44px] font-display text-3xl font-bold sm:text-4xl" style={{ color }}>
               {text}
               <span className="animate-blink ml-1 inline-block h-[0.9em] w-[3px] translate-y-[0.12em] bg-white" />
             </p>
