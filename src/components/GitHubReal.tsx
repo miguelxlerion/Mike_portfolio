@@ -179,7 +179,7 @@ export default function GitHubReal() {
           <p className="mt-4 border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">{error}</p>
         )}
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-[320px_1fr]">
+        <div className="mt-8 grid gap-5 lg:grid-cols-[320px_1fr] [&>*]:min-w-0">
           <Reveal className="h-fit space-y-4 border border-white/10 bg-panel p-6">
             <div className="flex items-center gap-4">
               {profile ? (
@@ -234,14 +234,14 @@ export default function GitHubReal() {
             </a>
           </Reveal>
 
-          <div className="grid content-start gap-4 sm:grid-cols-2">
+          <div className="grid content-start gap-4 sm:grid-cols-2 [&>*]:min-w-0">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-44 animate-pulse border border-white/10 bg-white/[0.03]" />)
             ) : sorted.length === 0 && !error ? (
               <p className="text-sm text-zinc-500">Cargando repositorios…</p>
             ) : (
               sorted.slice(0, content.github.maxRepos).map((r) => (
-                <a key={r.id} href={r.html_url} target="_blank" rel="noreferrer" className="group flex flex-col justify-between border border-white/10 bg-panel p-5 transition hover:-translate-y-1 hover:border-acid/60">
+                <a key={r.id} href={r.html_url} target="_blank" rel="noreferrer"                     className="group flex min-w-0 flex-col justify-between border border-white/10 bg-panel p-5 transition hover:-translate-y-1 hover:border-acid/60">
                   <div>
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-mono text-sm font-bold text-acid">{r.name}</h3>

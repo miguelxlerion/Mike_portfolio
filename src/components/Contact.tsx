@@ -91,15 +91,15 @@ export default function Contact() {
       <div className="relative mx-auto max-w-7xl">
         <SectionHeader index="06" eyebrow={contact.eyebrow} title={<>{contact.title}</>} text={contact.text} />
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-12">
+        <div className="mt-12 grid gap-6 lg:grid-cols-12 [&>*]:min-w-0">
           <Reveal className="space-y-4 lg:col-span-5">
             <div className="border border-white/10 bg-panel p-6">
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">Email directo</p>
               <div className="mt-3 flex items-center justify-between gap-3">
-                <a href={`mailto:${profile.email}`} className="flex items-center gap-2 font-display text-lg font-bold text-white hover:text-acid">
-                  <Mail className="h-5 w-5 text-acid" /> {profile.email}
+                <a href={`mailto:${profile.email}`} className="flex min-w-0 flex-1 items-center gap-2 font-display text-base font-bold text-white hover:text-acid sm:text-lg">
+                  <Mail className="h-5 w-5 shrink-0 text-acid" /> <span className="truncate">{profile.email}</span>
                 </a>
-                <button onClick={copyEmail} className="grid h-9 w-9 place-items-center border border-white/15 text-zinc-300 hover:border-acid hover:text-acid" aria-label="Copiar email">
+                <button onClick={copyEmail} className="grid h-9 w-9 shrink-0 place-items-center border border-white/15 text-zinc-300 hover:border-acid hover:text-acid" aria-label="Copiar email">
                   {copied ? <Check className="h-4 w-4 text-acid" /> : <Copy className="h-4 w-4" />}
                 </button>
               </div>

@@ -64,7 +64,7 @@ export default function Navbar() {
             <span className="text-acid">.</span>
           </span>
         </a>
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {LINKS.map((l) => (
             <a
               key={l.id}
@@ -97,7 +97,7 @@ export default function Navbar() {
               <span className="hidden lg:inline">Panel</span>
             </a>
           )}
-          <button onClick={() => setOpen((v) => !v)} className="grid h-10 w-10 place-items-center border border-white/15 text-white md:hidden" aria-label="Abrir menú">
+          <button onClick={() => setOpen((v) => !v)} className="grid h-10 w-10 place-items-center border border-white/15 text-white lg:hidden" aria-label="Abrir menú">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
@@ -108,7 +108,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-white/10 bg-ink/95 backdrop-blur-md md:hidden"
+            className="overflow-hidden border-t border-white/10 bg-ink/95 backdrop-blur-md lg:hidden"
           >
             <div className="space-y-1 px-5 py-4">
               {LINKS.map((l) => (

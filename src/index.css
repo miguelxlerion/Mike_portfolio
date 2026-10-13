@@ -41,6 +41,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Corta cualquier desborde horizontal decorativo (glows, marquee, watermark).
+   `clip` en vez de `hidden`: no crea contenedor de scroll ni rompe sticky. */
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   @apply bg-ink text-zinc-200 font-sans antialiased overflow-x-hidden;
 }

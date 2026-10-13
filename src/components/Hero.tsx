@@ -91,7 +91,7 @@ export default function Hero() {
       <div className="glow-cyan absolute bottom-[-20%] left-[-12%] h-[480px] w-[480px]" aria-hidden />
       <ParticleCanvas />
 
-      <div className="relative mx-auto grid max-w-7xl gap-14 px-5 pb-24 pt-14 md:pt-20 lg:grid-cols-12 lg:gap-8 lg:px-8">
+      <div className="relative mx-auto grid max-w-7xl gap-14 px-5 pb-24 pt-14 md:pt-20 lg:grid-cols-12 lg:gap-8 lg:px-8 [&>*]:min-w-0">
         <div className="flex flex-col justify-center lg:col-span-7">
           <motion.div {...fadeUp} transition={{ duration: 0.7 }}>
             <span className="inline-flex items-center gap-2.5 border border-white/12 bg-white/[0.04] px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-300">

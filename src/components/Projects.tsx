@@ -62,7 +62,7 @@ function ProjectModal({ project, onClose, onPrev, onNext }: { project: Project; 
           </div>
         ) : null}
 
-        <div className="p-6 sm:p-8">
+        <div className="p-5 sm:p-8">
           <div className="flex flex-wrap items-center gap-3">
             <span className="px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider" style={{ background: `${color}22`, color, border: `1px solid ${color}55` }}>
               {project.category} · {project.year}
@@ -185,7 +185,7 @@ export default function Projects() {
             <button onClick={() => { setQuery(""); setFilter("todos"); }} className="mt-2 bg-acid px-5 py-2.5 font-display text-sm font-bold text-ink">Ver todo</button>
           </div>
         ) : (
-          <motion.div layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 [&>*]:min-w-0">
             <AnimatePresence mode="popLayout">
               {filtered.map((p) => {
                 const color = categoryColor(content.categories, p.category);
@@ -197,7 +197,7 @@ export default function Projects() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35 }}
-                    className="group flex cursor-pointer flex-col overflow-hidden border border-white/10 bg-panel transition-all hover:-translate-y-1 hover:border-white/25"
+                    className="group flex min-w-0 cursor-pointer flex-col overflow-hidden border border-white/10 bg-panel transition-all hover:-translate-y-1 hover:border-white/25"
                     onClick={() => setSelectedId(p.id)}
                     data-cursor="hover"
                   >
@@ -217,7 +217,7 @@ export default function Projects() {
                           <span className="ml-2 truncate font-mono text-xs text-zinc-400">{p.repo.name}</span>
                           <span className="ml-auto font-mono text-[10px] uppercase" style={{ color }}>{p.category}</span>
                         </div>
-                        <pre className="max-h-44 overflow-hidden bg-[#0c0c0e] p-4 font-mono text-[11.5px] leading-relaxed text-zinc-300">
+                        <pre className="max-h-44 max-w-full overflow-auto bg-[#0c0c0e] p-4 font-mono text-[11.5px] leading-relaxed text-zinc-300">
                           <code>{highlightCode(p.repo.snippet.split("\n").slice(0, 8).join("\n"))}</code>
                         </pre>
                       </div>

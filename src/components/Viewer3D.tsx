@@ -31,7 +31,7 @@ export default function Viewer3D() {
       <div className="relative mx-auto max-w-7xl">
         <SectionHeader index="05" eyebrow={showcase3d.title} title={<>Modelos en 3D</>} text={showcase3d.text} />
 
-        <div className="mt-12 grid gap-5 lg:grid-cols-12">
+        <div className="mt-12 grid gap-5 lg:grid-cols-12 [&>*]:min-w-0">
           {/* Visor */}
           <Reveal className="lg:col-span-8">
             <div className="border border-white/10 bg-panel">

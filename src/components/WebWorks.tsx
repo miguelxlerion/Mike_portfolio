@@ -63,12 +63,12 @@ export default function WebWorks() {
       <div className="relative mx-auto max-w-7xl">
         <SectionHeader index="03" eyebrow={webworks.title} title={<>Sitios web en producción</>} text={webworks.text} />
 
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3 [&>*]:min-w-0">
           {webworks.items.map((w, i) => {
             const status = live[w.id];
             return (
               <Reveal key={w.id} delay={i * 0.08}>
-                <article className="group flex h-full flex-col overflow-hidden border border-white/10 bg-panel transition-all hover:-translate-y-1 hover:border-acid/50">
+                <article className="group flex h-full min-w-0 flex-col overflow-hidden border border-white/10 bg-panel transition-all hover:-translate-y-1 hover:border-acid/50">
                   {/* Barra de navegador */}
                   <div className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-3.5 py-2.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />

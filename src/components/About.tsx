@@ -13,7 +13,7 @@ export default function About() {
       <div className="relative mx-auto max-w-7xl">
         <SectionHeader index="01" eyebrow={about.eyebrow} title={<>{about.title}</>} />
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-12">
+        <div className="mt-12 grid gap-10 lg:grid-cols-12 [&>*]:min-w-0">
           <Reveal className="lg:col-span-7">
             <div className="space-y-5 text-base leading-relaxed text-zinc-400 md:text-lg">
               {about.paragraphs.map((p, i) => (
