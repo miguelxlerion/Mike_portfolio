@@ -52,7 +52,9 @@ function ProjectModal({ project, onClose, onPrev, onNext }: { project: Project; 
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-4xl overflow-hidden border border-white/12 bg-coal"
       >
-        {project.image ? (
+        {project.videoUrl ? (
+          <video src={project.videoUrl} controls preload="metadata" playsInline className="aspect-video w-full bg-black" />
+        ) : project.image ? (
           <img src={project.image} alt={project.title} className="aspect-[21/9] w-full object-cover" loading="lazy" />
         ) : project.repo ? (
           <div className="p-5 pb-0">

@@ -55,7 +55,7 @@ export function replaceBlock(fileText: string, content: SiteContent): string {
   return fileText.slice(0, i + START_MARKER.length) + "\n" + buildContentBlock(content) + "\n" + fileText.slice(j);
 }
 
-async function gh(path: string, token: string, init?: RequestInit) {
+export async function gh(path: string, token: string, init?: RequestInit) {
   const res = await fetch(`https://api.github.com${path}`, {
     ...init,
     headers: {
@@ -353,7 +353,9 @@ export async function publishAll(
   const commit = (await commitRes.json()) as { sha?: string };
   if (!commit.sha) throw new Error("bad-file");
 
-  const refRes = await gh(`/repos/${repo}/git/ref/heads/${branch}`, token, {
+  // OJO: leer es /git/ref/ (singular) pero actualizar es /git/refs/ (plural).
+  // Con singular el PATCH responde 404 aunque la rama exista.
+  const refRes = await gh(`/repos/${repo}/git/refs/heads/${branch}`, token, {
     method: "PATCH",
     body: JSON.stringify({ sha: commit.sha }),
   });

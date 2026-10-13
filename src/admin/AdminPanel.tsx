@@ -1,12 +1,21 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Check, Download, Eye, FileJson, KeyRound, Lock, Plus,
   RefreshCcw, Save, Settings2, Trash2, Copy, FolderKanban, User,
-  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload,
+  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload, Image as ImageIcon,
 } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import type { CategoryId, Model3D, Project, SiteContent, WebWork } from "../data/content";
 import { cn } from "../utils/cn";
+import {
+  MAX_IMAGE_BYTES,
+  deleteMedia,
+  importImageFromUrl,
+  listUploads,
+  mediaErrorMessage,
+  uploadImageFile,
+  type MediaItem,
+} from "./media";
 import {
   fetchSnapshot,
   forgetPublishToken,
@@ -21,7 +30,7 @@ import {
   type PublishResult,
 } from "./publish";
 
-type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "modelos" | "github" | "contact" | "design" | "data" | "publicar";
+type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "medios" | "modelos" | "github" | "contact" | "design" | "data" | "publicar";
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "general", label: "General", icon: <User className="h-4 w-4" /> },
@@ -29,6 +38,7 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "about", label: "Sobre mí", icon: <Info className="h-4 w-4" /> },
   { id: "projects", label: "Proyectos", icon: <FolderKanban className="h-4 w-4" /> },
   { id: "sitios", label: "Sitios Web", icon: <Globe className="h-4 w-4" /> },
+  { id: "medios", label: "Medios", icon: <ImageIcon className="h-4 w-4" /> },
   { id: "modelos", label: "Modelos 3D", icon: <Box className="h-4 w-4" /> },
   { id: "github", label: "GitHub", icon: <GitBranch className="h-4 w-4" /> },
   { id: "contact", label: "Contacto", icon: <Mail className="h-4 w-4" /> },
@@ -141,6 +151,149 @@ export default function AdminPanel() {
     }
   };
 
+  // Botón reutilizable: sube una imagen del PC a GitHub y devuelve el item.
+  // Muestra miniatura inmediata (raw de GitHub) porque la ruta pública
+  // /uploads/... solo existe en local tras el deploy.
+  // Se usa junto a los campos de imagen (proyecto, retrato, póster, sitio).
+  function ImageUploadButton({ onDone }: { onDone: (item: MediaItem) => void }) {
+    const [st, setSt] = useState<"idle" | "up" | "err">("idle");
+    const [thumb, setThumb] = useState<string | null>(null);
+    return (
+      <span className="inline-flex items-center gap-2">
+        <label
+          title="Sube la imagen a public/uploads/ de tu repo (requiere token)"
+          className="inline-flex cursor-pointer items-center gap-2 border border-white/15 px-3 py-2 font-mono text-xs text-zinc-300 transition hover:border-acid hover:text-acid"
+        >
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              e.target.value = "";
+              if (!f) return;
+              setSt("up");
+              uploadImageFile(pubCfg, f)
+                .then((item) => {
+                  onDone(item);
+                  setThumb(item.rawUrl);
+                  flashSaved();
+                  setSt("idle");
+                })
+                .catch(() => {
+                  setSt("err");
+                  setTimeout(() => setSt("idle"), 2600);
+                });
+            }}
+          />
+          <Upload className="h-3.5 w-3.5" />
+          {st === "up" ? "Subiendo…" : st === "err" ? "Error: ¿token?" : "Subir PC"}
+        </label>
+        {thumb && (
+          <img src={thumb} alt="Subida correcta" className="h-9 w-14 border border-acid/50 object-cover" title="En GitHub ✓ — se verá en el sitio tras el deploy" />
+        )}
+      </span>
+    );
+  }
+
+  // Vista previa que también funciona en local: si la ruta /uploads/...
+  // aún no existe en el disco (subida reciente), reintenta vía raw de GitHub.
+  function SmartPreview({ src, className, alt }: { src: string; className?: string; alt?: string }) {
+    const [fallback, setFallback] = useState(false);
+    useEffect(() => setFallback(false), [src]);
+    const looksUpload = src.startsWith("/uploads/");
+    const rawBase = `https://raw.githubusercontent.com/${pubCfg.repo.trim().replace(/\/$/, "")}/${(pubCfg.branch.trim() || "main")}/public`;
+    return (
+      <img
+        src={!fallback && looksUpload ? rawBase + src : src}
+        alt={alt ?? "Vista previa"}
+        loading="lazy"
+        onError={() => {
+          if (!fallback && looksUpload) setFallback(true);
+        }}
+        className={className ?? "h-40 w-full border border-white/15 object-cover"}
+      />
+    );
+  }
+
+  // ── Medios ──
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaMsg, setMediaMsg] = useState("");
+  const [uploadStates, setUploadStates] = useState<Record<string, string>>({});
+  const [importUrl, setImportUrl] = useState("");
+  const [importState, setImportState] = useState<"idle" | "working" | "ok" | "error">("idle");
+  const [imported, setImported] = useState<MediaItem | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoProject, setVideoProject] = useState("");
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+
+  const copyUrl = (url: string) => {
+    navigator.clipboard.writeText(url).catch(() => {});
+    setCopiedUrl(url);
+    setTimeout(() => setCopiedUrl((c) => (c === url ? null : c)), 1600);
+  };
+
+  const mediaErr = (e: unknown) => mediaErrorMessage(e instanceof Error ? e.message : "network");
+
+  const refreshMedia = async () => {
+    setMediaLoading(true);
+    setMediaMsg("");
+    try {
+      setMediaItems(await listUploads(pubCfg));
+    } catch (e) {
+      setMediaMsg(mediaErr(e));
+    } finally {
+      setMediaLoading(false);
+    }
+  };
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setMediaMsg("");
+    for (const f of Array.from(files)) {
+      setUploadStates((p) => ({ ...p, [f.name]: "subiendo…" }));
+      try {
+        const item = await uploadImageFile(pubCfg, f);
+        setUploadStates((p) => ({ ...p, [f.name]: "✓ en GitHub" }));
+        setMediaItems((prev) => [item, ...prev.filter((m) => m.path !== item.path)]);
+      } catch (e) {
+        setUploadStates((p) => ({ ...p, [f.name]: "error" }));
+        setMediaMsg(mediaErr(e));
+      }
+    }
+    flashSaved();
+  };
+
+  const handleImport = async () => {
+    if (!importUrl.trim()) return;
+    setImportState("working");
+    setMediaMsg("");
+    setImported(null);
+    try {
+      const item = await importImageFromUrl(pubCfg, importUrl);
+      setImported(item);
+      setImportState("ok");
+      setMediaItems((prev) => [item, ...prev.filter((m) => m.path !== item.path)]);
+      setImportUrl("");
+      flashSaved();
+    } catch (e) {
+      setImportState("error");
+      setMediaMsg(mediaErr(e));
+    }
+  };
+
+  const handleDeleteMedia = async (path: string) => {
+    if (!confirm(`¿Borrar ${path} de GitHub?`)) return;
+    try {
+      await deleteMedia(pubCfg, path);
+      setMediaItems((prev) => prev.filter((m) => m.path !== path));
+      flashSaved();
+    } catch (e) {
+      setMediaMsg(mediaErr(e));
+    }
+  };
+
   const flashSaved = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 1600);
@@ -246,10 +399,11 @@ export default function AdminPanel() {
               </div>
               <Field label="Rol / titular"><input value={content.profile.role} onChange={(e) => patch({ profile: { ...content.profile, role: e.target.value } })} className={inputCls} /></Field>
               <Field label="Frase de presentación"><textarea value={content.profile.tagline} onChange={(e) => patch({ profile: { ...content.profile, tagline: e.target.value } })} rows={2} className={inputCls} /></Field>
-              <Field label="Foto de retrato (URL)" hint="Pega la URL de tu foto. Recomendado: 800×1000px.">
+              <Field label="Foto de retrato (URL)" hint="Pega la URL de tu foto o súbela desde tu PC. Recomendado: 800×1000px. Se verá tras el deploy.">
                 <input value={content.profile.portrait} onChange={(e) => patch({ profile: { ...content.profile, portrait: e.target.value } })} className={inputCls} placeholder="https://…" />
               </Field>
-              {content.profile.portrait && <img src={content.profile.portrait} alt="Vista previa" className="h-40 w-32 border border-white/15 object-cover" />}
+              <ImageUploadButton onDone={(item) => patch({ profile: { ...content.profile, portrait: item.siteUrl } })} />
+              {content.profile.portrait && <SmartPreview src={content.profile.portrait} className="h-40 w-32 border border-white/15 object-cover" />}
             </div>
             <div className="space-y-4 border border-white/10 bg-panel p-6">
               <h2 className="font-display text-xl font-bold text-white">Contacto y disponibilidad</h2>
@@ -387,13 +541,15 @@ export default function AdminPanel() {
                 <Field label="Descripción corta"><textarea value={project.description} onChange={(e) => patchProject(project.id, (p) => ({ ...p, description: e.target.value }))} rows={2} className={inputCls} /></Field>
                 <Field label="Descripción larga"><textarea value={project.longDescription} onChange={(e) => patchProject(project.id, (p) => ({ ...p, longDescription: e.target.value }))} rows={4} className={inputCls} /></Field>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto."><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto. O súbela desde tu PC:"><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                  <ImageUploadButton onDone={(item) => patchProject(project.id, (p) => ({ ...p, image: item.siteUrl }))} />
                   <div className="grid gap-4">
                     <Field label="URL GitHub"><input value={project.repoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, repoUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/…" /></Field>
                     <Field label="URL demo"><input value={project.demoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, demoUrl: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <Field label="Video (URL .mp4, opcional)" hint="Si hay video, la ficha muestra reproductor en vez de foto."><input value={project.videoUrl ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, videoUrl: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
                   </div>
                 </div>
-                {(project.image ?? "").length > 0 && <img src={project.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                {(project.image ?? "").length > 0 && <SmartPreview src={project.image ?? ""} />}
                 <label className="flex items-center gap-3 border border-white/10 bg-black/30 px-4 py-3 text-sm text-zinc-200">
                   <input type="checkbox" checked={!!project.featured} onChange={(e) => patchProject(project.id, (p) => ({ ...p, featured: e.target.checked }))} className="h-4 w-4 accent-[#a3e635]" />
                   Proyecto destacado
@@ -474,10 +630,11 @@ export default function AdminPanel() {
                   <Field label="URL del sitio" hint="Debe empezar por https:// — el punto verde la verifica en vivo."><input value={currentSite.url} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, url: e.target.value }))} className={cn(inputCls, "font-mono text-xs")} placeholder="https://…" /></Field>
                   <Field label="Descripción"><textarea value={currentSite.desc} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, desc: e.target.value }))} rows={3} className={inputCls} /></Field>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio."><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio, o súbela desde tu PC:"><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <ImageUploadButton onDone={(item) => patchSite(currentSite.id, (w) => ({ ...w, image: item.siteUrl }))} />
                     <Field label="Etiquetas (separadas por comas)"><input value={currentSite.tags.join(", ")} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
                   </div>
-                  {(currentSite.image ?? "").length > 0 && <img src={currentSite.image} alt="Vista previa" className="h-40 w-full border border-white/15 object-cover" />}
+                  {(currentSite.image ?? "").length > 0 && <SmartPreview src={currentSite.image ?? ""} />}
                 </div>
               ) : (
                 <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay sitios. Crea el primero con el botón.</p>
@@ -545,6 +702,7 @@ export default function AdminPanel() {
                   )}
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field label="Póster (URL imagen previa)"><input value={currentModel.poster ?? ""} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, poster: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
+                    <ImageUploadButton onDone={(item) => patchModel(currentModel.id, (m) => ({ ...m, poster: item.siteUrl }))} />
                     <Field label="Etiquetas (separadas por comas)"><input value={currentModel.tags.join(", ")} onChange={(e) => patchModel(currentModel.id, (m) => ({ ...m, tags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))} className={inputCls} /></Field>
                   </div>
                   <Field label="Specs (una por línea: Etiqueta | Valor)">
@@ -559,6 +717,117 @@ export default function AdminPanel() {
               ) : (
                 <p className="border border-dashed border-white/15 p-10 text-center text-zinc-500">No hay modelos. Crea el primero con el botón.</p>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* ── MEDIOS ── */}
+        {tab === "medios" && (
+          <div className="space-y-5">
+            {!pubCfg.token && (
+              <p className="border border-amber-400/40 bg-amber-400/10 p-4 text-sm text-amber-200">
+                Esta sección sube archivos a GitHub: pega tu token en la pestaña{" "}
+                <button onClick={() => setTab("publicar")} className="underline hover:text-amber-100">Publicar</button>{" "}
+                para activarla.
+              </p>
+            )}
+            <div className="grid gap-5 lg:grid-cols-2">
+              <div className="space-y-4 border border-white/10 bg-panel p-6">
+                <h2 className="font-display text-xl font-bold text-white">Subir desde el PC</h2>
+                <p className="text-sm text-zinc-400">
+                  Imágenes (jpg, png, webp, gif, svg, avif) de hasta {(MAX_IMAGE_BYTES / 1048576).toFixed(0)} MB.
+                  Van a <code className="bg-white/10 px-1 font-mono text-xs text-acid">public/uploads/</code> del repo y Cloudflare las sirve en ~1–2 min.
+                </p>
+                <label className="block cursor-pointer border border-dashed border-white/20 bg-black/30 px-4 py-6 text-center transition hover:border-acid">
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => { void handleFiles(e.target.files); e.target.value = ""; }} />
+                  <span className="font-display text-sm font-bold text-zinc-200">Elegir imágenes…</span>
+                  <span className="mt-1 block font-mono text-xs text-zinc-500">puedes seleccionar varias</span>
+                </label>
+                {Object.keys(uploadStates).length > 0 && (
+                  <ul className="space-y-1 font-mono text-xs">
+                    {Object.entries(uploadStates).slice(-6).map(([name, st]) => (
+                      <li key={name} className="flex gap-2">
+                        <span className={st.startsWith("✓") ? "text-acid" : st === "error" ? "text-red-300" : "text-amber-200"}>{st}</span>
+                        <span className="truncate text-zinc-400">{name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {mediaMsg && <p className="border border-red-400/40 bg-red-400/10 p-3 text-sm text-red-200">{mediaMsg}</p>}
+              </div>
+
+              <div className="space-y-4 border border-white/10 bg-panel p-6">
+                <h2 className="font-display text-xl font-bold text-white">Importar por URL</h2>
+                <p className="text-sm text-zinc-400">Pega la URL de una imagen para traerla al repo (misma carpeta). Si el sitio bloquea descargas directas, te avisará.</p>
+                <div className="flex gap-2">
+                  <input value={importUrl} onChange={(e) => setImportUrl(e.target.value)} placeholder="https://…" className={cn(inputCls, "font-mono text-xs")} />
+                  <button onClick={() => void handleImport()} disabled={importState === "working"} className={btnGhost}>
+                    {importState === "working" ? "Trayendo…" : "Importar"}
+                  </button>
+                </div>
+                {imported && (
+                  <div className="flex items-center gap-3 border border-acid/40 bg-acid/5 p-3">
+                    <img src={imported.rawUrl} alt="" className="h-12 w-16 border border-white/15 object-cover" />
+                    <code className="min-w-0 flex-1 truncate font-mono text-xs text-acid">{imported.siteUrl}</code>
+                    <button onClick={() => copyUrl(imported.siteUrl)} className={btnGhost}>
+                      {copiedUrl === imported.siteUrl ? <Check className="h-4 w-4 text-acid" /> : <Copy className="h-4 w-4" />}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="border border-white/10 bg-panel p-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="font-display text-xl font-bold text-white">Galería en GitHub ({mediaItems.length})</h2>
+                <button onClick={() => void refreshMedia()} disabled={mediaLoading} className={cn(btnGhost, "ml-auto")}>
+                  <RefreshCcw className="h-4 w-4" /> {mediaLoading ? "Cargando…" : mediaItems.length ? "Actualizar" : "Cargar galería"}
+                </button>
+              </div>
+              <p className="mt-1 font-mono text-xs text-zinc-500">Copia la ruta y pégala en Retrato, Proyecto, Modelo o Sitio. Se sirve tras el deploy (~1–2 min).</p>
+              {mediaItems.length > 0 && (
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {mediaItems.map((m) => (
+                    <div key={m.path} className="border border-white/10 bg-black/30 p-3">
+                      <img src={m.rawUrl} alt={m.name} loading="lazy" className="aspect-[16/10] w-full border border-white/10 object-cover" />
+                      <p className="mt-2 truncate font-mono text-[11px] text-zinc-400" title={m.path}>{m.siteUrl}</p>
+                      <div className="mt-2 flex gap-2">
+                        <button onClick={() => copyUrl(m.siteUrl)} className={cn(btnGhost, "flex-1 justify-center !px-2 !py-1.5 !text-xs")}>
+                          {copiedUrl === m.siteUrl ? "¡Copiada!" : "Copiar ruta"}
+                        </button>
+                        <button onClick={() => void handleDeleteMedia(m.path)} className="grid w-9 place-items-center border border-white/15 text-zinc-400 hover:border-red-400 hover:text-red-300" aria-label={`Borrar ${m.name}`}>
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="border border-white/10 bg-panel p-6">
+              <h2 className="font-display text-xl font-bold text-white">Videos (solo URL)</h2>
+              <p className="text-sm text-zinc-400">Los videos no se suben al repo (pesan demasiado): pega la URL directa del .mp4 y asígnala a un proyecto. La ficha mostrará reproductor en vez de foto.</p>
+              <div className="mt-3 grid gap-3 lg:grid-cols-[1fr_240px_auto]">
+                <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="https://…/demo.mp4" className={cn(inputCls, "font-mono text-xs")} />
+                <select value={videoProject} onChange={(e) => setVideoProject(e.target.value)} className={cn(inputCls, "bg-coal")}>
+                  <option value="">Proyecto…</option>
+                  {content.projects.map((p) => (
+                    <option key={p.id} value={p.id}>{p.title}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => {
+                    if (!videoUrl.trim() || !videoProject) return;
+                    patchProject(videoProject, (p) => ({ ...p, videoUrl: videoUrl.trim() }));
+                    setVideoUrl("");
+                  }}
+                  disabled={!videoUrl.trim() || !videoProject}
+                  className={btnPrimary}
+                >
+                  Asignar
+                </button>
+              </div>
             </div>
           </div>
         )}
