@@ -240,6 +240,18 @@ export default function AdminPanel() {
   const [ragLoaded, setRagLoaded] = useState(false);
   const [ragLoading, setRagLoading] = useState(false);
   const [ragMsg, setRagMsg] = useState("");
+  const [savingKb, setSavingKb] = useState(false);
+  const [savingCfg, setSavingCfg] = useState(false);
+
+  // El mensaje de resultado vive arriba del tab: llevarlo a la vista
+  // para que nunca parezca que "no pasa nada" al guardar abajo.
+  useEffect(() => {
+    if (!ragMsg) return;
+    const t = setTimeout(() => {
+      document.getElementById("rag-msg")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 60);
+    return () => clearTimeout(t);
+  }, [ragMsg]);
   const [ragCfg, setRagCfg] = useState({
     chatModel: "@cf/meta/llama-3.1-8b-instruct",
     temperature: 0.3,
@@ -318,17 +330,25 @@ export default function AdminPanel() {
     for (let i = 0; i < bytes.length; i += 0x8000) {
       bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
     }
-    const res = await ragGh(`/repos/${repo}/contents/${path}`, {
-      method: "PUT",
-      body: JSON.stringify({ message: `Actualizar ${path} desde el panel`, content: btoa(bin), sha, branch }),
-    });
-    if (!res.ok) throw new Error(`http-${res.status}`);
-    const done = (await res.json()) as { content?: { sha?: string } };
-    return done.content?.sha ?? "";
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
+    try {
+      const res = await ragGh(`/repos/${repo}/contents/${path}`, {
+        method: "PUT",
+        body: JSON.stringify({ message: `Actualizar ${path} desde el panel`, content: btoa(bin), sha, branch }),
+        signal: ctrl.signal,
+      });
+      if (!res.ok) throw new Error(`http-${res.status}`);
+      const done = (await res.json()) as { content?: { sha?: string } };
+      return done.content?.sha ?? "";
+    } finally {
+      clearTimeout(timer);
+    }
   };
 
   const saveKb = async () => {
     setRagMsg("");
+    setSavingKb(true);
     try {
       const clean = kbItems.map((k) => ({ id: k.id.trim(), title: k.title.trim(), text: k.text.trim() })).filter((k) => k.id && k.text);
       if (clean.some((k, i) => clean.findIndex((x) => x.id === k.id) !== i)) {
@@ -341,12 +361,15 @@ export default function AdminPanel() {
       flashSaved();
       setRagMsg("✓ Conocimiento guardado en GitHub. Ahora pulsa Re-indexar para activarlo.");
     } catch {
-      setRagMsg("Error guardando. ¿Token válido y SHA vigente? Recarga con Cargar.");
+      setRagMsg("Error guardando (¿sin conexión o token sin permiso?). Reintenta.");
+    } finally {
+      setSavingKb(false);
     }
   };
 
   const saveCfg = async () => {
     setRagMsg("");
+    setSavingCfg(true);
     try {
       const current = await ragGh(
         `/repos/${pubCfg.repo.trim().replace(/\/$/, "")}/contents/worker/rag-config.json?ref=${encodeURIComponent(pubCfg.branch.trim() || "main")}`,
@@ -360,6 +383,8 @@ export default function AdminPanel() {
       setRagMsg("✓ Ajustes guardados. Cloudflare redespliega en ~2 min y aplican solos.");
     } catch {
       setRagMsg("Error guardando ajustes. Recarga con Cargar e intenta de nuevo.");
+    } finally {
+      setSavingCfg(false);
     }
   };
 
@@ -1021,7 +1046,7 @@ export default function AdminPanel() {
                 <RefreshCcw className="h-4 w-4" /> {ragLoading ? "Cargando…" : ragLoaded ? "Recargar" : "Cargar desde GitHub"}
               </button>
             </div>
-            {ragMsg && <p className="border border-acid/40 bg-acid/5 p-4 text-sm text-zinc-200">{ragMsg}</p>}
+            {ragMsg && <p id="rag-msg" className="border border-acid/40 bg-acid/5 p-4 text-sm text-zinc-200">{ragMsg}</p>}
             {ragLoaded && (
               <>
                 <div className="space-y-3">
@@ -1051,8 +1076,8 @@ export default function AdminPanel() {
                   >
                     <Plus className="h-4 w-4" /> Añadir chunk
                   </button>
-                  <button onClick={() => void saveKb()} className={btnPrimary}>
-                    <Save className="h-4 w-4" /> Guardar conocimiento en GitHub
+                  <button onClick={() => void saveKb()} disabled={savingKb} className={btnPrimary}>
+                    <Save className="h-4 w-4" /> {savingKb ? "Guardando…" : "Guardar conocimiento en GitHub"}
                   </button>
                 </div>
 
@@ -1128,8 +1153,8 @@ export default function AdminPanel() {
                     <Field label="Instrucciones del sistema">
                       <textarea value={ragCfg.systemPrompt} onChange={(e) => setRagCfg((c) => ({ ...c, systemPrompt: e.target.value }))} rows={7} className={cn(inputCls, "font-mono text-xs")} />
                     </Field>
-                    <button onClick={() => void saveCfg()} className={btnPrimary}>
-                      <Save className="h-4 w-4" /> Guardar ajustes
+                    <button onClick={() => void saveCfg()} disabled={savingCfg} className={btnPrimary}>
+                      <Save className="h-4 w-4" /> {savingCfg ? "Guardando…" : "Guardar ajustes"}
                     </button>
                   </div>
                 </div>
