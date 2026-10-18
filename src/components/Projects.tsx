@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, ExternalLink, Search, SearchX, Star, GitFork, X } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Search, SearchX, Star, GitFork, X, Target, TrendingUp, Code2 } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import type { CategoryId, Project } from "../data/content";
 import { categoryColor } from "../data/content";
 import { highlightCode, Reveal, SectionHeader } from "./ui";
+import { TechIcon } from "./TechIcon";
 import { cn } from "../utils/cn";
 
 function CodeWindow({ title, lang, code }: { title: string; lang: string; code: string }) {
@@ -81,6 +82,27 @@ function ProjectModal({ project, onClose, onPrev, onNext }: { project: Project; 
 
           <h3 className="mt-4 font-display text-3xl font-bold text-white">{project.title}</h3>
           <p className="mt-1 font-display text-base text-acid">{project.tagline}</p>
+
+          {(project.challenge || project.impact || project.solution) && (
+            <dl className="mt-5 grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-3">
+              {[
+                { label: "El reto", value: project.challenge, Icon: Target, color: "#fb7185" },
+                { label: "El impacto", value: project.impact, Icon: TrendingUp, color: "#a3e635" },
+                { label: "La solución técnica", value: project.solution, Icon: Code2, color: "#22d3ee" },
+              ].map((row) =>
+                row.value ? (
+                  <div key={row.label} className="bg-coal p-4">
+                    <dt className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: row.color }}>
+                      <row.Icon className="h-3.5 w-3.5" />
+                      {row.label}
+                    </dt>
+                    <dd className="mt-2 text-sm leading-relaxed text-zinc-300">{row.value}</dd>
+                  </div>
+                ) : null,
+              )}
+            </dl>
+          )}
+
           <p className="mt-4 leading-relaxed text-zinc-400">{project.longDescription || project.description}</p>
 
           {project.specs && project.specs.length > 0 && (
@@ -95,9 +117,15 @@ function ProjectModal({ project, onClose, onPrev, onNext }: { project: Project; 
           )}
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {project.tags.map((t) => (
-              <span key={t} className="border border-white/12 bg-white/[0.04] px-2.5 py-1 font-mono text-xs text-zinc-300">#{t}</span>
-            ))}
+            {project.tags.map((t) => {
+              const icon = <TechIcon name={t} className="h-3.5 w-3.5" />;
+              return (
+                <span key={t} className="inline-flex items-center gap-1.5 border border-white/12 bg-white/[0.04] px-2.5 py-1 font-mono text-xs text-zinc-300">
+                  {icon}
+                  {t}
+                </span>
+              );
+            })}
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

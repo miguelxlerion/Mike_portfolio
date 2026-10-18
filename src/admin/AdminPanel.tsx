@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Check, Download, Eye, FileJson, KeyRound, Lock, Plus,
   RefreshCcw, Save, Settings2, Trash2, Copy, FolderKanban, User,
-  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload, Image as ImageIcon, Bot as BotIcon,
+  Rocket, Info, GitBranch, Mail, Palette, Database, Box, Globe, Upload, Image as ImageIcon, Bot as BotIcon, BookOpen as BookIcon,
 } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import type { CategoryId, Model3D, Project, SiteContent, WebWork } from "../data/content";
@@ -30,7 +30,7 @@ import {
   type PublishResult,
 } from "./publish";
 
-type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "medios" | "modelos" | "rag" | "github" | "contact" | "design" | "data" | "publicar";
+type TabId = "general" | "hero" | "about" | "projects" | "sitios" | "medios" | "modelos" | "rag" | "github" | "contact" | "design" | "data" | "publicar" | "ayuda";
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "general", label: "General", icon: <User className="h-4 w-4" /> },
@@ -46,6 +46,7 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "design", label: "Diseño", icon: <Palette className="h-4 w-4" /> },
   { id: "data", label: "Datos", icon: <Database className="h-4 w-4" /> },
   { id: "publicar", label: "Publicar", icon: <Upload className="h-4 w-4" /> },
+  { id: "ayuda", label: "Ayuda", icon: <BookIcon className="h-4 w-4" /> },
 ];
 
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
@@ -645,6 +646,9 @@ export default function AdminPanel() {
                 <Field label="Botón principal"><input value={content.hero.ctaPrimary} onChange={(e) => patch({ hero: { ...content.hero, ctaPrimary: e.target.value } })} className={inputCls} /></Field>
                 <Field label="Botón secundario"><input value={content.hero.ctaSecondary} onChange={(e) => patch({ hero: { ...content.hero, ctaSecondary: e.target.value } })} className={inputCls} /></Field>
               </div>
+              <Field label="Botón de contacto (email)" hint="Aparece en el Hero con el logo de correo y enlaza a tu email.">
+                <input value={content.hero.ctaContact} onChange={(e) => patch({ hero: { ...content.hero, ctaContact: e.target.value } })} className={inputCls} />
+              </Field>
               <Field label="Cinta infinita (una por línea)">
                 <textarea value={content.marquee.join("\n")} onChange={(e) => patch({ marquee: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })} rows={6} className={inputCls} />
               </Field>
@@ -708,6 +712,21 @@ export default function AdminPanel() {
                 </div>
               ))}
               <button onClick={() => { update({ skills: [...content.skills, { name: "Nueva habilidad", level: 70, color: "#a3e635" }] }); flashSaved(); }} className={btnGhost}><Plus className="h-4 w-4" /> Añadir habilidad</button>
+              <div className="mt-5 border border-white/10 bg-black/30 p-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-acid">Bonus · Por qué trabajar conmigo</p>
+                <p className="mt-1 text-xs text-zinc-600">Aparece justo antes del contacto, como valor agregado del perfil Senior.</p>
+                <div className="mt-3 space-y-3">
+                  <Field label="Título de la sección"><input value={content.whyMe.title} onChange={(e) => patch({ whyMe: { ...content.whyMe, title: e.target.value } })} className={inputCls} /></Field>
+                  <Field label="Texto de la sección"><textarea value={content.whyMe.text} onChange={(e) => patch({ whyMe: { ...content.whyMe, text: e.target.value } })} rows={2} className={inputCls} /></Field>
+                  {content.whyMe.cards.map((c, i) => (
+                    <div key={i} className="grid grid-cols-[1fr_auto] gap-2 border-t border-white/5 pt-2">
+                      <input value={c.title} onChange={(e) => { const cards = [...content.whyMe.cards]; cards[i] = { ...cards[i], title: e.target.value }; patch({ whyMe: { ...content.whyMe, cards } }); }} className={inputCls} placeholder="Título de la tarjeta" />
+                      <input type="color" value={c.color} onChange={(e) => { const cards = [...content.whyMe.cards]; cards[i] = { ...cards[i], color: e.target.value }; patch({ whyMe: { ...content.whyMe, cards } }); }} className="h-10 w-12 cursor-pointer border border-white/15 bg-transparent" title="Color del acento" />
+                      <textarea value={c.desc} onChange={(e) => { const cards = [...content.whyMe.cards]; cards[i] = { ...cards[i], desc: e.target.value }; patch({ whyMe: { ...content.whyMe, cards } }); }} rows={2} className={cn(inputCls, "col-span-2")} placeholder="Descripción de la tarjeta" />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -754,6 +773,21 @@ export default function AdminPanel() {
                 </div>
                 <Field label="Tagline (una línea)"><input value={project.tagline} onChange={(e) => patchProject(project.id, (p) => ({ ...p, tagline: e.target.value }))} className={inputCls} /></Field>
                 <Field label="Descripción corta"><textarea value={project.description} onChange={(e) => patchProject(project.id, (p) => ({ ...p, description: e.target.value }))} rows={2} className={inputCls} /></Field>
+                <div className="border border-white/10 bg-black/30 p-4">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-acid">Narrativa de negocio (Reto → Impacto → Solución)</p>
+                  <p className="mt-1 text-xs text-zinc-600">Si rellenas estos tres campos, la ficha muestra el bloque de negocio encima de la descripción técnica.</p>
+                  <div className="mt-3 space-y-3">
+                    <Field label="El reto (dolor del cliente)">
+                      <textarea value={project.challenge ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, challenge: e.target.value }))} rows={2} className={inputCls} />
+                    </Field>
+                    <Field label="El impacto (métrica de negocio)">
+                      <textarea value={project.impact ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, impact: e.target.value }))} rows={2} className={inputCls} />
+                    </Field>
+                    <Field label="La solución técnica (stack)">
+                      <textarea value={project.solution ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, solution: e.target.value }))} rows={2} className={inputCls} />
+                    </Field>
+                  </div>
+                </div>
                 <Field label="Descripción larga"><textarea value={project.longDescription} onChange={(e) => patchProject(project.id, (p) => ({ ...p, longDescription: e.target.value }))} rows={4} className={inputCls} /></Field>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Imagen (URL)" hint="Vacío = tarjeta de código. Con URL = tarjeta con foto. O súbela desde tu PC:"><input value={project.image ?? ""} onChange={(e) => patchProject(project.id, (p) => ({ ...p, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
@@ -844,6 +878,9 @@ export default function AdminPanel() {
                   </div>
                   <Field label="URL del sitio" hint="Debe empezar por https:// — el punto verde la verifica en vivo."><input value={currentSite.url} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, url: e.target.value }))} className={cn(inputCls, "font-mono text-xs")} placeholder="https://…" /></Field>
                   <Field label="Descripción"><textarea value={currentSite.desc} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, desc: e.target.value }))} rows={3} className={inputCls} /></Field>
+                  <Field label="Resultado de negocio (una línea)" hint="Se muestra destacado con el icono de tendencia. Ej: «Reduce el trabajo manual…».">
+                    <textarea value={currentSite.result ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, result: e.target.value }))} rows={2} className={inputCls} />
+                  </Field>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field label="Miniatura (URL imagen)" hint="Vacío = tarjeta con icono. Prueba hotlink del propio sitio, o súbela desde tu PC:"><input value={currentSite.image ?? ""} onChange={(e) => patchSite(currentSite.id, (w) => ({ ...w, image: e.target.value }))} className={inputCls} placeholder="https://…" /></Field>
                     <ImageUploadButton onDone={(item) => patchSite(currentSite.id, (w) => ({ ...w, image: item.siteUrl }))} />
@@ -1479,9 +1516,176 @@ git push --force origin main`}
               <p className="mt-4 border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-200">{allMsg}</p>
             )}
           </div>
+            {snapStatus === "error" && (
+              <p className="mt-4 border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-200">{allMsg}</p>
+            )}
           </div>
         )}
+
+        {/* ── AYUDA ── */}
+        {tab === "ayuda" && <HelpTab copyUrl={copyUrl} copiedUrl={copiedUrl} setTab={setTab} />}
       </div>
+    </div>
+  );
+}
+
+function HelpTab({
+  copyUrl,
+  copiedUrl,
+  setTab,
+}: {
+  copyUrl: (url: string) => void;
+  copiedUrl: string | null;
+  setTab: (t: TabId) => void;
+}) {
+  const cmd = (label: string, text: string, hint?: string) => (
+    <div>
+      <p className="mb-1 font-mono text-[11px] text-zinc-500">{label}</p>
+      <div className="flex items-center gap-2 border border-white/10 bg-black/40 px-3 py-2">
+      <code className="min-w-0 flex-1 truncate font-mono text-xs text-zinc-200" title={text}>
+        <span className="mr-2 text-zinc-600">$</span>
+        {text}
+      </code>
+      <button
+        onClick={() => copyUrl(text)}
+        className="shrink-0 border border-white/15 px-2.5 py-1 font-mono text-[11px] text-zinc-300 transition hover:border-acid hover:text-acid"
+      >
+        {copiedUrl === text ? "✓" : "Copiar"}
+      </button>
+        {hint && <span className="hidden shrink-0 font-mono text-[11px] text-zinc-500 sm:inline">{hint}</span>}
+      </div>
+    </div>
+  );
+
+  const section = (title: string, children: React.ReactNode) => (
+    <details className="border border-white/10 bg-panel" open>
+      <summary className="cursor-pointer list-none px-5 py-4 font-display text-base font-bold text-white transition-colors hover:text-acid [&::-webkit-details-marker]:hidden">
+        <span className="mr-2 text-acid">▸</span>
+        {title}
+      </summary>
+      <div className="space-y-3 border-t border-white/10 p-5 pt-4 text-sm leading-relaxed text-zinc-400">{children}</div>
+    </details>
+  );
+
+  const kv = (k: string, v: React.ReactNode) => (
+    <div className="grid gap-1 border-b border-white/5 pb-2 sm:grid-cols-[190px_1fr] sm:gap-3">
+      <span className="font-display text-sm font-bold text-white">{k}</span>
+      <span>{v}</span>
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      {section(
+        "Rutina recomendada (90% de los días)",
+        <ol className="list-decimal space-y-1.5 pl-5">
+          <li>
+            Edita en las pestañas (todo se <strong className="text-white">autoguarda en este navegador</strong>).
+          </li>
+          <li>
+            Comprueba con <strong className="text-white">Ver sitio</strong> (arriba a la derecha).
+          </li>
+          <li>
+            <button onClick={() => setTab("publicar")} className="underline hover:text-acid">
+              Publicar
+            </button>
+            : <strong className="text-white">contenido</strong> para textos/fotos/colores,{" "}
+            <strong className="text-white">TODO</strong> si tocó código (o no estás seguro).
+          </li>
+          <li>
+            Espera el deploy verde (~2 min) y abre el sitio con <code className="bg-white/10 px-1 font-mono text-xs text-acid">Ctrl+Shift+R</code>.
+          </li>
+        </ol>,
+      )}
+
+      {section(
+        "Qué hace cada pestaña",
+        <div className="space-y-2">
+          {kv("General", "Nombre, rol, foto, email, teléfono, ubicación y texto del CV descargable.")}
+          {kv("Hero", "Badge, roles del typewriter, descripción, botones, stats y cinta infinita.")}
+          {kv("Sobre mí", "Historia, cita, idiomas, disciplinas y barras de habilidades.")}
+          {kv("Proyectos", "Crear/duplicar/eliminar proyectos: textos, tags, specs, links, snippets y video. Botón Subir PC en la imagen.")}
+          {kv("Sitios Web", "Tus sitios en producción: URL, descripción, tags y miniatura (+Subir PC).")}
+          {kv("Medios", "Subir imágenes del PC, importar por URL, galería con borrado y videos por URL para asignar.")}
+          {kv("Modelos 3D", "Piezas del visor: demos procedurales o tu .glb (+Subir PC al póster).")}
+          {kv("RAG", "Conocimiento del chatbot (CRUD), re-indexado sin terminal y ajustes de la IA.")}
+          {kv("GitHub", "Usuario por defecto y nº de repos de la sección en vivo.")}
+          {kv("Contacto", "Textos, redes, servicios del formulario, presupuestos y nota del pie.")}
+          {kv("Diseño", "Acento, fondo, superficies, categorías y visibilidad de secciones.")}
+          {kv("Datos", "Copia de seguridad JSON, importar, restablecer y cambiar la contraseña.")}
+          {kv("Publicar", "Subir contenido o TODO el proyecto a GitHub (Cloudflare redespliega solo).")}
+        </div>,
+      )}
+
+      {section(
+        "Comandos fuera del panel (PowerShell, en la carpeta del proyecto)",
+        <div className="space-y-4">
+          <div>
+            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Servidor local</p>
+            <div className="space-y-2">
+              {cmd("Abrir el panel (o doble clic a Abrir-Panel-Admin.bat)", "npm run dev")}
+              {cmd("Ver estado", "git status --short")}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Git (cuando el panel no basta)</p>
+            <div className="space-y-2">
+              {cmd("Sincronizar (si el push dice non-fast-forward)", "git pull --rebase origin main")}
+              {cmd("Subir", "git push origin main")}
+              {cmd("Forzar deploy sin cambios", 'git commit --allow-empty -m "trigger redeploy" && git push origin main')}
+              {cmd("Ver historial", "git log --oneline -8")}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">RAG / Cloudflare (con token en el entorno)</p>
+            <div className="space-y-2">
+              {cmd("Fijar credenciales (duran la sesión)", "$env:CLOUDFLARE_API_TOKEN='tu-token'")}
+              {cmd("Fijar cuenta", "$env:CLOUDFLARE_ACCOUNT_ID='c393829619b11d1545a1dd69d4d48356'")}
+              {cmd("Re-indexar por terminal", "npm run rag:ingest")}
+              {cmd("Ver índices", "npx wrangler vectorize list")}
+              {cmd("Ver mi usuario/cuentas", "npx wrangler whoami")}
+            </div>
+          </div>
+        </div>,
+      )}
+
+      {section(
+        "Claves: cuál va dónde (ninguna va al código)",
+        <div className="space-y-2">
+          {kv("Contraseña panel", <>Pestaña Datos. Solo abre el panel local.</>)}
+          {kv("Token GitHub", <>Pestaña Publicar (se reutiliza en Medios y RAG). Vive en tu navegador.</>)}
+          {kv("RAG_ADMIN_KEY", <>La inventas tú: igualita en el secret del Worker y en el campo RAG.</>)}
+          {kv("GITHUB_TOKEN", "Secret del Worker. Sin ella, repos a ratos caídos.")}
+          {kv("RESEND_API_KEY", "Secret del Worker. Sin ella, el formulario abre tu app de correo.")}
+          {kv("TRANSLATE_API_KEY", "Secret del Worker. Sin ella, el EN dinámico depende del endpoint público.")}
+          {kv("CF API token", "Solo tu PowerShell ($env). Jamás en archivos. Rota si circula por chats.")}
+        </div>,
+      )}
+
+      {section(
+        "Si algo falla (lee el síntoma)",
+        <div className="space-y-2">
+          {kv("Push rejected (non-fast-forward)", <>Tu panel publicó antes: <code className="bg-white/10 px-1 font-mono text-xs">git pull --rebase origin main</code> y luego push.</>)}
+          {kv("Publicar dice markers-missing", "El repo no tiene el código nuevo: haz push del proyecto primero.")}
+          {kv("401 GitHub / Cloudflare", "Token malo, caducado o sin permiso. Verifica, rota y reintenta.")}
+          {kv("429 en repos o traducir", "Límite sin clave: añade GITHUB_TOKEN / TRANSLATE_API_KEY en el Worker.")}
+          {kv("Color/cambio no se ve", "1) Espera el deploy verde. 2) Ctrl+Shift+R. 3) En prod se ignora localStorage viejo por diseño.")}
+          {kv("Chat no responde", "Mira el código del error: stage-embed (modelo), stage-query (índice), stage-gen (LLM).")}
+          {kv("Deploy rojo", "Abre el log: manda el timestamp, no un log viejo. Revisa que incluya tu último commit.")}
+          {kv("Login wrangler raro", "Quita $env:CLOUDFLARE_API_TOKEN de la sesión y usa npx wrangler login limpio.")}
+        </div>,
+      )}
+
+      {section(
+        "Reglas de oro",
+        <ol className="list-decimal space-y-1.5 pl-5">
+          <li>Ningún secreto va a archivos versionados. Solo navegador, PowerShell o dashboard.</li>
+          <li>Contenido → panel. Código → push. Imágenes → Medios. No mezcles las vías el mismo día sin hacer pull entre medias.</li>
+          <li>Tras publicar del panel, tu clon queda atrás: <code className="bg-white/10 px-1 font-mono text-xs text-acid">git pull --rebase</code> antes del próximo push.</li>
+          <li>Después de cada deploy: recarga dura (<code className="bg-white/10 px-1 font-mono text-xs text-acid">Ctrl+Shift+R</code>) antes de declarar que algo no se ve.</li>
+          <li>Exporta el JSON (Datos) antes de cambios grandes: es tu deshacer universal.</li>
+        </ol>,
+      )}
     </div>
   );
 }

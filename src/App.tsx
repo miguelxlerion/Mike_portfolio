@@ -8,6 +8,7 @@ import Projects from "./components/Projects";
 import WebWorks from "./components/WebWorks";
 import GitHubReal from "./components/GitHubReal";
 import Viewer3D from "./components/Viewer3D";
+import WhyMe from "./components/WhyMe";
 import Contact from "./components/Contact";
 import Footer, { BackToTop } from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
@@ -76,6 +77,7 @@ export default function App() {
         <WebWorks />
         <GitHubReal />
         <Viewer3D />
+        <WhyMe />
         <Contact />
       </main>
 

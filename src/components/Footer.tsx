@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Mail } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 
 export function BackToTop() {
@@ -45,7 +45,13 @@ export default function Footer() {
         </nav>
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">Contacto</p>
-          <a href={`mailto:${content.profile.email}`} className="mt-4 block font-display text-lg font-bold text-white hover:text-acid">{content.profile.email}</a>
+          <a
+            href={`mailto:${content.profile.email}?subject=${encodeURIComponent("Hablemos de un proyecto")}`}
+            className="mt-4 inline-flex items-center gap-2 bg-acid px-5 py-2.5 font-display text-sm font-bold text-ink transition hover:bg-acid-soft"
+          >
+            <Mail className="h-4 w-4" /> Hablemos
+          </a>
+          <a href={`mailto:${content.profile.email}`} className="mt-3 block font-display text-lg font-bold text-white hover:text-acid">{content.profile.email}</a>
           <div className="mt-3 flex flex-wrap gap-2">
             {content.contact.socials.map((s) => (
               <a key={s.label} href={s.url} target="_blank" rel="noreferrer" className="border border-white/12 px-3 py-1.5 font-mono text-xs text-zinc-400 hover:border-acid hover:text-acid">{s.label}</a>

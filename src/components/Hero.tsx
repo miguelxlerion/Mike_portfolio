@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Boxes, Code2, Download, MapPin, PenTool } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Boxes, Code2, Download, Mail, MapPin, PenTool } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import { useLang } from "../i18n/LangContext";
 import { translateString } from "../i18n/auto";
@@ -54,6 +54,15 @@ function downloadCV(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
+/** Logo de LinkedIn en SVG (lucide-react ya no incluye iconos de marca). */
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
 const fadeUp = { initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 } };
 
 export default function Hero() {
@@ -83,6 +92,7 @@ export default function Hero() {
     };
   }, [lang, hero.roles]);
   const { text, color } = useTypewriter(roles);
+  const linkedin = content.contact.socials.find((s) => /linkedin/i.test(s.label));
 
   return (
     <section id="inicio" className="relative overflow-hidden pt-16 md:pt-[72px]">
@@ -131,9 +141,21 @@ export default function Hero() {
               <Download className="h-5 w-5" />
               {hero.ctaSecondary}
             </button>
+            <a
+              href={`mailto:${profile.email}?subject=${encodeURIComponent("Hablemos de un proyecto")}`}
+              className="inline-flex items-center gap-2 border border-acid/50 bg-acid/10 px-6 py-3.5 font-display text-base font-bold text-acid transition-colors hover:bg-acid hover:text-ink"
+            >
+              <Mail className="h-5 w-5" />
+              {hero.ctaContact}
+            </a>
             <span className="inline-flex items-center gap-1.5 font-mono text-xs text-zinc-500">
               <MapPin className="h-3.5 w-3.5" /> {profile.location}
             </span>
+            {linkedin && (
+              <a href={linkedin.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-zinc-500 transition-colors hover:text-acid">
+                <LinkedInIcon className="h-3.5 w-3.5" /> LinkedIn
+              </a>
+            )}
           </motion.div>
 
           {content.appearance.showStats && (

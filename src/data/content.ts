@@ -41,6 +41,13 @@ export interface Project {
   repo?: RepoInfo;
   specs?: { label: string; value: string }[];
   featured?: boolean;
+  /**
+   * Narrativa orientada a negocio (opcional). Si existe, la ficha muestra
+   * el bloque "El reto / El impacto / La solución técnica" antes del detalle.
+   */
+  challenge?: string;
+  impact?: string;
+  solution?: string;
 }
 
 export interface Skill {
@@ -85,6 +92,8 @@ export interface WebWork {
   id: string;
   title: string;
   desc: string;
+  /** Resultado de negocio destacado (una línea). Opcional. */
+  result?: string;
   url: string;
   tags: string[];
   year: string;
@@ -96,6 +105,20 @@ export interface WebWorks {
   title: string;
   text: string;
   items: WebWork[];
+}
+
+/** Tarjeta de la sección "Por qué trabajar conmigo" (bonus invisible del perfil Senior). */
+export interface WhyMeCard {
+  title: string;
+  desc: string;
+  color: string;
+}
+
+export interface WhyMe {
+  eyebrow: string;
+  title: string;
+  text: string;
+  cards: WhyMeCard[];
 }
 
 export interface SiteContent {
@@ -121,6 +144,8 @@ export interface SiteContent {
     description: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    /** Botón de contacto directo en el Hero (lleva al formulario). */
+    ctaContact: string;
     stats: HeroStat[];
   };
   marquee: string[];
@@ -144,6 +169,7 @@ export interface SiteContent {
   };
   showcase3d: Showcase3D;
   webworks: WebWorks;
+  whyMe: WhyMe;
   contact: {
     eyebrow: string;
     title: string;
@@ -187,8 +213,8 @@ export const defaultContent: SiteContent = {
     "name": "MIGUEL RODRIGUEZ",
     "shortName": "Miguel Rodriguez",
     "initials": "MR",
-    "role": "Senior Full-Stack Engineer · 3D & AI Data Platforms",
-    "tagline": "Construyo plataformas donde los datos en tiempo real cobran vida en 3D interactivo.",
+    "role": "Senior Full-Stack Engineer · Real-Time 3D & AI",
+    "tagline": "Desde arquitecturas 3D en tiempo real e IA hasta plataformas web de alta conversión.",
     "location": "Bogotá, Colombia · Remoto",
     "email": "miguelxlerion@gmail.com",
     "phone": "+57 313 226 3265",
@@ -217,9 +243,10 @@ export const defaultContent: SiteContent = {
         "color": "#fbbf24"
       }
     ],
-    "description": "10+ años uniendo Full-Stack (React, Python, Django) con 3D interactivo e IA en producción real.",
+    "description": "Mi enfoque no es la sobre-ingeniería: construyo la solución más eficiente y escalable, orientada al ROI de tu negocio, con estándares Senior de rendimiento (Core Web Vitals), SEO técnico y seguridad.",
     "ctaPrimary": "Ver proyectos",
     "ctaSecondary": "Descargar CV",
+    "ctaContact": "Hablemos",
     "stats": [
       {
         "value": 10,
@@ -227,19 +254,19 @@ export const defaultContent: SiteContent = {
         "label": "Años de experiencia"
       },
       {
-        "value": 45,
-        "suffix": "",
-        "label": "Repos públicos"
+        "value": 1200,
+        "suffix": "+",
+        "label": "Unidades gestionadas"
+      },
+      {
+        "value": 60,
+        "suffix": "%",
+        "label": "Menos tiempo de decisión"
       },
       {
         "value": 99,
         "suffix": "%",
         "label": "Uptime en producción"
-      },
-      {
-        "value": 12,
-        "suffix": "+",
-        "label": "Admins con dashboards"
       }
     ]
   },
@@ -255,8 +282,9 @@ export const defaultContent: SiteContent = {
   ],
   "about": {
     "eyebrow": "Sobre mí",
-    "title": "Datos en tiempo real que cobran vida en 3D.",
+    "title": "Del dato en tiempo real al resultado de negocio.",
     "paragraphs": [
+      "Desde arquitecturas 3D en tiempo real e IA hasta plataformas web de alta conversión. Mi enfoque no es la sobre-ingeniería, sino construir la solución más eficiente, escalable y orientada al ROI que tu negocio necesite para crecer. Apalanco mi experiencia Senior para garantizar velocidad de entrega, código limpio y optimización técnica (Core Web Vitals, SEO, Seguridad).",
       "Soy Miguel Rodriguez, ingeniero Full-Stack Senior y fundador de Xlerion Studio. Me muevo entre la arquitectura backend y el render en el navegador: un día diseño microservicios con WebSockets y al siguiente entrego un gemelo digital 3D a 60 FPS.",
       "Mi trabajo se mide en resultados: reduje 40% el tiempo de análisis de datos complejos (AONC), 60% el tiempo de decisiones para 12+ administradores municipales con 1.200+ unidades gestionadas (FOVIS), y 80% el tiempo de exportación de pipeline 3D con una suite de automatización propia."
     ],
@@ -365,9 +393,12 @@ export const defaultContent: SiteContent = {
       "id": "smartfactory-3d",
       "title": "SmartFactory 3D",
       "category": "codigo",
-      "tagline": "Gemelo digital industrial con telemetría en tiempo real",
-      "description": "Plataforma Full-Stack (React 18 + Three.js + FastAPI): >100 msg/s vía WebSockets manteniendo 60 FPS.",
+      "tagline": "Telemetría industrial en vivo, sin perder un solo frame",
+      "description": "Reduce el tiempo de análisis operativo en planta con una plataforma que sostiene +100 mensajes/segundo a 60 FPS estables.",
       "longDescription": "Gemelo digital industrial para monitorización de telemetría y mantenimiento predictivo. Frontend React 18 + Three.js con interpolación (Lerp), backend FastAPI con detección de anomalías Z-score (NumPy), control de acceso RBAC con JWT y despliegue containerizado con Docker Compose. Sostiene más de 100 mensajes por segundo vía WebSockets sin bajar de 60 FPS.",
+      "challenge": "Monitorear cientos de máquinas en tiempo real sin que el dashboard se degrade: los operarios perdían minutos por incidente y las anomalías se detectaban tarde.",
+      "impact": "+100 mensajes/segundo a 60 FPS estables, con detección temprana de anomalías que reduce las paradas no planificadas.",
+      "solution": "React 18 + Three.js (interpolación Lerp) en el front, FastAPI + NumPy (Z-score) en el back, RBAC con JWT y despliegue con Docker Compose.",
       "tags": [
         "React 18",
         "Three.js",
@@ -415,9 +446,12 @@ export const defaultContent: SiteContent = {
       "id": "rag-x",
       "title": "Enterprise RAG Assistant",
       "category": "codigo",
-      "tagline": "IA corporativa sin alucinaciones: RAG en producción",
-      "description": "Sistema de integración empresarial para bases de conocimiento desestructuradas (legal, operaciones).",
+      "tagline": "IA corporativa que responde sin alucinar",
+      "description": "Convierte bases de conocimiento dispersas en respuestas verificables en segundos, sin alucinaciones.",
       "longDescription": "Asistente RAG para entornos empresariales con procesamiento asíncrono de PDFs (Celery + Redis), chunking semántico y búsqueda híbrida (vectorial + léxica) con re-ranking para evitar alucinaciones. Integra APIs de LLMs (OpenAI/Claude) como componente dentro de una arquitectura de producción con costos optimizados y resiliencia garantizada.",
+      "challenge": "Equipos legales y de operaciones perdían horas buscando en PDFs y documentos sin estructura, con riesgo de respuestas erróneas.",
+      "impact": "Respuestas trazables en segundos sobre documentos internos, con contexto verificado y sin alucinaciones.",
+      "solution": "Python + Django/DRF, LangChain, pgvector, búsqueda híbrida con re-ranking, Celery + Redis y Docker.",
       "tags": [
         "Python",
         "Django/DRF",
@@ -462,9 +496,12 @@ export const defaultContent: SiteContent = {
       "id": "ingest-pipeline",
       "title": "IoT Telemetry Resilient Backend",
       "category": "codigo",
-      "tagline": "Ingesta industrial tolerante a fallos con 99% de uptime",
-      "description": "Backend para sensores industriales en entornos con conectividad intermitente.",
+      "tagline": "Ningún dato se pierde aunque falle la conexión",
+      "description": "Mantiene 99% de uptime con sensores industriales que pierden conectividad en campo.",
       "longDescription": "Plataforma de ingesta de datos de sensores industriales diseñada para conectividad intermitente: persistencia local (buffering) y sincronización asíncrona que garantizan 99% de uptime bajo tráfico concurrente simulado vía WebSockets/MQTT. Transforma documentos crudos multiformato (PDF, CSV, JSON, TXT) en datos limpios y trazables listos para RAG.",
+      "challenge": "Sensores en campo con conectividad intermitente: los datos se perdían y los reportes llegaban incompletos.",
+      "impact": "99% de uptime bajo tráfico concurrente y cero pérdida de datos gracias al buffer local y al reintento automático.",
+      "solution": "Python Asyncio + Node.js, MQTT y WebSockets, PostgreSQL y despliegue con Docker.",
       "tags": [
         "Python Asyncio",
         "Node.js",
@@ -508,9 +545,12 @@ export const defaultContent: SiteContent = {
       "id": "fovis-platform",
       "title": "FOVIS · Gestión Habitacional",
       "category": "codigo",
-      "tagline": "1.200+ unidades y KPIs en tiempo real para la Alcaldía de Caucasia",
-      "description": "Plataforma construida desde cero: dashboards de KPIs que recortaron 60% el tiempo de decisiones.",
+      "tagline": "Gestión habitacional con KPIs en tiempo real",
+      "description": "Recortó 60% el tiempo de decisiones para 12+ administradores que gestionan 1.200+ unidades.",
       "longDescription": "Arquitecté y desarrollé desde cero la plataforma de gestión habitacional de la Alcaldía de Caucasia (FOVIS): frontend React con biblioteca propia de componentes UI reutilizables y backend Django/MySQL desacoplado por APIs. Los dashboards de KPIs en tiempo real para 12+ administradores redujeron el tiempo de toma de decisiones un 60% y los tiempos de carga un 35%.",
+      "challenge": "La Alcaldía gestionaba 1.200+ unidades habitacionales con procesos manuales y reportes que tardaban días en consolidarse.",
+      "impact": "-60% en tiempo de toma de decisiones y -35% en tiempos de carga para 12+ administradores municipales.",
+      "solution": "Plataforma React + Tailwind con librería propia de componentes UI y backend Django/MySQL desacoplado por APIs.",
       "image": "/uploads/mv60jz35-fovis_mark.jpg",
       "tags": [
         "React",
@@ -544,8 +584,11 @@ export const defaultContent: SiteContent = {
       "title": "AONC · NeuroData 3D",
       "category": "diseno3d",
       "tagline": "Datasets masivos convertidos en mundos 3D navegables",
-      "description": "Entornos 3D gamificados para análisis visual en tiempo real. −40% en tiempo de análisis.",
+      "description": "Redujo 40% el tiempo de análisis de datos complejos convirtiéndolos en entornos 3D navegables.",
       "longDescription": "Como Director de Diseño 3D & Data Visualization en AONC Neuroscientific Strategies, transformé conjuntos de datos masivos y complejos en entornos 3D gamificados y navegables para análisis visual en tiempo real. Aplicando principios UX/UI de claridad visual, reduje el tiempo de análisis un 40% para usuarios no técnicos.",
+      "challenge": "Analistas no técnicos debían interpretar datasets enormes en tablas planas: lento, ilegible y con riesgo de error.",
+      "impact": "-40% en tiempo de análisis para usuarios no técnicos, con entornos visuales claros y navegable en tiempo real.",
+      "solution": "Entornos 3D gamificados en Unity aplicando principios UX/UI de claridad visual.",
       "image": "/uploads/mv6085i9-portada_aonc.jpg",
       "tags": [
         "Unity",
@@ -574,8 +617,11 @@ export const defaultContent: SiteContent = {
       "title": "Total Darkness",
       "category": "diseno3d",
       "tagline": "Videojuego musical en Unity basado en la discografía de Redemthor",
-      "description": "Dirección conceptual y técnica: sonido, narrativa y desarrollo unificados en Unity.",
+      "description": "Dirección conceptual y técnica que unifica sonido, narrativa y jugabilidad en un solo producto.",
       "longDescription": "Lideré el desarrollo conceptual y técnico de Total Darkness, videojuego musical basado en la discografía de Redemthor, unificando diseño de sonido, narrativa y desarrollo en Unity. Proyecto de Xlerion Studio que combina mi perfil técnico con el artístico.",
+      "challenge": "Convertir la discografía de Redemthor en una experiencia jugable coherente sin perder la identidad artística del proyecto.",
+      "impact": "Producto propio de Xlerion Studio con dirección técnica y artística unificada: sonido, narrativa y juego en un solo lenguaje.",
+      "solution": "Unity para desarrollo y sonido, con dirección narrativa y de arte propia.",
       "image": "/uploads/mv5zro02-total-darkness-logo.png",
       "tags": [
         "Unity",
@@ -615,7 +661,8 @@ export const defaultContent: SiteContent = {
       {
         "id": "tropical-biohostel",
         "title": "Tropical Biohostel",
-        "desc": "Plataforma turística bilingüe (ES/EN) para un biohostel en Nocaima: hospedaje, Cosmic Bungaló, experiencias, gastronomía de la finca y buscador inteligente Zemisqua.",
+        "desc": "Plataforma turística bilingüe (ES/EN) optimizada para conversión y SEO: hospedaje, Cosmic Bungaló, experiencias, gastronomía de la finca y buscador inteligente Zemisqua.",
+        "result": "Experiencia bilingüe que acelera la reserva directa y refuerza el posicionamiento en buscadores.",
         "url": "https://tropicalbiohostel.pages.dev/",
         "tags": [
           "Turismo",
@@ -630,6 +677,7 @@ export const defaultContent: SiteContent = {
         "id": "tranxport",
         "title": "Tranxport · Rastreo",
         "desc": "Rastreador y cotizador de mensajería en moto para 5 municipios: códigos TRX, tarifario oficial, pedidos que caen directo al sistema y confirmación por WhatsApp.",
+        "result": "Reduce el trabajo manual y acorta el ciclo de cotización con seguimiento en tiempo real.",
         "url": "https://tranxport-web.tranxportx.workers.dev/",
         "tags": [
           "Logística",
@@ -644,6 +692,7 @@ export const defaultContent: SiteContent = {
         "id": "ropero-magico",
         "title": "El Ropero Mágico",
         "desc": "E-commerce de moda circular con drops cada 15 días, probador virtual 3D + AR, carrito, pagos Wompi y comunidad de +2.300 personas por WhatsApp.",
+        "result": "Conversiones y recompra desde un catálogo rotativo, con experiencia de prueba en 3D/AR.",
         "url": "https://elropero-magico-platform.xlerionultimate.workers.dev/",
         "tags": [
           "E-commerce",
@@ -653,6 +702,28 @@ export const defaultContent: SiteContent = {
         ],
         "year": "2026",
         "image": "https://elropero-magico-platform.xlerionultimate.workers.dev/images/hero.jpg"
+      }
+    ]
+  },
+  "whyMe": {
+    "eyebrow": "Por qué trabajar conmigo",
+    "title": "El bonus invisible de un perfil Senior",
+    "text": "Lo que un maquetador promedio no incluye: estándares de ingeniería que protegen tu inversión a largo plazo.",
+    "cards": [
+      {
+        "title": "Rendimiento y SEO técnico",
+        "desc": "No solo escribo código: optimizo la carga, el caché y las Core Web Vitals para que Google y tus usuarios amen tu sitio.",
+        "color": "#22d3ee"
+      },
+      {
+        "title": "Arquitectura escalable",
+        "desc": "Construyo pensando en el futuro: código modular y limpio que tu equipo podrá mantener y escalar sin deuda técnica.",
+        "color": "#a78bfa"
+      },
+      {
+        "title": "Entrega y confiabilidad",
+        "desc": "Certificado PMP y experiencia en organismos internacionales (USAID): cumplo plazos, comunico avances y trabajo de forma 100% autónoma.",
+        "color": "#a3e635"
       }
     ]
   },
@@ -731,7 +802,7 @@ export const defaultContent: SiteContent = {
   "contact": {
     "eyebrow": "Contacto",
     "title": "¿Construimos algo que importe?",
-    "text": "Arquitectura, 3D en tiempo real o IA en producción: respondo en menos de 24 horas con propuesta y tiempos.",
+    "text": "¿Tienes un proyecto web en mente? Hablemos 15 minutos sobre cómo puedo ayudarte a ejecutarlo con calidad y en los plazos que necesitas. Respondo en menos de 24 horas con propuesta y tiempos.",
     "socials": [
       {
         "label": "GitHub",
@@ -762,7 +833,7 @@ export const defaultContent: SiteContent = {
     ]
   },
   "footer": {
-    "note": "Hecho con React, WebSockets y café.",
+    "note": "Desde arquitecturas 3D en tiempo real hasta landing pages de alta conversión. Me adapto a la herramienta que tu negocio necesite.",
     "watermark": "MIKE"
   },
   "appearance": {

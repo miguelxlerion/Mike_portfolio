@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { ArrowUpRight, Globe, TrendingUp } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import { Reveal, SectionHeader } from "./ui";
+import { TechIcon } from "./TechIcon";
 import { cn } from "../utils/cn";
 
 const hostOf = (url: string) => {
@@ -122,10 +123,22 @@ export default function WebWorks() {
                     </p>
                     <h3 className="mt-2 font-display text-xl font-bold text-white transition-colors group-hover:text-acid">{w.title}</h3>
                     <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-400">{w.desc}</p>
+                    {w.result && (
+                      <p className="mt-2 flex items-start gap-2 text-sm leading-relaxed text-zinc-200">
+                        <TrendingUp className="mt-0.5 h-4 w-4 shrink-0 text-acid" />
+                        <span className="font-medium">{w.result}</span>
+                      </p>
+                    )}
                     <div className="mt-3 flex flex-wrap gap-1.5">
-                      {w.tags.map((t) => (
-                        <span key={t} className="border border-white/12 bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] text-zinc-300">#{t}</span>
-                      ))}
+                      {w.tags.map((t) => {
+                        const icon = <TechIcon name={t} className="h-3.5 w-3.5" />;
+                        return (
+                          <span key={t} className="inline-flex items-center gap-1.5 border border-white/12 bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] text-zinc-300">
+                            {icon}
+                            {t}
+                          </span>
+                        );
+                      })}
                     </div>
                     <a
                       href={w.url}

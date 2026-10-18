@@ -89,7 +89,7 @@ export default function Contact() {
     <section id="contacto" className="relative px-5 py-24 sm:px-8">
       <div className="glow-acid absolute bottom-0 left-1/2 h-[380px] w-[680px] -translate-x-1/2" aria-hidden />
       <div className="relative mx-auto max-w-7xl">
-        <SectionHeader index="06" eyebrow={contact.eyebrow} title={<>{contact.title}</>} text={contact.text} />
+        <SectionHeader index="07" eyebrow={contact.eyebrow} title={<>{contact.title}</>} text={contact.text} />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-12 [&>*]:min-w-0">
           <Reveal className="space-y-4 lg:col-span-5">

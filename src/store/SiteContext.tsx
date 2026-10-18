@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from "react";
 import { defaultContent, type SiteContent } from "../data/content";
 
-const STORAGE_KEY = "mike-portfolio-v2";
+const STORAGE_KEY = "mike-portfolio-v3";
 
 function loadInitial(): SiteContent {
   // En producción el contenido es 100% el del build: se ignora
