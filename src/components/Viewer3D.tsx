@@ -190,12 +190,6 @@ export default function Viewer3D() {
                 </button>
               ))}
             </div>
-            <div className="mt-3 border border-dashed border-white/15 p-4 text-xs leading-relaxed text-zinc-500">
-              <strong className="text-zinc-300">¿Cómo publico mis modelos?</strong><br />
-              1) Optimiza tu pieza a <code className="text-acid">.glb</code> (&lt;5 MB, texturas WebP).<br />
-              2) Súbela a <code className="text-acid">public/models/</code> o a R2.<br />
-              3) En el panel → Modelos 3D → cambia el preset a <code className="text-acid">URL .glb</code> y pega la ruta.
-            </div>
           </Reveal>
         </div>
       </div>

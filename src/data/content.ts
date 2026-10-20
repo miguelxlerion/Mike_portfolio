@@ -736,7 +736,6 @@ export const defaultContent: SiteContent = {
         "title": "Núcleo Reactor",
         "desc": "Demo procedural: núcleo icosaédrico con anillos orbitales y emisivos. Marcador de posición para tus hard-surface.",
         "preset": "reactor",
-        "poster": "https://picsum.photos/seed/demo-reactor/1200/800",
         "tags": [
           "Procedural",
           "Three.js",
@@ -758,7 +757,6 @@ export const defaultContent: SiteContent = {
         "title": "Cristal de Datos",
         "desc": "Demo procedural: cluster de octaedros translúcidos. Ideal para presentar lookdev y materiales.",
         "preset": "cristal",
-        "poster": "https://picsum.photos/seed/demo-cristal/1200/800",
         "tags": [
           "Procedural",
           "Lookdev",
@@ -780,7 +778,6 @@ export const defaultContent: SiteContent = {
         "title": "Toroide Industrial",
         "desc": "Demo procedural: toroide con detalle anillado y giro continuo. Reemplázame con tu primer .glb desde el panel.",
         "preset": "toroide",
-        "poster": "https://picsum.photos/seed/demo-toroide/1200/800",
         "tags": [
           "Procedural",
           "Turntable",
