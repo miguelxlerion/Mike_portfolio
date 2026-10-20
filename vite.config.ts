@@ -99,4 +99,26 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  build: {
+    // Chunking optimizado para caché granular en Cloudflare
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks separados para mejor caché
+          "vendor-react": ["react", "react-dom"],
+          "vendor-motion": ["framer-motion"],
+          "vendor-lucide": ["lucide-react"],
+          "vendor-utils": ["clsx", "tailwind-merge"],
+          // Three.js ya se carga lazy en ModelCanvas
+        },
+      },
+    },
+    // Límite de advertencia más alto para chunks de Three.js (se cargan lazy)
+    chunkSizeWarningLimit: 1000,
+    // CSS code splitting habilitado por defecto en Vite 7+
+    cssCodeSplit: true,
+    // Minificación optimizada
+    minify: "esbuild",
+    target: "es2022",
+  },
 }));

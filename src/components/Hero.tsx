@@ -86,6 +86,20 @@ export default function Hero() {
   const [cvModalOpen, setCvModalOpen] = useState(false);
   const [copiedLang, setCopiedLang] = useState<string | null>(null);
 
+  // Preload del retrato (LCP candidate) — se inyecta al montar
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = profile.portrait;
+    link.setAttribute("fetchpriority", "high");
+    document.head.appendChild(link);
+    return () => {
+      const existing = document.querySelector(`link[href="${profile.portrait}"][rel="preload"]`);
+      existing?.remove();
+    };
+  }, [profile.portrait]);
+
   const cvOptions = [
     { lang: "Español", href: "/cv/Miguel_Rodriguez_FullStack_Senior_Esp.pdf", size: "107 KB" },
     { lang: "English", href: "/cv/Miguel_Rodriguez_FullStack_Senior_CV_Eng.pdf", size: "114 KB" },
@@ -265,7 +279,7 @@ export default function Hero() {
         >
           <div className="absolute -inset-3 border border-acid/30 translate-x-5 translate-y-5" aria-hidden />
           <div className="relative overflow-hidden border border-white/15 bg-panel">
-            <img src={profile.portrait} alt={`Retrato de ${profile.shortName}`} className="aspect-[4/5] w-full object-cover" loading="eager" />
+            <img src={profile.portrait} alt={`Retrato de ${profile.shortName}`} className="aspect-[4/5] w-full object-cover" loading="eager" fetchpriority="high" />
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5">
               <div className="bg-ink/80 px-3.5 py-2.5 backdrop-blur-md">
                 <p className="font-display text-sm font-bold text-white">{profile.shortName}</p>

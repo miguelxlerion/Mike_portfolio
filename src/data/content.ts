@@ -52,7 +52,7 @@ export interface Project {
 
 export interface Skill {
   name: string;
-  level: number;
+  level: "Experto" | "Avanzado" | "Intermedio";
   color: string;
 }
 
@@ -342,32 +342,32 @@ export const defaultContent: SiteContent = {
   "skills": [
     {
       "name": "Frontend · React / TypeScript / Tailwind",
-      "level": 95,
+      "level": "Experto",
       "color": "#22d3ee"
     },
     {
       "name": "Backend · Python / Django / Node.js",
-      "level": 92,
+      "level": "Experto",
       "color": "#22d3ee"
     },
     {
       "name": "3D en Tiempo Real · Three.js / Unity / WebSockets",
-      "level": 90,
+      "level": "Experto",
       "color": "#a78bfa"
     },
     {
       "name": "IA & RAG · LangChain / pgvector / LLMs",
-      "level": 85,
+      "level": "Avanzado",
       "color": "#fb7185"
     },
     {
       "name": "3D Art · 3ds Max / Substance / ZBrush / Blender",
-      "level": 86,
+      "level": "Avanzado",
       "color": "#fbbf24"
     },
     {
       "name": "DevOps · Docker / Linux / Nginx / CI-CD",
-      "level": 84,
+      "level": "Avanzado",
       "color": "#a3e635"
     }
   ],

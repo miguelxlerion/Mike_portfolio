@@ -706,12 +706,16 @@ export default function AdminPanel() {
               {content.skills.map((s, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input value={s.name} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)) })} className={inputCls} />
-                  <input type="number" min={0} max={100} value={s.level} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, level: Math.max(0, Math.min(100, Number(e.target.value))) } : x)) })} className={cn(inputCls, "w-20")} />
+                  <select value={s.level} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, level: e.target.value as "Experto" | "Avanzado" | "Intermedio" } : x)) })} className={cn(inputCls, "w-32")}>
+                    <option value="Experto">Experto</option>
+                    <option value="Avanzado">Avanzado</option>
+                    <option value="Intermedio">Intermedio</option>
+                  </select>
                   <input type="color" value={s.color} onChange={(e) => update({ skills: content.skills.map((x, j) => (j === i ? { ...x, color: e.target.value } : x)) })} className="h-10 w-10 shrink-0 cursor-pointer border border-white/15 bg-transparent" />
                   <button onClick={() => { update({ skills: content.skills.filter((_, j) => j !== i) }); flashSaved(); }} className="grid h-10 w-10 shrink-0 place-items-center border border-white/15 text-zinc-400 hover:border-red-400 hover:text-red-300" aria-label="Eliminar habilidad"><Trash2 className="h-4 w-4" /></button>
                 </div>
               ))}
-              <button onClick={() => { update({ skills: [...content.skills, { name: "Nueva habilidad", level: 70, color: "#a3e635" }] }); flashSaved(); }} className={btnGhost}><Plus className="h-4 w-4" /> Añadir habilidad</button>
+              <button onClick={() => { update({ skills: [...content.skills, { name: "Nueva habilidad", level: "Avanzado", color: "#a3e635" }] }); flashSaved(); }} className={btnGhost}><Plus className="h-4 w-4" /> Añadir habilidad</button>
               <div className="mt-5 border border-white/10 bg-black/30 p-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-acid">Bonus · Por qué trabajar conmigo</p>
                 <p className="mt-1 text-xs text-zinc-600">Aparece justo antes del contacto, como valor agregado del perfil Senior.</p>

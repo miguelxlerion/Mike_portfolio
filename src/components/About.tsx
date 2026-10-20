@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { BadgeCheck, Quote } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import { AnimatedCounter, Reveal, SectionHeader } from "./ui";
@@ -37,23 +36,18 @@ export default function About() {
 
             <div className="mt-10">
               <h3 className="font-mono text-[11px] uppercase tracking-[0.3em] text-zinc-500">Habilidades</h3>
-              <div className="mt-5 space-y-4">
+              <div className="mt-5 space-y-3">
                 {skills.map((s) => (
-                  <div key={s.name}>
-                    <div className="mb-1.5 flex items-center justify-between text-sm">
-                      <span className="font-medium text-zinc-200">{s.name}</span>
-                      <span className="font-mono text-xs text-zinc-500">{s.level}%</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-white/8">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${s.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full rounded-full"
-                        style={{ background: s.color }}
-                      />
-                    </div>
+                  <div key={s.name} className="flex items-center justify-between gap-4 px-3 py-2.5 border border-white/8 bg-white/[0.03] rounded-lg transition-colors hover:border-white/15">
+                    <span className="font-medium text-zinc-200 text-sm">{s.name}</span>
+                    <span className="flex-shrink-0 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] rounded-full border"
+                          style={{
+                            background: `${s.color}20`,
+                            borderColor: `${s.color}60`,
+                            color: s.color
+                          }}>
+                      {s.level}
+                    </span>
                   </div>
                 ))}
               </div>
