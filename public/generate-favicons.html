@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Favicon Generator</title>
+  <style>
+    body { margin: 0; background: #0a0a0b; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="512" height="512"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#0a0a0b"/>
+  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#a3e635" stroke-width="3"/>
+  <text x="32" y="42" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#a3e635" text-anchor="middle">MR</text>
+</svg>`;
+    const img = new Image();
+    img.onload = () => {
+      // Draw at max size (512)
+      ctx.drawImage(img, 0, 0, 512, 512);
+      
+      // Generate all sizes
+      const sizes = [16, 32, 48, 180, 192, 512];
+      sizes.forEach(size => {
+        const c = document.createElement('canvas');
+        c.width = size;
+        c.height = size;
+        const ctx2 = c.getContext('2d');
+        ctx2.drawImage(canvas, 0, 0, size, size);
+        const link = document.createElement('a');
+        link.download = `favicon-${size}x${size}.png`;
+        link.href = c.toDataURL('image/png');
+        link.click();
+      });
+      
+      // Also generate ICO (16, 32, 48 combined)
+      // For ICO we need special handling - skip for now, just PNGs
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg);
+  </script>
+</body>
+</html>
