@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Boxes, Code2, Download, Mail, MapPin, PenTool } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowDown, ArrowUpRight, Boxes, Code2, Download, Mail, MapPin, PenTool, X, FileText, Globe, Copy, Check } from "lucide-react";
 import { useSite } from "../store/SiteContext";
 import { useLang } from "../i18n/LangContext";
 import { translateString } from "../i18n/auto";
@@ -44,16 +44,6 @@ function useTypewriter(roles: { text: string; color: string }[]) {
   return { text, color: roles.length ? roles[roleIdx % roles.length].color : "#a3e635" };
 }
 
-function downloadCV(filename: string, text: string) {
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 /** Logo de LinkedIn en SVG (lucide-react ya no incluye iconos de marca). */
 function LinkedInIcon({ className }: { className?: string }) {
   return (
@@ -93,6 +83,24 @@ export default function Hero() {
   }, [lang, hero.roles]);
   const { text, color } = useTypewriter(roles);
   const linkedin = content.contact.socials.find((s) => /linkedin/i.test(s.label));
+  const [cvModalOpen, setCvModalOpen] = useState(false);
+  const [copiedLang, setCopiedLang] = useState<string | null>(null);
+
+  const cvOptions = [
+    { lang: "Español", href: "/cv/Miguel_Rodriguez_FullStack_Senior_Esp.pdf", size: "107 KB" },
+    { lang: "English", href: "/cv/Miguel_Rodriguez_FullStack_Senior_CV_Eng.pdf", size: "114 KB" },
+  ] as const;
+
+  function closeCvModal() {
+    setCvModalOpen(false);
+  }
+
+  function copyCvLink(cvHref: string, lang: string) {
+    const fullUrl = `${window.location.origin}${cvHref}`;
+    navigator.clipboard.writeText(fullUrl);
+    setCopiedLang(lang);
+    setTimeout(() => setCopiedLang(null), 2000);
+  }
 
   return (
     <section id="inicio" className="relative overflow-hidden pt-16 md:pt-[72px]">
@@ -135,7 +143,7 @@ export default function Hero() {
               <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <button
-              onClick={() => downloadCV(`CV-${profile.shortName}.txt`, profile.cvText)}
+              onClick={() => setCvModalOpen(true)}
               className="inline-flex items-center gap-2 border border-white/20 px-6 py-3.5 font-display text-base font-bold text-white transition-colors hover:border-acid hover:text-acid"
             >
               <Download className="h-5 w-5" />
@@ -157,6 +165,83 @@ export default function Hero() {
               </a>
             )}
           </motion.div>
+
+          {/* Modal CV */}
+          <AnimatePresence>
+            {cvModalOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 backdrop-blur-sm"
+                onClick={closeCvModal}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Seleccionar CV"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative w-full max-w-md mx-4 bg-panel border border-white/12 rounded-xl p-6 shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={closeCvModal}
+                    className="absolute top-3 right-3 p-1 text-zinc-400 hover:text-white transition-colors"
+                    aria-label="Cerrar"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                  <h3 className="font-display text-lg font-bold text-white mb-4">Descargar CV</h3>
+                  <p className="text-zinc-400 text-sm mb-5">Elige la versión que prefieras:</p>
+                  <div className="flex flex-col gap-3">
+                    {cvOptions.map((cv) => (
+                      <div key={cv.lang} className="flex flex-col gap-2">
+                        <a
+                          href={cv.href}
+                          download
+                          onClick={closeCvModal}
+                          className="group inline-flex items-center justify-between gap-4 border border-white/12 bg-white/[0.04] px-4 py-3.5 rounded-lg transition-all hover:border-acid hover:bg-white/[0.08]"
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className="h-6 w-6 text-acid" />
+                            <div>
+                              <p className="font-display font-bold text-white">{cv.lang}</p>
+                              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">PDF · {cv.size}</p>
+                            </div>
+                          </div>
+                          <Globe className="h-5 w-5 text-zinc-500 group-hover:text-acid transition-colors" />
+                        </a>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            copyCvLink(cv.href, cv.lang);
+                          }}
+                          className="self-start inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400 hover:text-acid transition-colors"
+                          aria-label={`Copiar enlace del CV en ${cv.lang}`}
+                        >
+                          {copiedLang === cv.lang ? (
+                            <>
+                              <Check className="h-3.5 w-3.5 text-acid" />
+                              <span>¡Copiado!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3.5 w-3.5" />
+                              <span>Copiar enlace</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {content.appearance.showStats && (
             <motion.dl {...fadeUp} transition={{ duration: 0.7, delay: 0.5 }} className="mt-12 grid max-w-lg grid-cols-2 gap-4 border-t border-white/10 pt-7 sm:grid-cols-4">
