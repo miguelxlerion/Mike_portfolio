@@ -101,8 +101,8 @@ export default function Hero() {
   }, [profile.portrait]);
 
   const cvOptions = [
-    { lang: "Español", href: "/cv/Miguel_Rodriguez_FullStack_Senior_Esp.pdf", size: "107 KB" },
-    { lang: "English", href: "/cv/Miguel_Rodriguez_FullStack_Senior_CV_Eng.pdf", size: "114 KB" },
+    { lang: "Español", href: "/cv/Miguel_Rodriguez_FullStack_Senior_Esp.pdf", size: "189 KB" },
+    { lang: "English", href: "/cv/Miguel_Rodriguez_FullStack_Senior_CV_Eng.pdf", size: "185 KB" },
   ] as const;
 
   function closeCvModal() {
