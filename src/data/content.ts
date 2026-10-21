@@ -702,6 +702,21 @@ export const defaultContent: SiteContent = {
         ],
         "year": "2026",
         "image": "https://elropero-magico-platform.xlerionultimate.workers.dev/images/hero.jpg"
+      },
+      {
+        "id": "alma-semilla",
+        "title": "Alma Semilla",
+        "desc": "Plataforma de agricultura regenerativa y trazabilidad de semillas: marketplace B2B, certificación blockchain, georreferenciación de cultivos y dashboard de impacto ambiental.",
+        "result": "Conecta productores con compradores garantizando trazabilidad y prácticas regenerativas verificables.",
+        "url": "https://alma-semilla.xlerionultimate.workers.dev/",
+        "tags": [
+          "AgriTech",
+          "Blockchain",
+          "Trazabilidad",
+          "Workers"
+        ],
+        "year": "2026",
+        "image": "https://alma-semilla.xlerionultimate.workers.dev/og-image.jpg"
       }
     ]
   },
