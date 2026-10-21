@@ -716,7 +716,7 @@ export const defaultContent: SiteContent = {
           "Workers"
         ],
         "year": "2026",
-        "image": "https://alma-semilla.xlerionultimate.workers.dev/og-image.jpg"
+        "image": "https://alma-semilla.xlerionultimate.workers.dev/assets/img/og-cover.jpg"
       }
     ]
   },
