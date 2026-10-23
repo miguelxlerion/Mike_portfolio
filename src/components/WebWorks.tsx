@@ -5,7 +5,10 @@ import { Reveal, SectionHeader } from "./ui";
 import { TechIcon } from "./TechIcon";
 import { cn } from "../utils/cn";
 
+const isLocalUrl = (url: string) => url.startsWith("/");
+
 const hostOf = (url: string) => {
+  if (isLocalUrl(url)) return "local";
   try {
     return new URL(url).hostname;
   } catch {
@@ -26,6 +29,11 @@ export default function WebWorks() {
     const timers: ReturnType<typeof setTimeout>[] = [];
     const ctrls: AbortController[] = [];
     for (const w of webworks.items) {
+      // Skip live check for local URLs (e.g., /3d-cv/)
+      if (isLocalUrl(w.url)) {
+        if (!cancelled) setLive((p) => ({ ...p, [w.id]: "local" }));
+        continue;
+      }
       const ctrl = new AbortController();
       ctrls.push(ctrl);
       let done = false;
@@ -80,12 +88,13 @@ export default function WebWorks() {
                       <span className="truncate font-mono text-[11px] text-zinc-400">{hostOf(w.url)}</span>
                     </span>
                     <span
-                      title={status === true ? "El sitio responde ahora mismo" : status === false ? "Sin respuesta ahora mismo" : "Comprobando…"}
+                      title={status === true ? "El sitio responde ahora mismo" : status === false ? "Sin respuesta ahora mismo" : status === "local" ? "Proyecto local" : "Comprobando…"}
                       className={cn(
                         "h-2 w-2 shrink-0 rounded-full",
                         status === true && "bg-acid animate-pulse-dot",
                         status === false && "bg-zinc-600",
-                        status == null && "animate-pulse bg-zinc-500",
+                        status === "local" && "bg-cyan-400",
+                        (status == null || status === "local") && "!animate-none",
                       )}
                     />
                   </div>
@@ -116,9 +125,9 @@ export default function WebWorks() {
                   <div className="flex flex-1 flex-col p-5">
                     <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
                       {w.year}
-                      <span className={cn("inline-flex items-center gap-1", status === true ? "text-acid" : status === false ? "text-zinc-600" : "text-zinc-500")}>
-                        <span className={cn("h-1.5 w-1.5 rounded-full", status === true ? "bg-acid" : "bg-current")} />
-                        {status === true ? "En vivo" : status === false ? "Sin respuesta" : "Verificando…"}
+                      <span className={cn("inline-flex items-center gap-1", status === true ? "text-acid" : status === false ? "text-zinc-600" : status === "local" ? "text-cyan-400" : "text-zinc-500")}>
+                        <span className={cn("h-1.5 w-1.5 rounded-full", status === true ? "bg-acid" : status === "local" ? "bg-cyan-400" : "bg-current")} />
+                        {status === true ? "En vivo" : status === false ? "Sin respuesta" : status === "local" ? "Local" : "Verificando…"}
                       </span>
                     </p>
                     <h3 className="mt-2 font-display text-xl font-bold text-white transition-colors group-hover:text-acid">{w.title}</h3>
