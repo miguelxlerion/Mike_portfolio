@@ -9,6 +9,39 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ─────────────────────────────────────────────
+//  Copy 3D CV static files to dist root during build
+//  Ensures /3d-cv.html and /3d-cv-assets/* are served correctly
+// ─────────────────────────────────────────────
+function copy3dCVPlugin(): Plugin {
+  return {
+    name: "mike-copy-3dcv",
+    closeBundle() {
+      const srcDir = path.join(__dirname, "public", "3d-cv");
+      const distDir = path.join(__dirname, "dist");
+
+      // Copy 3d-cv.html to dist root
+      const htmlSrc = path.join(srcDir, "3d-cv.html");
+      const htmlDest = path.join(distDir, "3d-cv.html");
+      if (fs.existsSync(htmlSrc)) {
+        fs.copyFileSync(htmlSrc, htmlDest);
+        console.log("✅ Copied 3d-cv.html to dist/");
+      }
+
+      // Copy assets to dist/3d-cv-assets/
+      const assetsSrc = path.join(srcDir, "assets");
+      const assetsDest = path.join(distDir, "3d-cv-assets");
+      if (fs.existsSync(assetsSrc)) {
+        if (!fs.existsSync(assetsDest)) fs.mkdirSync(assetsDest, { recursive: true });
+        for (const file of fs.readdirSync(assetsSrc)) {
+          fs.copyFileSync(path.join(assetsSrc, file), path.join(assetsDest, file));
+        }
+        console.log("✅ Copied 3d-cv-assets to dist/");
+      }
+    },
+  };
+}
+
+// ─────────────────────────────────────────────
 //  Snapshot del código fuente SOLO para `vite dev`.
 //  El panel local (que también es solo-dev) lo pide al publicar
 //  para commitear el proyecto completo sin pasar por la terminal.
@@ -90,7 +123,7 @@ function sourcesPlugin(): Plugin {
 // - `npm run build` (mode=production, lo que sube a Pages) → false y el
 //   bundler elimina las ramas muertas: el chunk del admin ni se emite.
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), tailwindcss(), sourcesPlugin()],
+  plugins: [react(), tailwindcss(), sourcesPlugin(), copy3dCVPlugin()],
   define: {
     __ADMIN_ENABLED__: mode !== "production",
   },
