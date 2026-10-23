@@ -723,7 +723,7 @@ export const defaultContent: SiteContent = {
         "title": "3D Interactive CV",
         "desc": "Portafolio inmersivo en WebGL/Three.js con 4 zonas navegables: Architecture (liderazgo y sistemas), Testing (calidad y accesibilidad), AI Workflow (herramientas y automatización), Creative 3D (entornos interactivos y rendimiento). Experiencia cinematográfica con camera controller, post-processing (bloom, vignette, chromatic aberration), HUD dinámico y modo guiado.",
         "result": "Demuestra expertise en 3D tiempo real, R3F, shaders, optimización 60 FPS y narrativa interactiva.",
-        "url": "/3d-cv/",
+        "url": "/3d-cv.html",
         "tags": [
           "Three.js",
           "React Three Fiber",
