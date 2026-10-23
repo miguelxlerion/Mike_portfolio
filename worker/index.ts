@@ -65,6 +65,11 @@ export default {
       return new Response("Method Not Allowed", { status: 405 });
     }
 
+    // Serve 3D CV assets directly (bypass SPA fallback)
+    if (url.pathname.startsWith("/3d-cv/")) {
+      return env.ASSETS.fetch(request);
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
