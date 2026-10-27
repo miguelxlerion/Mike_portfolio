@@ -19,8 +19,8 @@ const copy = {
     copyEmail: "Copiar email",
     copyPhone: "Copiar teléfono",
     copyLabel: "Copiar",
-    cvLabel: "CV / EN",
-    cvAria: "Descargar CV en inglés (PDF)",
+    cvEsAria: "Descargar CV en español (PDF)",
+    cvEnAria: "Descargar CV en inglés (PDF)",
     formEyebrow: "Nuevo proyecto",
     formTitle: "Briefing en 60 segundos.",
     nameLabel: "Nombre",
@@ -52,8 +52,8 @@ const copy = {
     copyEmail: "Copy email",
     copyPhone: "Copy phone",
     copyLabel: "Copy",
-    cvLabel: "CV / ES",
-    cvAria: "Download CV in Spanish (PDF)",
+    cvEsAria: "Download CV in Spanish (PDF)",
+    cvEnAria: "Download CV in English (PDF)",
     formEyebrow: "New project",
     formTitle: "60-second brief.",
     nameLabel: "Name",
@@ -78,7 +78,16 @@ const copy = {
   },
 }[lang];
 
-const cvHref = lang === "es" ? profile.cvEn : profile.cvEs;
+const cvLinks =
+  lang === "es"
+    ? [
+        { href: profile.cvEs, label: "CV / ES", aria: copy.cvEsAria },
+        { href: profile.cvEn, label: "CV / EN", aria: copy.cvEnAria },
+      ]
+    : [
+        { href: profile.cvEn, label: "CV / EN", aria: copy.cvEnAria },
+        { href: profile.cvEs, label: "CV / ES", aria: copy.cvEsAria },
+      ];
 ---
 
 <section
@@ -160,15 +169,19 @@ const cvHref = lang === "es" ? profile.cvEn : profile.cvEs;
           <Icon name="linkedin" class="h-3.5 w-3.5" />
           LinkedIn
         </a>
-        <a
-          href={cvHref}
-          download
-          class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
-          aria-label={copy.cvAria}
-        >
-          <Icon name="download" class="h-3.5 w-3.5" />
-          {copy.cvLabel}
-        </a>
+        {
+          cvLinks.map((cv) => (
+            <a
+              href={cv.href}
+              download
+              class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
+              aria-label={cv.aria}
+            >
+              <Icon name="download" class="h-3.5 w-3.5" />
+              {cv.label}
+            </a>
+          ))
+        }
       </div>
 
       <div

@@ -145,6 +145,15 @@ report.check("EN: AI filter cards", gallery.filtered.visible === 1, gallery.filt
 report.check("EN: all filter count", gallery.all.status === "04 projects", gallery.all);
 report.check("EN: all filter cards", gallery.all.visible === 4, gallery.all.visible);
 
+const readCvLinks = () =>
+  client.evaluate(() =>
+    [...document.querySelectorAll('#contacto a[download]')].map((link) => ({
+      label: link.textContent.trim(),
+      href: link.getAttribute("href"),
+      aria: link.getAttribute("aria-label"),
+    })),
+  );
+
 const contact = await client.evaluate(async () => {
   document.querySelector("[data-submit]")?.click();
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -160,6 +169,20 @@ report.check(
   "EN: form status",
   contact.status === "Review the highlighted fields before continuing.",
   contact.status,
+);
+
+const enCv = await readCvLinks();
+report.check(
+  "EN: English CV first in contact",
+  enCv[0]?.label === "CV / EN" &&
+    enCv[0]?.href?.endsWith("_Eng.pdf") &&
+    enCv[0]?.aria === "Download CV in English (PDF)",
+  enCv,
+);
+report.check(
+  "EN: Spanish CV also available",
+  enCv[1]?.label === "CV / ES" && enCv[1]?.href?.endsWith("_Esp.pdf"),
+  enCv,
 );
 
 const viewer = await client.evaluate(async () => {
@@ -229,6 +252,20 @@ const backToEs = await readState();
 report.check("ES: switch keeps hash", backToEs.path === "/" && backToEs.hash === "#proyectos", `${backToEs.path}${backToEs.hash}`);
 report.check("ES: switch restores navigation", same(backToEs.nav, ES_NAV), backToEs.nav);
 report.check("ES: switch restores menu label", backToEs.menuLabel === "Abrir menú", backToEs.menuLabel);
+
+const esCv = await readCvLinks();
+report.check(
+  "ES: Spanish CV first in contact",
+  esCv[0]?.label === "CV / ES" &&
+    esCv[0]?.href?.endsWith("_Esp.pdf") &&
+    esCv[0]?.aria === "Descargar CV en español (PDF)",
+  esCv,
+);
+report.check(
+  "ES: English CV also available",
+  esCv[1]?.label === "CV / EN" && esCv[1]?.href?.endsWith("_Eng.pdf"),
+  esCv,
+);
 
 await client.navigate(`${BASE}/en/`);
 await client.screenshot("qa-desktop-en-hero.png");
