@@ -8,6 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "qa": "node scripts/qa/desktop.mjs && node scripts/qa/mobile.mjs",
+    "qa:desktop": "node scripts/qa/desktop.mjs",
+    "qa:mobile": "node scripts/qa/mobile.mjs",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
