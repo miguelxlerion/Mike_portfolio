@@ -8,7 +8,11 @@ function setState(site: HTMLElement, state: SiteState) {
   if (dot) dot.dataset.state = state;
   if (label) {
     label.textContent =
-      state === "live" ? "En vivo" : state === "down" ? "Sin respuesta" : "Comprobando";
+      state === "live"
+        ? (site.dataset.labelLive ?? "En vivo")
+        : state === "down"
+          ? (site.dataset.downLabel ?? "Sin respuesta")
+          : (site.dataset.checkingLabel ?? "Comprobando");
   }
 }
 

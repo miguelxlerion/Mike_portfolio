@@ -1,21 +1,46 @@
 ---
-import { skillGroups, credentials } from "../../data/site";
+import { getSite, type Lang } from "../../data/site";
 import Icon from "../ui/Icon.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { skillGroups, credentials } = getSite(lang);
+
+const copy = {
+  es: {
+    eyebrow: "05 — Stack",
+    title: "Herramientas elegidas",
+    titleAccent: "por criterio, no por moda.",
+    intro:
+      "Un stack deliberadamente corto: lo que domino en profundidad y lo que mantiene los sistemas rápidos, observables y fáciles de operar.",
+    credentials: "Credenciales",
+  },
+  en: {
+    eyebrow: "05 — Stack",
+    title: "Tools chosen",
+    titleAccent: "by criteria, not hype.",
+    intro:
+      "A deliberately short stack: what I know in depth and what keeps systems fast, observable and easy to operate.",
+    credentials: "Credentials",
+  },
+}[lang];
 ---
 
 <section id="stack" class="relative border-t border-white/10 bg-coal py-20 sm:py-28">
   <div class="container-page">
     <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
-        <p class="eyebrow" data-reveal>05 — Stack</p>
+        <p class="eyebrow" data-reveal>{copy.eyebrow}</p>
         <h2 class="section-title max-w-2xl" data-reveal>
-          Herramientas elegidas<br class="hidden sm:block" />
-          por criterio, no por moda.
+          {copy.title}<br class="hidden sm:block" />
+          {copy.titleAccent}
         </h2>
       </div>
       <p class="max-w-sm text-sm leading-relaxed text-zinc-500" data-reveal>
-        Un stack deliberadamente corto: lo que domino en profundidad y lo que mantiene los
-        sistemas rápidos, observables y fáciles de operar.
+        {copy.intro}
       </p>
     </div>
 
@@ -48,7 +73,7 @@ import Icon from "../ui/Icon.astro";
     </div>
 
     <div class="mt-10" data-reveal>
-      <p class="eyebrow">Credenciales</p>
+      <p class="eyebrow">{copy.credentials}</p>
       <div class="mt-4 grid gap-px border border-white/10 bg-white/10 md:grid-cols-3">
         {
           credentials.map((credential) => (

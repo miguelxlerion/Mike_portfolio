@@ -4,7 +4,9 @@ import { prefersReducedMotion } from "./motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const formatter = new Intl.NumberFormat("es-CO");
+const formatter = new Intl.NumberFormat(
+  document.documentElement.lang === "en" ? "en-US" : "es-CO",
+);
 
 export function initCounters() {
   const counters = document.querySelectorAll<HTMLElement>("[data-counter]");

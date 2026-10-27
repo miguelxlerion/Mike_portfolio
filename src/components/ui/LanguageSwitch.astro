@@ -1,0 +1,65 @@
+---
+import type { Lang } from "../../data/site";
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+
+const { lang, class: className = "" } = Astro.props;
+const label = lang === "es" ? "Idioma" : "Language";
+---
+
+<div
+  class:list={[
+    "inline-flex items-center border border-white/10 bg-white/[0.02] font-mono text-[9px] uppercase tracking-[0.14em]",
+    className,
+  ]}
+  role="group"
+  aria-label={label}
+>
+  {
+    lang === "es" ? (
+      <span class="bg-white/10 px-2 py-1.5 text-white" aria-current="page">
+        ES
+      </span>
+    ) : (
+      <a
+        href="/"
+        data-lang-link
+        data-href="/"
+        class="px-2 py-1.5 text-zinc-500 transition-colors hover:text-white"
+        aria-label="Español"
+      >
+        ES
+      </a>
+    )
+  }
+  <span class="h-3 w-px bg-white/10" aria-hidden="true"></span>
+  {
+    lang === "en" ? (
+      <span class="bg-white/10 px-2 py-1.5 text-white" aria-current="page">
+        EN
+      </span>
+    ) : (
+      <a
+        href="/en/"
+        data-lang-link
+        data-href="/en/"
+        class="px-2 py-1.5 text-zinc-500 transition-colors hover:text-white"
+        aria-label="English"
+      >
+        EN
+      </a>
+    )
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-lang-link]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const base = link.dataset.href ?? "/";
+      link.href = window.location.hash ? `${base}${window.location.hash}` : base;
+    });
+  });
+</script>

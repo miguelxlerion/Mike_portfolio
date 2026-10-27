@@ -1,10 +1,51 @@
 ---
-import { profile, credentials } from "../../data/site";
+import { getSite, type Lang } from "../../data/site";
 import Icon from "../ui/Icon.astro";
 
-const subtitle =
-  "Construyo plataformas de datos en tiempo real, gemelos digitales y visualización 3D interactiva que convierten señales complejas en decisiones de negocio.";
-const words = subtitle.split(" ");
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile, credentials } = getSite(lang);
+
+const copy = {
+  es: {
+    subtitle:
+      "Construyo plataformas de datos en tiempo real, gemelos digitales y visualización 3D interactiva que convierten señales complejas en decisiones de negocio.",
+    projects: "Explorar proyectos",
+    cv: "Descargar CV",
+    cvAria: "Descargar CV en PDF (español)",
+    founder: "Fundador",
+    years: "+10 años",
+    twinAria:
+      "Visualización isométrica de un gemelo digital: edificios y nodos de datos conectados sobre una retícula",
+    municipalities: "Municipios",
+    homes: "Viviendas",
+    latency: "latencia p95",
+    synced: "sincronizado",
+    demo: "Gemelo digital · demo estática",
+  },
+  en: {
+    subtitle:
+      "I build real-time data platforms, digital twins and interactive 3D visualization that turn complex signals into business decisions.",
+    projects: "Explore projects",
+    cv: "Download CV",
+    cvAria: "Download CV as PDF (English)",
+    founder: "Founder",
+    years: "+10 years",
+    twinAria:
+      "Isometric visualization of a digital twin: buildings and data nodes connected on a grid",
+    municipalities: "Municipalities",
+    homes: "Homes",
+    latency: "p95 latency",
+    synced: "synchronized",
+    demo: "Digital twin · static demo",
+  },
+}[lang];
+
+const words = copy.subtitle.split(" ");
+const cvHref = lang === "es" ? profile.cvEs : profile.cvEn;
 ---
 
 <section
@@ -101,23 +142,23 @@ const words = subtitle.split(" ");
 
       <div data-hero-fade class="mt-9 flex flex-wrap items-center gap-3">
         <a href="#proyectos" class="btn btn-primary group">
-          Explorar proyectos
+          {copy.projects}
           <Icon
             name="arrow-right"
             class="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1"
           />
         </a>
         <a
-          href={profile.cvEs}
+          href={cvHref}
           download
           class="btn btn-ghost group"
-          aria-label="Descargar CV en PDF (español)"
+          aria-label={copy.cvAria}
         >
           <Icon
             name="download"
             class="h-3.5 w-3.5 text-zinc-500 transition-colors group-hover:text-white"
           />
-          Descargar CV
+          {copy.cv}
         </a>
       </div>
 
@@ -127,12 +168,12 @@ const words = subtitle.split(" ");
       >
         <li class="flex items-center gap-2">
           <span class="h-1 w-1 bg-acid" aria-hidden="true"></span>
-          Fundador · {profile.studio}
+          {copy.founder} · {profile.studio}
         </li>
         {credentials.map((credential) => (
           <li>{credential.label}</li>
         ))}
-        <li class="text-zinc-300">+10 años</li>
+        <li class="text-zinc-300">{copy.years}</li>
       </ul>
     </div>
 
@@ -166,7 +207,7 @@ const words = subtitle.split(" ");
             viewBox="0 0 420 320"
             class="mt-1 h-auto w-full"
             role="img"
-            aria-label="Visualización isométrica de un gemelo digital: edificios y nodos de datos conectados sobre una retícula"
+            aria-label={copy.twinAria}
           >
             <defs>
               <radialGradient id="twin-glow" cx="50%" cy="62%" r="52%">
@@ -459,13 +500,15 @@ const words = subtitle.split(" ");
         <dl class="grid grid-cols-3 divide-x divide-white/10 border-b border-white/10">
           <div class="px-4 py-3.5">
             <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">
-              Municipios
+              {copy.municipalities}
             </dt>
             <dd class="mt-1 font-mono text-base text-white">12+</dd>
           </div>
           <div class="px-4 py-3.5">
-            <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">Viviendas</dt>
-            <dd class="mt-1 font-mono text-base text-white">1.200+</dd>
+            <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">
+              {copy.homes}
+            </dt>
+            <dd class="mt-1 font-mono text-base text-white">{lang === "es" ? "1.200+" : "1,200+"}</dd>
           </div>
           <div class="px-4 py-3.5">
             <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">Uptime</dt>
@@ -476,10 +519,10 @@ const words = subtitle.split(" ");
         <div
           class="flex items-center justify-between px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600"
         >
-          <span>latencia p95 <span class="text-zinc-300">24 ms</span></span>
+          <span>{copy.latency} <span class="text-zinc-300">24 ms</span></span>
           <span class="flex items-center gap-1.5">
             <Icon name="clock" class="h-3 w-3" />
-            sincronizado
+            {copy.synced}
           </span>
         </div>
 
@@ -500,7 +543,7 @@ const words = subtitle.split(" ");
       <p
         class="mt-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600"
       >
-        <span>Gemelo digital · demo estática</span>
+        <span>{copy.demo}</span>
         <span>CSS/SVG · 0 KB JS</span>
       </p>
     </div>

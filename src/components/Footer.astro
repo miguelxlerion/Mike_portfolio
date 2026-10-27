@@ -1,7 +1,40 @@
 ---
-import { profile, navLinks } from "../data/site";
+import { getSite, type Lang } from "../data/site";
 import Icon from "./ui/Icon.astro";
 
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile, navLinks } = getSite(lang);
+
+const copy = {
+  es: {
+    tagline:
+      "Senior Full-Stack Engineer. Plataformas de datos en tiempo real, gemelos digitales y visualización 3D para decisiones que no pueden esperar.",
+    githubAria: "GitHub de Miguel Rodriguez",
+    linkedinAria: "LinkedIn de Miguel Rodriguez",
+    emailAria: "Enviar email",
+    navigation: "Navegación",
+    direct: "Directo",
+    cv: "Descargar CV",
+    top: "Volver arriba",
+  },
+  en: {
+    tagline:
+      "Senior Full-Stack Engineer. Real-time data platforms, digital twins and 3D visualization for decisions that can't wait.",
+    githubAria: "Miguel Rodriguez on GitHub",
+    linkedinAria: "Miguel Rodriguez on LinkedIn",
+    emailAria: "Send email",
+    navigation: "Navigation",
+    direct: "Direct",
+    cv: "Download CV",
+    top: "Back to top",
+  },
+}[lang];
+
+const cvHref = lang === "es" ? profile.cvEs : profile.cvEn;
 const year = new Date().getFullYear();
 ---
 
@@ -19,8 +52,7 @@ const year = new Date().getFullYear();
         </a>
 
         <p class="mt-5 max-w-sm text-sm leading-relaxed text-zinc-500">
-          Senior Full-Stack Engineer. Plataformas de datos en tiempo real, gemelos digitales y
-          visualización 3D para decisiones que no pueden esperar.
+          {copy.tagline}
         </p>
 
         <div class="mt-5 flex items-center gap-2">
@@ -29,7 +61,7 @@ const year = new Date().getFullYear();
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
-            aria-label="GitHub de Miguel Rodriguez"
+            aria-label={copy.githubAria}
           >
             <Icon name="github" class="h-4 w-4" />
           </a>
@@ -38,14 +70,14 @@ const year = new Date().getFullYear();
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
-            aria-label="LinkedIn de Miguel Rodriguez"
+            aria-label={copy.linkedinAria}
           >
             <Icon name="linkedin" class="h-4 w-4" />
           </a>
           <a
             href={`mailto:${profile.email}`}
             class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
-            aria-label="Enviar email"
+            aria-label={copy.emailAria}
           >
             <Icon name="mail" class="h-4 w-4" />
           </a>
@@ -53,7 +85,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <p class="eyebrow">Navegación</p>
+        <p class="eyebrow">{copy.navigation}</p>
         <ul class="mt-4 space-y-2.5">
           {
             navLinks.map((link) => (
@@ -71,7 +103,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <p class="eyebrow">Directo</p>
+        <p class="eyebrow">{copy.direct}</p>
         <ul class="mt-4 space-y-2.5">
           <li>
             <a
@@ -92,12 +124,12 @@ const year = new Date().getFullYear();
           <li class="text-sm text-zinc-500">{profile.location}</li>
           <li class="pt-1">
             <a
-              href={profile.cvEs}
+              href={cvHref}
               download
               class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500 transition-colors hover:text-acid"
             >
               <Icon name="download" class="h-3 w-3" />
-              Descargar CV
+              {copy.cv}
             </a>
           </li>
         </ul>
@@ -113,7 +145,7 @@ const year = new Date().getFullYear();
         href="#inicio"
         class="inline-flex items-center gap-2 transition-colors hover:text-white"
       >
-        Volver arriba
+        {copy.top}
         <Icon name="arrow-down" class="h-3 w-3 rotate-180" />
       </a>
     </div>

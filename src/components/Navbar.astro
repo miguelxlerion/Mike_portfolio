@@ -1,15 +1,40 @@
 ---
-import { profile, navLinks } from "../data/site";
+import { getSite, type Lang } from "../data/site";
 import Icon from "./ui/Icon.astro";
+import LanguageSwitch from "./ui/LanguageSwitch.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile, navLinks } = getSite(lang);
+
+const copy = {
+  es: {
+    logoAria: `${profile.name} — ir al inicio`,
+    mainNav: "Navegación principal",
+    mobileNav: "Navegación móvil",
+    cta: "Hablemos",
+    openMenu: "Abrir menú",
+    closeMenu: "Cerrar menú",
+    language: "Idioma",
+  },
+  en: {
+    logoAria: `${profile.name} — go to home`,
+    mainNav: "Main navigation",
+    mobileNav: "Mobile navigation",
+    cta: "Let's talk",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    language: "Language",
+  },
+}[lang];
 ---
 
 <header data-header class="site-header fixed inset-x-0 top-0 z-50">
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a
-      href="#inicio"
-      class="group inline-flex items-baseline gap-2"
-      aria-label={`${profile.name} — ir al inicio`}
-    >
+    <a href="#inicio" class="group inline-flex items-baseline gap-2" aria-label={copy.logoAria}>
       <span class="font-mono text-sm font-semibold tracking-[0.14em] text-white">
         M<span class="text-acid">.</span>R
       </span>
@@ -20,7 +45,7 @@ import Icon from "./ui/Icon.astro";
       </span>
     </a>
 
-    <nav class="hidden items-center md:flex" aria-label="Navegación principal">
+    <nav class="hidden items-center md:flex" aria-label={copy.mainNav}>
       {
         navLinks.map((link) => (
           <a
@@ -32,7 +57,8 @@ import Icon from "./ui/Icon.astro";
           </a>
         ))
       }
-      <a href="#contacto" class="btn btn-primary ml-4 px-4 py-2.5 text-[10px]">Hablemos</a>
+      <LanguageSwitch lang={lang} class="ml-3" />
+      <a href="#contacto" class="btn btn-primary ml-3 px-4 py-2.5 text-[10px]">{copy.cta}</a>
     </nav>
 
     <button
@@ -44,7 +70,9 @@ import Icon from "./ui/Icon.astro";
     >
       <span data-menu-icon-open><Icon name="menu" class="h-5 w-5" /></span>
       <span data-menu-icon-close class="hidden"><Icon name="close" class="h-5 w-5" /></span>
-      <span class="sr-only">Abrir menú</span>
+      <span class="sr-only" data-menu-label data-open={copy.openMenu} data-close={copy.closeMenu}>
+        {copy.openMenu}
+      </span>
     </button>
   </div>
 
@@ -55,7 +83,7 @@ import Icon from "./ui/Icon.astro";
     hidden
     class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-ink/95 backdrop-blur-xl md:hidden"
   >
-    <nav class="container-page flex flex-col py-4" aria-label="Navegación móvil">
+    <nav class="container-page flex flex-col py-4" aria-label={copy.mobileNav}>
       {
         navLinks.map((link, index) => (
           <a
@@ -84,7 +112,13 @@ import Icon from "./ui/Icon.astro";
       <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600">
         {profile.location}
       </p>
-      <a href="#contacto" class="btn btn-primary mt-5 w-full">Hablemos</a>
+      <a href="#contacto" class="btn btn-primary mt-5 w-full">{copy.cta}</a>
+      <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+        <span class="font-mono text-[9px] uppercase tracking-[0.16em] text-zinc-600">
+          {copy.language}
+        </span>
+        <LanguageSwitch lang={lang} />
+      </div>
     </div>
   </div>
 
@@ -106,6 +140,7 @@ import Icon from "./ui/Icon.astro";
   if (header && button && panel) {
     const openIcon = button.querySelector<HTMLElement>("[data-menu-icon-open]");
     const closeIcon = button.querySelector<HTMLElement>("[data-menu-icon-close]");
+    const menuLabel = button.querySelector<HTMLElement>("[data-menu-label]");
 
     const setOpen = (open: boolean) => {
       button.setAttribute("aria-expanded", String(open));
@@ -113,6 +148,11 @@ import Icon from "./ui/Icon.astro";
       document.body.classList.toggle("menu-open", open);
       openIcon?.classList.toggle("hidden", open);
       closeIcon?.classList.toggle("hidden", !open);
+      if (menuLabel) {
+        menuLabel.textContent = open
+          ? (menuLabel.dataset.close ?? "")
+          : (menuLabel.dataset.open ?? "");
+      }
       window.dispatchEvent(new CustomEvent("portfolio:menu", { detail: { open } }));
     };
 

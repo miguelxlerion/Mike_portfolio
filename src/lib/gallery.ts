@@ -15,6 +15,8 @@ export function initGallery() {
   if (!buttons.length || !cards.length) return;
 
   const reduced = prefersReducedMotion();
+  const singular = gallery.dataset.labelSingular ?? "proyecto";
+  const plural = gallery.dataset.labelPlural ?? "proyectos";
   let active = "todos";
   let animating = false;
 
@@ -33,7 +35,7 @@ export function initGallery() {
 
     if (status) {
       status.textContent = `${String(visible.length).padStart(2, "0")} ${
-        visible.length === 1 ? "proyecto" : "proyectos"
+        visible.length === 1 ? singular : plural
       }`;
     }
 

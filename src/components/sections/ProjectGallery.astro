@@ -1,7 +1,47 @@
 ---
 import { Image } from "astro:assets";
-import { filters, projects } from "../../data/site";
+import { getSite, type Lang } from "../../data/site";
 import Icon from "../ui/Icon.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { filters, projects } = getSite(lang);
+
+const copy = {
+  es: {
+    eyebrow: "02 — Proyectos",
+    title: "Donde el rendimiento",
+    titleAccent: "se vuelve producto.",
+    intro:
+      "Cuatro casos donde la arquitectura, la visualización y la operación se miden con la misma vara: tiempo de decisión, uptime y carga cognitiva.",
+    filterAria: "Filtrar proyectos por categoría",
+    project: "proyecto",
+    projects: "proyectos",
+    technologies: "Tecnologías",
+    privateCase: "Caso privado · detalles en entrevista",
+    nda: "Arquitectura, decisiones y métricas disponibles bajo NDA",
+    caseStudy: "Pedir case study",
+    repository: "Ver repositorio",
+  },
+  en: {
+    eyebrow: "02 — Projects",
+    title: "Where performance",
+    titleAccent: "becomes product.",
+    intro:
+      "Four cases where architecture, visualization and operations are measured with the same yardstick: decision time, uptime and cognitive load.",
+    filterAria: "Filter projects by category",
+    project: "project",
+    projects: "projects",
+    technologies: "Technologies",
+    privateCase: "Private case · details in interview",
+    nda: "Architecture, decisions and metrics available under NDA",
+    caseStudy: "Request case study",
+    repository: "View repository",
+  },
+}[lang];
 
 const counts = filters.map((filter) => ({
   ...filter,
@@ -12,24 +52,29 @@ const counts = filters.map((filter) => ({
 }));
 ---
 
-<section id="proyectos" data-gallery class="relative border-t border-white/10 py-20 sm:py-28">
+<section
+  id="proyectos"
+  data-gallery
+  data-label-singular={copy.project}
+  data-label-plural={copy.projects}
+  class="relative border-t border-white/10 py-20 sm:py-28"
+>
   <div class="container-page">
     <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
-        <p class="eyebrow" data-reveal>02 — Proyectos</p>
+        <p class="eyebrow" data-reveal>{copy.eyebrow}</p>
         <h2 class="section-title" data-reveal>
-          Donde el rendimiento<br class="hidden sm:block" />
-          se vuelve producto.
+          {copy.title}<br class="hidden sm:block" />
+          {copy.titleAccent}
         </h2>
       </div>
       <p class="max-w-sm text-sm leading-relaxed text-zinc-500" data-reveal>
-        Cuatro casos donde la arquitectura, la visualización y la operación se miden con la misma
-        vara: tiempo de decisión, uptime y carga cognitiva.
+        {copy.intro}
       </p>
     </div>
 
     <div class="mt-10 flex flex-wrap items-center justify-between gap-4" data-reveal>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar proyectos por categoría">
+      <div class="flex flex-wrap gap-2" role="group" aria-label={copy.filterAria}>
         {
           counts.map((filter) => (
             <button
@@ -49,7 +94,7 @@ const counts = filters.map((filter) => ({
         data-gallery-status
         aria-live="polite"
       >
-        {String(projects.length).padStart(2, "0")} proyectos
+        {String(projects.length).padStart(2, "0")} {copy.projects}
       </p>
     </div>
 
@@ -108,7 +153,7 @@ const counts = filters.map((filter) => ({
                 </h3>
                 <p class="mt-3 text-sm leading-relaxed text-zinc-400">{project.description}</p>
 
-                <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías">
+                <ul class="mt-5 flex flex-wrap gap-1.5" aria-label={copy.technologies}>
                   {project.tags.map((tag) => <li class="chip">{tag}</li>)}
                 </ul>
 
@@ -120,13 +165,13 @@ const counts = filters.map((filter) => ({
                       rel="noopener noreferrer"
                       class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-300 transition-colors hover:text-acid"
                     >
-                      {project.hrefLabel ?? "Ver repositorio"}
+                      {project.hrefLabel ?? copy.repository}
                       <Icon name="arrow-up-right" class="h-3 w-3" />
                     </a>
                   ) : (
                     <span class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-600">
                       <Icon name="clock" class="h-3 w-3" />
-                      Caso privado · detalles en entrevista
+                      {copy.privateCase}
                     </span>
                   )}
                 </div>
@@ -142,13 +187,13 @@ const counts = filters.map((filter) => ({
       data-reveal
     >
       <p class="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-600">
-        Arquitectura, decisiones y métricas disponibles bajo NDA
+        {copy.nda}
       </p>
       <a
         href="#contacto"
         class="group inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-300 transition-colors hover:text-acid"
       >
-        Pedir case study
+        {copy.caseStudy}
         <Icon
           name="arrow-right"
           class="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1"

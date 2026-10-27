@@ -1,0 +1,42 @@
+---
+import Base from "../layouts/Base.astro";
+import Navbar from "./Navbar.astro";
+import Hero from "./sections/Hero.astro";
+import ImpactMetrics from "./sections/ImpactMetrics.astro";
+import ProjectGallery from "./sections/ProjectGallery.astro";
+import ViewerSection from "./sections/ViewerSection.astro";
+import LiveSites from "./sections/LiveSites.astro";
+import Skills from "./sections/Skills.astro";
+import Contact from "./sections/Contact.astro";
+import Footer from "./Footer.astro";
+import type { Lang } from "../data/site";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const skipLabel = lang === "es" ? "Saltar al contenido" : "Skip to content";
+---
+
+<Base lang={lang}>
+  <a href="#main" data-skip-link class="skip-link">{skipLabel}</a>
+
+  <Navbar lang={lang} />
+
+  <main id="main" tabindex="-1" class="outline-none">
+    <Hero lang={lang} />
+    <ImpactMetrics lang={lang} />
+    <ProjectGallery lang={lang} />
+    <ViewerSection lang={lang} />
+    <LiveSites lang={lang} />
+    <Skills lang={lang} />
+    <Contact lang={lang} />
+  </main>
+
+  <Footer lang={lang} />
+
+  <script>
+    import "../lib/init";
+  </script>
+</Base>

@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useReducedMotion } from "../../lib/useReducedMotion";
 import { useVisibilityPause } from "../../lib/useVisibilityPause";
+import type { Lang } from "../../data/site";
 
 const Scene = lazy(() => import("./Scene"));
 
@@ -22,7 +23,7 @@ function supportsWebGL(): boolean {
   }
 }
 
-export default function Viewer3D() {
+export default function Viewer3D({ lang }: { lang: Lang }) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [paused, setPaused] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,21 +34,59 @@ export default function Viewer3D() {
   const visible = useVisibilityPause(frameRef);
   const reduced = useReducedMotion();
 
+  const t =
+    lang === "en"
+      ? {
+          static: "Static view",
+          offscreen: "Paused · off-screen",
+          paused: "Paused",
+          running: "Rendering",
+          webglError:
+            "This browser does not expose WebGL. I can walk you through the case on a call.",
+          retry: "Retry",
+          activate: "Activate 3D viewer",
+          activateAria: "Activate interactive 3D viewer",
+          zeroAssets: "Real-time geometry · 0 assets",
+          loading: "Loading geometry…",
+          orbit: "Drag to orbit",
+          staticReduced: "Static view · reduced motion",
+          pause: "Pause",
+          resume: "Resume",
+          stop: "Stop",
+        }
+      : {
+          static: "Vista estática",
+          offscreen: "Pausado · fuera de vista",
+          paused: "Pausado",
+          running: "Render activo",
+          webglError: "Este navegador no expone WebGL. Puedo mostrarte el caso en una llamada.",
+          retry: "Reintentar",
+          activate: "Activar visor 3D",
+          activateAria: "Activar visor 3D interactivo",
+          zeroAssets: "Geometría generada en tiempo real · 0 assets",
+          loading: "Cargando geometría…",
+          orbit: "Arrastra para orbitar",
+          staticReduced: "Vista estática · reduced motion",
+          pause: "Pausar",
+          resume: "Reanudar",
+          stop: "Detener",
+        };
+
   const running = phase === "active" && visible && !paused && !reduced;
   const frameloop: Frameloop =
     phase === "idle" || paused || !visible ? "never" : reduced ? "demand" : "always";
 
   const status = reduced
-    ? "Vista estática"
+    ? t.static
     : !visible
-      ? "Pausado · fuera de vista"
+      ? t.offscreen
       : paused
-        ? "Pausado"
-        : "Render activo";
+        ? t.paused
+        : t.running;
 
   const start = () => {
     if (!supportsWebGL()) {
-      setError("Este navegador no expone WebGL. Puedo mostrarte el caso en una llamada.");
+      setError(t.webglError);
       return;
     }
 
@@ -105,7 +144,7 @@ export default function Viewer3D() {
             <button
               type="button"
               onClick={start}
-              aria-label="Activar visor 3D interactivo"
+              aria-label={t.activateAria}
               className="group flex h-14 w-14 items-center justify-center border border-acid/50 bg-acid/10 text-acid transition-colors duration-200 hover:border-acid hover:bg-acid hover:text-ink"
             >
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
@@ -115,10 +154,10 @@ export default function Viewer3D() {
 
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
-                {error ? "Reintentar" : "Activar visor 3D"}
+                {error ? t.retry : t.activate}
               </p>
               <p className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500">
-                Geometría generada en tiempo real · 0 assets
+                {t.zeroAssets}
               </p>
             </div>
 
@@ -147,7 +186,7 @@ export default function Viewer3D() {
                 <div className="absolute inset-0 grid place-items-center bg-ink">
                   <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-400">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-acid" />
-                    Cargando geometría…
+                    {t.loading}
                   </p>
                 </div>
               }
@@ -171,7 +210,7 @@ export default function Viewer3D() {
             </div>
 
             <span className="absolute bottom-4 left-4 hidden font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500 sm:block">
-              {reduced ? "Vista estática · reduced motion" : "Arrastra para orbitar"}
+              {reduced ? t.staticReduced : t.orbit}
             </span>
           </div>
 
@@ -202,7 +241,7 @@ export default function Viewer3D() {
                     <rect x="13.5" y="5" width="3.5" height="14" rx="1" />
                   </svg>
                 )}
-                {paused ? "Reanudar" : "Pausar"}
+                {paused ? t.resume : t.pause}
               </button>
             )}
 
@@ -219,7 +258,7 @@ export default function Viewer3D() {
               >
                 <rect x="6" y="6" width="12" height="12" rx="1" />
               </svg>
-              Detener
+              {t.stop}
             </button>
           </div>
         </>

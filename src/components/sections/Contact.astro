@@ -1,14 +1,84 @@
 ---
-import { profile } from "../../data/site";
+import { getSite, type Lang } from "../../data/site";
 import Icon from "../ui/Icon.astro";
 
-const topics = [
-  "Plataforma de datos / 3D",
-  "IA aplicada / RAG",
-  "Producto full-stack",
-  "Auditoría técnica",
-  "Otro",
-];
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile } = getSite(lang);
+
+const copy = {
+  es: {
+    eyebrow: "06 — Contacto",
+    title: "Hablemos de tu",
+    titleAccent: "próximo sistema.",
+    intro:
+      "Cuéntame el contexto, el objetivo y la fecha límite. Si encaja, te respondo con un plan de arquitectura y el primer hito concreto; si no, te lo digo claro.",
+    copyEmail: "Copiar email",
+    copyPhone: "Copiar teléfono",
+    copyLabel: "Copiar",
+    cvLabel: "CV / EN",
+    cvAria: "Descargar CV en inglés (PDF)",
+    formEyebrow: "Nuevo proyecto",
+    formTitle: "Briefing en 60 segundos.",
+    nameLabel: "Nombre",
+    namePlaceholder: "Tu nombre",
+    emailLabel: "Email",
+    emailPlaceholder: "nombre@empresa.com",
+    topicLabel: "Interés",
+    topics: [
+      "Plataforma de datos / 3D",
+      "IA aplicada / RAG",
+      "Producto full-stack",
+      "Auditoría técnica",
+      "Otro",
+    ],
+    messageLabel: "Mensaje",
+    messageMin: "mín. 20 caracteres",
+    messagePlaceholder: "Contexto, objetivo y plazo…",
+    privacy: "Tus datos solo se usan para responder. Sin newsletters ni terceros.",
+    submit: "Enviar mensaje",
+    noscriptBefore: "El formulario necesita JavaScript. Escríbeme directamente a ",
+    noscriptAfter: ".",
+  },
+  en: {
+    eyebrow: "06 — Contact",
+    title: "Let's talk about your",
+    titleAccent: "next system.",
+    intro:
+      "Tell me the context, the goal and the deadline. If it's a fit, I'll reply with an architecture plan and a concrete first milestone; if not, I'll tell you straight.",
+    copyEmail: "Copy email",
+    copyPhone: "Copy phone",
+    copyLabel: "Copy",
+    cvLabel: "CV / ES",
+    cvAria: "Download CV in Spanish (PDF)",
+    formEyebrow: "New project",
+    formTitle: "60-second brief.",
+    nameLabel: "Name",
+    namePlaceholder: "Your name",
+    emailLabel: "Email",
+    emailPlaceholder: "name@company.com",
+    topicLabel: "Interest",
+    topics: [
+      "Data platform / 3D",
+      "Applied AI / RAG",
+      "Full-stack product",
+      "Technical audit",
+      "Other",
+    ],
+    messageLabel: "Message",
+    messageMin: "min. 20 characters",
+    messagePlaceholder: "Context, goal and timeline…",
+    privacy: "Your data is only used to reply. No newsletters or third parties.",
+    submit: "Send message",
+    noscriptBefore: "The form needs JavaScript. Email me directly at ",
+    noscriptAfter: ".",
+  },
+}[lang];
+
+const cvHref = lang === "es" ? profile.cvEn : profile.cvEs;
 ---
 
 <section
@@ -24,14 +94,13 @@ const topics = [
 
   <div class="container-page relative grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
     <div>
-      <p class="eyebrow" data-reveal>06 — Contacto</p>
+      <p class="eyebrow" data-reveal>{copy.eyebrow}</p>
       <h2 class="section-title" data-reveal>
-        Hablemos de tu<br />
-        próximo sistema.
+        {copy.title}<br />
+        {copy.titleAccent}
       </h2>
       <p class="mt-5 max-w-md text-sm leading-relaxed text-zinc-400" data-reveal>
-        Cuéntame el contexto, el objetivo y la fecha límite. Si encaja, te respondo con un plan de
-        arquitectura y el primer hito concreto; si no, te lo digo claro.
+        {copy.intro}
       </p>
 
       <div class="mt-9 border-t border-white/10" data-reveal>
@@ -43,8 +112,8 @@ const topics = [
             <Icon name="mail" class="h-4 w-4 shrink-0 text-zinc-600" />
             <span class="truncate">{profile.email}</span>
           </a>
-          <button type="button" data-copy={profile.email} class="copy-btn" aria-label="Copiar email">
-            Copiar
+          <button type="button" data-copy={profile.email} class="copy-btn" aria-label={copy.copyEmail}>
+            {copy.copyLabel}
           </button>
         </div>
 
@@ -60,9 +129,9 @@ const topics = [
             type="button"
             data-copy={profile.phone}
             class="copy-btn"
-            aria-label="Copiar teléfono"
+            aria-label={copy.copyPhone}
           >
-            Copiar
+            {copy.copyLabel}
           </button>
         </div>
 
@@ -92,13 +161,13 @@ const topics = [
           LinkedIn
         </a>
         <a
-          href={profile.cvEn}
+          href={cvHref}
           download
           class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
-          aria-label="Descargar CV en inglés (PDF)"
+          aria-label={copy.cvAria}
         >
           <Icon name="download" class="h-3.5 w-3.5" />
-          CV / EN
+          {copy.cvLabel}
         </a>
       </div>
 
@@ -120,10 +189,10 @@ const topics = [
       <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-5">
         <div>
           <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-            Nuevo proyecto
+            {copy.formEyebrow}
           </p>
           <p class="mt-1 text-lg font-semibold tracking-tight text-white">
-            Briefing en 60 segundos.
+            {copy.formTitle}
           </p>
         </div>
         <span
@@ -137,14 +206,14 @@ const topics = [
       <form data-contact-form data-email={profile.email} novalidate class="mt-6 space-y-5">
         <div class="grid gap-4 sm:grid-cols-2">
           <div>
-            <label class="field-label" for="contact-name">Nombre</label>
+            <label class="field-label" for="contact-name">{copy.nameLabel}</label>
             <input
               class="field-input"
               id="contact-name"
               name="name"
               type="text"
               autocomplete="name"
-              placeholder="Tu nombre"
+              placeholder={copy.namePlaceholder}
               required
               aria-required="true"
               aria-describedby="name-error"
@@ -153,14 +222,14 @@ const topics = [
           </div>
 
           <div>
-            <label class="field-label" for="contact-email">Email</label>
+            <label class="field-label" for="contact-email">{copy.emailLabel}</label>
             <input
               class="field-input"
               id="contact-email"
               name="email"
               type="email"
               autocomplete="email"
-              placeholder="nombre@empresa.com"
+              placeholder={copy.emailPlaceholder}
               required
               aria-required="true"
               aria-describedby="email-error"
@@ -170,17 +239,17 @@ const topics = [
         </div>
 
         <div>
-          <label class="field-label" for="contact-topic">Interés</label>
+          <label class="field-label" for="contact-topic">{copy.topicLabel}</label>
           <select class="field-input" id="contact-topic" name="topic">
-            {topics.map((topic) => <option>{topic}</option>)}
+            {copy.topics.map((topic) => <option>{topic}</option>)}
           </select>
         </div>
 
         <div>
           <div class="flex items-baseline justify-between gap-4">
-            <label class="field-label" for="contact-message">Mensaje</label>
+            <label class="field-label" for="contact-message">{copy.messageLabel}</label>
             <span class="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-zinc-600">
-              mín. 20 caracteres
+              {copy.messageMin}
             </span>
           </div>
           <textarea
@@ -188,7 +257,7 @@ const topics = [
             id="contact-message"
             name="message"
             rows="5"
-            placeholder="Contexto, objetivo y plazo…"
+            placeholder={copy.messagePlaceholder}
             required
             aria-required="true"
             aria-describedby="message-error"
@@ -198,7 +267,7 @@ const topics = [
 
         <div class="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <p class="max-w-[230px] font-mono text-[9px] leading-relaxed tracking-[0.06em] text-zinc-600">
-            Tus datos solo se usan para responder. Sin newsletters ni terceros.
+            {copy.privacy}
           </p>
 
           <button type="submit" data-submit class="btn btn-primary min-w-[190px]">
@@ -207,16 +276,16 @@ const topics = [
               class="hidden h-3 w-3 animate-spin rounded-full border-2 border-ink/30 border-t-ink"
               aria-hidden="true"
             ></span>
-            <span data-submit-label>Enviar mensaje</span>
+            <span data-submit-label>{copy.submit}</span>
           </button>
         </div>
 
         <noscript>
           <p class="border border-white/10 bg-white/[0.02] px-3 py-2 font-mono text-[10px] leading-relaxed text-zinc-400">
-            El formulario necesita JavaScript. Escríbeme directamente a
-            <a href={`mailto:${profile.email}`} class="text-acid underline underline-offset-2">
-              {profile.email}
-            </a>.
+            {copy.noscriptBefore}<a
+              href={`mailto:${profile.email}`}
+              class="text-acid underline underline-offset-2"
+            >{profile.email}</a>{copy.noscriptAfter}
           </p>
         </noscript>
       </form>
