@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#0a0a0b"/>
-  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#a3e635" stroke-width="3"/>
-  <text x="32" y="42" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#a3e635" text-anchor="middle">MR</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MR">
+  <rect width="64" height="64" rx="14" fill="#0A0A0A"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#22D3EE" stroke-opacity="0.45"/>
+  <path d="M13 46V18h7.2l6.6 13.4L33.4 18H40v28h-6.4V30.1l-6.8 13-6.8-13V46H13Z" fill="#F4F4F5"/>
+  <circle cx="50" cy="45" r="4" fill="#22D3EE"/>
 </svg>

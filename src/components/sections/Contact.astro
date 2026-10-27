@@ -1,0 +1,228 @@
+---
+import { profile } from "../../data/site";
+import Icon from "../ui/Icon.astro";
+
+const topics = [
+  "Plataforma de datos / 3D",
+  "IA aplicada / RAG",
+  "Producto full-stack",
+  "Auditoría técnica",
+  "Otro",
+];
+---
+
+<section
+  id="contacto"
+  class="relative overflow-hidden border-t border-white/10 py-20 sm:py-28"
+>
+  <div class="ambient-glow pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
+  <div
+    class="bg-grid mask-fade pointer-events-none absolute inset-0 opacity-30"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
+    <div>
+      <p class="eyebrow" data-reveal>06 — Contacto</p>
+      <h2 class="section-title" data-reveal>
+        Hablemos de tu<br />
+        próximo sistema.
+      </h2>
+      <p class="mt-5 max-w-md text-sm leading-relaxed text-zinc-400" data-reveal>
+        Cuéntame el contexto, el objetivo y la fecha límite. Si encaja, te respondo con un plan de
+        arquitectura y el primer hito concreto; si no, te lo digo claro.
+      </p>
+
+      <div class="mt-9 border-t border-white/10" data-reveal>
+        <div class="flex items-center justify-between gap-4 border-b border-white/10 py-4">
+          <a
+            href={`mailto:${profile.email}`}
+            class="group flex min-w-0 items-center gap-3 text-sm text-zinc-300 transition-colors hover:text-white"
+          >
+            <Icon name="mail" class="h-4 w-4 shrink-0 text-zinc-600" />
+            <span class="truncate">{profile.email}</span>
+          </a>
+          <button type="button" data-copy={profile.email} class="copy-btn" aria-label="Copiar email">
+            Copiar
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 border-b border-white/10 py-4">
+          <a
+            href={`tel:${profile.phoneHref}`}
+            class="group flex min-w-0 items-center gap-3 text-sm text-zinc-300 transition-colors hover:text-white"
+          >
+            <Icon name="phone" class="h-4 w-4 shrink-0 text-zinc-600" />
+            <span>{profile.phone}</span>
+          </a>
+          <button
+            type="button"
+            data-copy={profile.phone}
+            class="copy-btn"
+            aria-label="Copiar teléfono"
+          >
+            Copiar
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 border-b border-white/10 py-4 text-sm text-zinc-400">
+          <Icon name="pin" class="h-4 w-4 shrink-0 text-zinc-600" />
+          <span>{profile.location} · GMT-5</span>
+        </div>
+      </div>
+
+      <div class="mt-7 flex flex-wrap items-center gap-2" data-reveal>
+        <a
+          href={profile.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
+        >
+          <Icon name="github" class="h-3.5 w-3.5" />
+          GitHub
+        </a>
+        <a
+          href={profile.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
+        >
+          <Icon name="linkedin" class="h-3.5 w-3.5" />
+          LinkedIn
+        </a>
+        <a
+          href={profile.cvEn}
+          download
+          class="inline-flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
+          aria-label="Descargar CV en inglés (PDF)"
+        >
+          <Icon name="download" class="h-3.5 w-3.5" />
+          CV / EN
+        </a>
+      </div>
+
+      <div
+        class="mt-8 inline-flex items-center gap-2.5 border border-white/10 bg-white/[0.02] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-300"
+        data-reveal
+      >
+        <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+          <span
+            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"
+          ></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+        </span>
+        {profile.availability}
+      </div>
+    </div>
+
+    <div class="card relative p-5 sm:p-8" data-reveal>
+      <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+            Nuevo proyecto
+          </p>
+          <p class="mt-1 text-lg font-semibold tracking-tight text-white">
+            Briefing en 60 segundos.
+          </p>
+        </div>
+        <span
+          class="flex items-center gap-1.5 border border-white/10 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-400"
+        >
+          <span class="h-1 w-1 rounded-full bg-acid" aria-hidden="true"></span>
+          &lt; 24h
+        </span>
+      </div>
+
+      <form data-contact-form data-email={profile.email} novalidate class="mt-6 space-y-5">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="contact-name">Nombre</label>
+            <input
+              class="field-input"
+              id="contact-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Tu nombre"
+              required
+              aria-required="true"
+              aria-describedby="name-error"
+            />
+            <p id="name-error" data-error-for="name" class="field-error" hidden></p>
+          </div>
+
+          <div>
+            <label class="field-label" for="contact-email">Email</label>
+            <input
+              class="field-input"
+              id="contact-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="nombre@empresa.com"
+              required
+              aria-required="true"
+              aria-describedby="email-error"
+            />
+            <p id="email-error" data-error-for="email" class="field-error" hidden></p>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="contact-topic">Interés</label>
+          <select class="field-input" id="contact-topic" name="topic">
+            {topics.map((topic) => <option>{topic}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <div class="flex items-baseline justify-between gap-4">
+            <label class="field-label" for="contact-message">Mensaje</label>
+            <span class="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-zinc-600">
+              mín. 20 caracteres
+            </span>
+          </div>
+          <textarea
+            class="field-input min-h-[140px] resize-y"
+            id="contact-message"
+            name="message"
+            rows="5"
+            placeholder="Contexto, objetivo y plazo…"
+            required
+            aria-required="true"
+            aria-describedby="message-error"
+          ></textarea>
+          <p id="message-error" data-error-for="message" class="field-error" hidden></p>
+        </div>
+
+        <div class="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-[230px] font-mono text-[9px] leading-relaxed tracking-[0.06em] text-zinc-600">
+            Tus datos solo se usan para responder. Sin newsletters ni terceros.
+          </p>
+
+          <button type="submit" data-submit class="btn btn-primary min-w-[190px]">
+            <span
+              data-submit-spinner
+              class="hidden h-3 w-3 animate-spin rounded-full border-2 border-ink/30 border-t-ink"
+              aria-hidden="true"
+            ></span>
+            <span data-submit-label>Enviar mensaje</span>
+          </button>
+        </div>
+
+        <noscript>
+          <p class="border border-white/10 bg-white/[0.02] px-3 py-2 font-mono text-[10px] leading-relaxed text-zinc-400">
+            El formulario necesita JavaScript. Escríbeme directamente a
+            <a href={`mailto:${profile.email}`} class="text-acid underline underline-offset-2">
+              {profile.email}
+            </a>.
+          </p>
+        </noscript>
+      </form>
+    </div>
+  </div>
+
+  <p class="sr-only" data-form-status aria-live="polite"></p>
+  <p class="sr-only" data-copy-status aria-live="polite"></p>
+</section>

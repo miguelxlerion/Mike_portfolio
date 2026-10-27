@@ -1,0 +1,70 @@
+---
+import Viewer3D from "../three/Viewer3D";
+
+const specs = [
+  { label: "Carga", value: "Lazy · 0 KB al inicio" },
+  { label: "Pausa", value: "IntersectionObserver + visibilitychange" },
+  { label: "Accesibilidad", value: "prefers-reduced-motion" },
+];
+---
+
+<section id="visor" class="relative overflow-hidden border-t border-white/10 bg-coal py-20 sm:py-28">
+  <div
+    class="ambient-glow pointer-events-none absolute inset-0 opacity-40"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="eyebrow" data-reveal>03 — Demo interactiva</p>
+        <h2 class="section-title max-w-2xl" data-reveal>
+          Un gemelo digital que<br class="hidden sm:block" />
+          responde al puntero.
+        </h2>
+      </div>
+      <p class="max-w-sm text-sm leading-relaxed text-zinc-500" data-reveal>
+        No es un video: es una escena WebGL generada en el navegador. Se monta solo cuando la
+        activas y detiene el render en cuanto sale de pantalla.
+      </p>
+    </div>
+
+    <div class="mt-10 overflow-hidden border border-white/10 bg-ink" data-reveal>
+      <div
+        class="flex items-center justify-between border-b border-white/10 px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600"
+      >
+        <span>twin_core.worker · demo</span>
+        <span class="flex items-center gap-2">
+          <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-acid" aria-hidden="true"></span>
+          webgl / r3f
+        </span>
+      </div>
+
+      <div class="relative aspect-[4/3] sm:aspect-[16/9]">
+        <Viewer3D client:visible />
+      </div>
+
+      <div class="grid gap-px border-t border-white/10 bg-white/10 sm:grid-cols-3">
+        {
+          specs.map((spec) => (
+            <div class="bg-ink px-4 py-3.5">
+              <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">
+                {spec.label}
+              </p>
+              <p class="mt-1 font-mono text-[10px] tracking-[0.04em] text-zinc-300">{spec.value}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <p
+      class="mt-5 max-w-3xl font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-zinc-600"
+      data-reveal
+    >
+      La escena devuelve el contexto WebGL al detenerse. Sin texturas externas, sin modelos GLB y
+      sin coste de red: geometría instanciada, dpr limitado y bucle condicionado.
+    </p>
+  </div>
+</section>

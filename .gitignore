@@ -1,17 +1,28 @@
-# Deps y build
+# dependencies
 node_modules/
+.npm/
+
+# build output
 dist/
+.astro/
 
-# Caché local de Wrangler
+# Cloudflare
 .wrangler/
+.dev.vars
 
-# Logs de servidores locales
-*.log
+# env
+.env
+.env.*
+!.env.example
 
-# Scripts efímeros de QA
-qa-*.mjs
-shot-*.png
+# logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
 
-# Secretos locales (tokens de GitHub/Resend si los guardas en .env.local)
-.env.local
-.env.*.local
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/

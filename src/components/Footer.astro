@@ -1,0 +1,121 @@
+---
+import { profile, navLinks } from "../data/site";
+import Icon from "./ui/Icon.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-white/10 bg-coal">
+  <div class="container-page py-14">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <a href="#inicio" class="inline-flex items-baseline gap-2">
+          <span class="font-mono text-sm font-semibold tracking-[0.14em] text-white">
+            M<span class="text-acid">.</span>R
+          </span>
+          <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-zinc-600">
+            {profile.studio}
+          </span>
+        </a>
+
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-zinc-500">
+          Senior Full-Stack Engineer. Plataformas de datos en tiempo real, gemelos digitales y
+          visualización 3D para decisiones que no pueden esperar.
+        </p>
+
+        <div class="mt-5 flex items-center gap-2">
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
+            aria-label="GitHub de Miguel Rodriguez"
+          >
+            <Icon name="github" class="h-4 w-4" />
+          </a>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
+            aria-label="LinkedIn de Miguel Rodriguez"
+          >
+            <Icon name="linkedin" class="h-4 w-4" />
+          </a>
+          <a
+            href={`mailto:${profile.email}`}
+            class="inline-flex h-9 w-9 items-center justify-center border border-white/10 text-zinc-500 transition-colors hover:border-white/30 hover:text-white"
+            aria-label="Enviar email"
+          >
+            <Icon name="mail" class="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="eyebrow">Navegación</p>
+        <ul class="mt-4 space-y-2.5">
+          {
+            navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-zinc-400 transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <p class="eyebrow">Directo</p>
+        <ul class="mt-4 space-y-2.5">
+          <li>
+            <a
+              href={`mailto:${profile.email}`}
+              class="break-all text-sm text-zinc-400 transition-colors hover:text-white"
+            >
+              {profile.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={`tel:${profile.phoneHref}`}
+              class="text-sm text-zinc-400 transition-colors hover:text-white"
+            >
+              {profile.phone}
+            </a>
+          </li>
+          <li class="text-sm text-zinc-500">{profile.location}</li>
+          <li class="pt-1">
+            <a
+              href={profile.cvEs}
+              download
+              class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500 transition-colors hover:text-acid"
+            >
+              <Icon name="download" class="h-3 w-3" />
+              Descargar CV
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} Miguel E. Rodriguez Martinez</p>
+      <p class="hidden sm:block">Astro · React · GSAP · Three.js</p>
+      <a
+        href="#inicio"
+        class="inline-flex items-center gap-2 transition-colors hover:text-white"
+      >
+        Volver arriba
+        <Icon name="arrow-down" class="h-3 w-3 rotate-180" />
+      </a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,66 @@
+---
+import { skillGroups, credentials } from "../../data/site";
+import Icon from "../ui/Icon.astro";
+---
+
+<section id="stack" class="relative border-t border-white/10 bg-coal py-20 sm:py-28">
+  <div class="container-page">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="eyebrow" data-reveal>05 — Stack</p>
+        <h2 class="section-title max-w-2xl" data-reveal>
+          Herramientas elegidas<br class="hidden sm:block" />
+          por criterio, no por moda.
+        </h2>
+      </div>
+      <p class="max-w-sm text-sm leading-relaxed text-zinc-500" data-reveal>
+        Un stack deliberadamente corto: lo que domino en profundidad y lo que mantiene los
+        sistemas rápidos, observables y fáciles de operar.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        skillGroups.map((group, index) => (
+          <div class="group bg-ink p-6 transition-colors duration-300 hover:bg-panel" data-reveal>
+            <div class="flex items-center justify-between">
+              <div class="flex h-9 w-9 items-center justify-center border border-white/10 bg-white/[0.03] text-acid">
+                <Icon name={group.icon} class="h-4 w-4" />
+              </div>
+              <span class="font-mono text-[9px] tracking-[0.16em] text-zinc-700">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
+
+            <h3 class="mt-5 text-lg font-semibold tracking-tight text-white">{group.title}</h3>
+
+            <ul class="mt-4">
+              {group.items.map((item) => (
+                <li class="flex items-center justify-between border-b border-white/[0.06] py-2 text-sm text-zinc-400 last:border-0">
+                  {item}
+                  <span class="h-1 w-1 bg-white/15 transition-colors duration-300 group-hover:bg-acid/60" aria-hidden="true"></span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10" data-reveal>
+      <p class="eyebrow">Credenciales</p>
+      <div class="mt-4 grid gap-px border border-white/10 bg-white/10 md:grid-cols-3">
+        {
+          credentials.map((credential) => (
+            <div class="bg-ink p-5">
+              <p class="text-sm font-medium text-white">{credential.label}</p>
+              <p class="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">
+                {credential.issuer} · {credential.year}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

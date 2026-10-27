@@ -1,0 +1,165 @@
+---
+import { profile, navLinks } from "../data/site";
+import Icon from "./ui/Icon.astro";
+---
+
+<header data-header class="site-header fixed inset-x-0 top-0 z-50">
+  <div class="container-page flex h-16 items-center justify-between gap-4">
+    <a
+      href="#inicio"
+      class="group inline-flex items-baseline gap-2"
+      aria-label={`${profile.name} — ir al inicio`}
+    >
+      <span class="font-mono text-sm font-semibold tracking-[0.14em] text-white">
+        M<span class="text-acid">.</span>R
+      </span>
+      <span
+        class="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-zinc-500 transition-colors group-hover:text-zinc-300 sm:inline"
+      >
+        Senior Engineer
+      </span>
+    </a>
+
+    <nav class="hidden items-center md:flex" aria-label="Navegación principal">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            data-nav-link
+            class="nav-link px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:text-white"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a href="#contacto" class="btn btn-primary ml-4 px-4 py-2.5 text-[10px]">Hablemos</a>
+    </nav>
+
+    <button
+      type="button"
+      data-menu-button
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="inline-flex h-10 w-10 items-center justify-center border border-white/15 text-zinc-200 transition-colors hover:border-white/40 hover:text-white md:hidden"
+    >
+      <span data-menu-icon-open><Icon name="menu" class="h-5 w-5" /></span>
+      <span data-menu-icon-close class="hidden"><Icon name="close" class="h-5 w-5" /></span>
+      <span class="sr-only">Abrir menú</span>
+    </button>
+  </div>
+
+  <div
+    id="mobile-menu"
+    data-menu-panel
+    data-lenis-prevent
+    hidden
+    class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-ink/95 backdrop-blur-xl md:hidden"
+  >
+    <nav class="container-page flex flex-col py-4" aria-label="Navegación móvil">
+      {
+        navLinks.map((link, index) => (
+          <a
+            href={link.href}
+            class="mobile-link flex items-center justify-between border-b border-white/[0.06] py-4 text-lg font-medium tracking-tight text-zinc-300"
+          >
+            <span class="flex items-baseline gap-4">
+              <span class="font-mono text-[10px] tracking-[0.16em] text-zinc-600">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {link.label}
+            </span>
+            <Icon name="arrow-up-right" class="h-4 w-4 text-zinc-600" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="container-page border-t border-white/10 py-5">
+      <a
+        href={`mailto:${profile.email}`}
+        class="block font-mono text-xs tracking-[0.06em] text-zinc-300 transition-colors hover:text-white"
+      >
+        {profile.email}
+      </a>
+      <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+        {profile.location}
+      </p>
+      <a href="#contacto" class="btn btn-primary mt-5 w-full">Hablemos</a>
+    </div>
+  </div>
+
+  <div class="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]" aria-hidden="true">
+    <div
+      data-scroll-progress
+      class="h-full origin-left bg-gradient-to-r from-acid to-electric"
+      style="transform: scaleX(0)"
+    >
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const button = header?.querySelector<HTMLButtonElement>("[data-menu-button]");
+  const panel = header?.querySelector<HTMLElement>("[data-menu-panel]");
+
+  if (header && button && panel) {
+    const openIcon = button.querySelector<HTMLElement>("[data-menu-icon-open]");
+    const closeIcon = button.querySelector<HTMLElement>("[data-menu-icon-close]");
+
+    const setOpen = (open: boolean) => {
+      button.setAttribute("aria-expanded", String(open));
+      panel.hidden = !open;
+      document.body.classList.toggle("menu-open", open);
+      openIcon?.classList.toggle("hidden", open);
+      closeIcon?.classList.toggle("hidden", !open);
+      window.dispatchEvent(new CustomEvent("portfolio:menu", { detail: { open } }));
+    };
+
+    button.addEventListener("click", () => setOpen(panel.hidden));
+
+    panel.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setOpen(false));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !panel.hidden) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (panel.hidden) return;
+      if (!header.contains(event.target as Node)) setOpen(false);
+    });
+
+    window.matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
+      if (event.matches && !panel.hidden) setOpen(false);
+    });
+  }
+
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>("main > section[id]"));
+
+  if (sections.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const hash = `#${entry.target.id}`;
+
+          navLinks.forEach((link) => {
+            const active = link.getAttribute("href") === hash;
+            link.toggleAttribute("data-active", active);
+            if (active) link.setAttribute("aria-current", "true");
+            else link.removeAttribute("aria-current");
+          });
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+</script>

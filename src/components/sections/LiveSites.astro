@@ -1,0 +1,122 @@
+---
+import { liveSites } from "../../data/site";
+import Icon from "../ui/Icon.astro";
+---
+
+<section id="sitios" class="relative border-t border-white/10 py-20 sm:py-28">
+  <div class="container-page">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="eyebrow" data-reveal>04 — En producción</p>
+        <h2 class="section-title max-w-2xl" data-reveal>
+          Sitios vivos,<br class="hidden sm:block" />
+          no mockups.
+        </h2>
+      </div>
+      <p class="max-w-sm text-sm leading-relaxed text-zinc-500" data-reveal>
+        Productos desplegados en Cloudflare, con dominio propio, contenido real y usuarios
+        navegando ahora mismo.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-2">
+      {
+        liveSites.map((site, index) => (
+          <article
+            data-live-site={site.url}
+            data-state="checking"
+            class="card spotlight group relative flex flex-col overflow-hidden transition-colors duration-300 hover:border-white/25"
+            data-reveal
+          >
+            <div
+              class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-20 blur-3xl transition-opacity duration-500 group-hover:opacity-40"
+              style={`background:${site.accent}`}
+              aria-hidden="true"
+            />
+
+            <div class="relative z-10 flex items-start justify-between gap-4 p-6">
+              <div>
+                <div class="flex flex-wrap items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em]">
+                  <span class="flex items-center gap-1.5 text-zinc-400" aria-live="polite">
+                    <span
+                      data-live-dot
+                      data-state="checking"
+                      class="h-1.5 w-1.5 rounded-full"
+                      aria-hidden="true"
+                    >
+                    </span>
+                    <span data-live-label>Comprobando</span>
+                  </span>
+                  <span class="text-zinc-700" aria-hidden="true">/</span>
+                  <span class="text-zinc-600">{site.host}</span>
+                </div>
+
+                <h3 class="mt-4 text-2xl font-semibold tracking-tight text-white">{site.name}</h3>
+                <p class="mt-3 max-w-md text-sm leading-relaxed text-zinc-400">{site.description}</p>
+
+                <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Características">
+                  {site.tags.map((tag) => <li class="chip">{tag}</li>)}
+                </ul>
+              </div>
+
+              <div
+                class="hidden w-32 shrink-0 border border-white/10 bg-ink p-2 sm:block"
+                aria-hidden="true"
+              >
+                <div class="flex items-center gap-1">
+                  <span class="h-1 w-1 rounded-full bg-white/20"></span>
+                  <span class="h-1 w-1 rounded-full bg-white/20"></span>
+                  <span class="h-1 w-1 rounded-full bg-white/20"></span>
+                  <span
+                    class="ml-auto font-mono text-[7px] uppercase tracking-[0.1em]"
+                    style={`color:${site.accent}`}
+                  >
+                    {site.monogram}
+                  </span>
+                </div>
+                <div class="mt-3 space-y-1">
+                  <div class="h-1 w-3/4 bg-white/15"></div>
+                  <div class="h-1 w-1/2 bg-white/10"></div>
+                </div>
+                <div class="mt-3 grid grid-cols-3 gap-1">
+                  <div class="aspect-square bg-white/[0.06]"></div>
+                  <div class="aspect-square bg-white/[0.06]"></div>
+                  <div class="aspect-square bg-white/[0.06]"></div>
+                </div>
+                <div class="mt-2 h-1.5" style={`background:${site.accent}`}></div>
+              </div>
+            </div>
+
+            <div
+              class="relative z-10 mt-auto flex items-center justify-between border-t border-white/10 px-6 py-4"
+            >
+              <span class="font-mono text-[9px] uppercase tracking-[0.14em] text-zinc-600">
+                Lanzado {site.year} · 0{index + 1}
+              </span>
+              <a
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group/link inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-300 transition-colors hover:text-acid"
+                aria-label={`Visitar ${site.name} (se abre en una pestaña nueva)`}
+              >
+                Visitar sitio
+                <Icon
+                  name="arrow-up-right"
+                  class="h-3 w-3 transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p
+      class="mt-8 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-600"
+      data-reveal
+    >
+      Estado comprobado desde tu navegador al entrar en la sección · Cloudflare Pages / Workers
+    </p>
+  </div>
+</section>
