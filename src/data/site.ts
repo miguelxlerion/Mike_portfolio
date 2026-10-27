@@ -169,6 +169,30 @@ export const liveSites = [
     monogram: "AS",
     accent: "#a3e635",
   },
+  {
+    id: "tranxport",
+    name: "Tranxport · Rastreo",
+    host: "tranxport-web.tranxportx.workers.dev",
+    url: "https://tranxport-web.tranxportx.workers.dev/",
+    description:
+      "Rastreador y cotizador de mensajería en moto para 5 municipios: códigos TRX, tarifario oficial, pedidos integrados al sistema y confirmación por WhatsApp.",
+    tags: ["Logística", "Rastreo", "WhatsApp", "Workers"],
+    year: "2026",
+    monogram: "TX",
+    accent: "#fb923c",
+  },
+  {
+    id: "ropero-magico",
+    name: "El Ropero Mágico",
+    host: "elropero-magico-platform.xlerionultimate.workers.dev",
+    url: "https://elropero-magico-platform.xlerionultimate.workers.dev/",
+    description:
+      "E-commerce de moda circular con drops cada 15 días, probador virtual 3D + AR, carrito, pagos Wompi y comunidad de +2.300 personas por WhatsApp.",
+    tags: ["E-commerce", "3D + AR", "Wompi", "Drops"],
+    year: "2026",
+    monogram: "ER",
+    accent: "#f472b6",
+  },
 ] as const;
 
 export const skillGroups = [
